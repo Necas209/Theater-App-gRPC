@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Grpc.Net.Client;
 
 namespace Client
@@ -19,17 +7,26 @@ namespace Client
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void Greet()
+        private async Task Greet()
         {
             using var channel = GrpcChannel.ForAddress("https://localhost:7046");
-            // var client = new Greeter
+            var client = new Greeter.GreeterClient(channel);
+            var reply = await client.SayHelloAsync(
+                new HelloRequest { Name = "GreeterClient" }
+            );
+            Message.Content = $"Greeting: {reply?.Message}";
+        }
+
+        private void BtSayHello_OnClick(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(async () => await Greet());
         }
     }
 }

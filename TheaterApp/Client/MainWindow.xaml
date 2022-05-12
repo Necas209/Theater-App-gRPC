@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Label Name="Message" Content="Greeting: "
+               Margin="20 40 60 40" Width="200" Height="30"
+               BorderBrush="Black" BorderThickness="1pt"></Label>
+        <Button Name="BtSayHello" Content="Say Hello"
+                Margin="320 40 0 40" Width="100" Height="30" Click="BtSayHello_OnClick"></Button>
     </Grid>
 </Window>
