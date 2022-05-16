@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcLibrary", "GrpcLibrary\GrpcLibrary.csproj", "{F88D57D5-A767-4322-9719-538AD2F24807}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheaterLibrary", "TheaterLibrary\TheaterLibrary.csproj", "{9320532C-4874-44E4-B1B6-997EE89B7E71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{F88D57D5-A767-4322-9719-538AD2F24807}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F88D57D5-A767-4322-9719-538AD2F24807}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F88D57D5-A767-4322-9719-538AD2F24807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9320532C-4874-44E4-B1B6-997EE89B7E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9320532C-4874-44E4-B1B6-997EE89B7E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9320532C-4874-44E4-B1B6-997EE89B7E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9320532C-4874-44E4-B1B6-997EE89B7E71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
