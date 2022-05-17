@@ -12,7 +12,7 @@ builder.Services.AddGrpc();
 
 builder.Services.AddDbContext<TheaterDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("TheaterDBConnection")
+        builder.Configuration.GetConnectionString("TheaterDbConnection")
         )
     );
 

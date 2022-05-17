@@ -1,2 +1,2 @@
-TheaterAdmin
-Service2022
+User ID: TheaterAdmin
+Password: Service2022
