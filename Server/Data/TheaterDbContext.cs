@@ -30,6 +30,8 @@ public class TheaterDbContext: DbContext
     
     public DbSet<Watched> Watched { get; set; }
     
+    public DbSet<Log> Logs { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

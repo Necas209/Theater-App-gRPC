@@ -3,8 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheaterLibrary;
 
-public class User
+public sealed class User
 {
+    public User()
+    {
+        Logs = new HashSet<Log>();
+    }
+    
     [Key]
     public int Id { get; set; }
     
@@ -21,11 +26,14 @@ public class User
     public string Password { get; set; }
     
     [InverseProperty(nameof(TheaterLibrary.Admin.User))]
-    public virtual Admin? Admin { get; set; }
+    public Admin? Admin { get; set; }
 
     [InverseProperty(nameof(TheaterLibrary.Client.User))]
-    public virtual Client? Client { get; set; }
+    public Client? Client { get; set; }
 
     [InverseProperty(nameof(TheaterLibrary.Manager.User))]
-    public virtual Manager? Manager { get; set; }
+    public Manager? Manager { get; set; }
+    
+    [InverseProperty(nameof(Log.User))]
+    public ICollection<Log> Logs { get; set; }
 }

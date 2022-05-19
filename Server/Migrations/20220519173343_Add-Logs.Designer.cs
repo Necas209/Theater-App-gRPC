@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,10 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(TheaterDbContext))]
-    partial class TheaterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220519173343_Add-Logs")]
+    partial class AddLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,6 +63,31 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("TheaterLibrary.Log", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Stamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Log");
                 });
 
             modelBuilder.Entity("TheaterLibrary.Manager", b =>
@@ -268,6 +295,17 @@ namespace Server.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TheaterLibrary.Log", b =>
+                {
+                    b.HasOne("TheaterLibrary.User", "User")
+                        .WithMany("Logs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TheaterLibrary.Manager", b =>
                 {
                     b.HasOne("TheaterLibrary.User", "User")
@@ -381,6 +419,8 @@ namespace Server.Migrations
                     b.Navigation("Admin");
 
                     b.Navigation("Client");
+
+                    b.Navigation("Logs");
 
                     b.Navigation("Manager");
                 });
