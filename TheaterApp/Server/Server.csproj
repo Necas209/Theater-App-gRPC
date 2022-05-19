@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="EntityFramework" Version="6.4.4" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.45.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
@@ -20,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GrpcLibrary\GrpcLibrary.csproj" />
       <ProjectReference Include="..\TheaterLibrary\TheaterLibrary.csproj" />
     </ItemGroup>
 
