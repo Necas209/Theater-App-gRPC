@@ -1,3 +1,4 @@
+using Greet;
 using Grpc.Core;
 
 namespace Server.Services;
