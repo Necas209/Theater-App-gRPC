@@ -5,12 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="270" Width="300">
     <Grid>
-        <Label Name="Message" Content="Greeting: "
-               Margin="20 40 60 40" Width="200" Height="30"
-               BorderBrush="Black" BorderThickness="1pt"></Label>
-        <Button Name="BtSayHello" Content="Say Hello"
-                Margin="320 40 0 40" Width="100" Height="30" Click="BtSayHello_OnClick"></Button>
+        <Label Content="UserName:" Margin="0 0 140 100" Width="90" Height="30" 
+               FontSize="16" HorizontalContentAlignment="Right"></Label>
+        <TextBox Margin="110 0 10 100" Height="30" Width="120"></TextBox>
+        <Label Content="Password:" Margin="0 100 140 100" Width="90" Height="30" 
+               FontSize="16" HorizontalContentAlignment="Right"></Label>
+        <PasswordBox Margin="110 100 10 100" Height="30" Width="120"></PasswordBox>
+        <Button Name="BtLogin" Content="Login"
+                Margin="0 120 0 0" Width="100" Height="30" Click="BtLogin_OnClick"></Button>
     </Grid>
 </Window>

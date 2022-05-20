@@ -9,6 +9,7 @@ public sealed class Client
     {
         Reservations = new HashSet<Reservation>();
         ShowsWatched = new HashSet<Watched>();
+        Transactions = new List<Transaction>();
     }
 
     [Key]
@@ -26,4 +27,7 @@ public sealed class Client
 
     [InverseProperty(nameof(Watched.Client))]
     public ICollection<Watched> ShowsWatched { get; set; }
+    
+    [InverseProperty(nameof(Transaction.Client))]
+    public ICollection<Transaction> Transactions { get; set; }
 }

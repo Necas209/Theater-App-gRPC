@@ -31,6 +31,8 @@ public class TheaterDbContext: DbContext
     public DbSet<Watched> Watched { get; set; }
     
     public DbSet<Log> Logs { get; set; }
+    
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +45,10 @@ public class TheaterDbContext: DbContext
             .HasPrecision(2);
         modelBuilder.Entity<Session>()
             .Property(u => u.TicketPrice)
+            .HasColumnType("money")
+            .HasPrecision(2);
+        modelBuilder.Entity<Transaction>()
+            .Property(u => u.Value)
             .HasColumnType("money")
             .HasPrecision(2);
     }

@@ -22,12 +22,16 @@ namespace Client
             var reply = await client.SayHelloAsync(
                 new HelloRequest { Name = "GreeterClient" }
             );
-            Message.Content = $"Greeting: {reply?.Message}";
         }
 
         private void BtSayHello_OnClick(object sender, RoutedEventArgs e)
         {
             Dispatcher.Invoke(async () => await Greet());
+        }
+
+        private void BtLogin_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
