@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public sealed class Session
 {
@@ -29,11 +29,11 @@ public sealed class Session
     public decimal TicketPrice { get; set; }
         
     [ForeignKey(nameof(ShowId))]
-    [InverseProperty(nameof(TheaterLibrary.Show.Sessions))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Show.Sessions))]
     public Show? Show { get; set; }
     
     [ForeignKey(nameof(TheaterId))]
-    [InverseProperty(nameof(TheaterLibrary.Theater.Sessions))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Theater.Sessions))]
     public Theater? Theater { get; set; }
     
     [InverseProperty(nameof(Reservation.Session))]

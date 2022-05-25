@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public class Log
 {
@@ -15,6 +15,6 @@ public class Log
     public string Message { get; set; }
     
     [ForeignKey(nameof(UserId))]
-    [InverseProperty(nameof(TheaterLibrary.User.Logs))]
+    [InverseProperty(nameof(GrpcLibrary.Models.User.Logs))]
     public User? User { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public sealed class Show
 {
@@ -21,7 +21,7 @@ public sealed class Show
     public int GenreId { get; set; }
     
     [ForeignKey(nameof(GenreId))]
-    [InverseProperty(nameof(TheaterLibrary.Genre.Shows))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Genre.Shows))]
     public Genre Genre { get; set; }
     
     [InverseProperty(nameof(Session.Show))]

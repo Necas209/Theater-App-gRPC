@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public class Manager
 {
@@ -9,6 +9,6 @@ public class Manager
     public int Id { get; set; }
     
     [ForeignKey(nameof(Id))]
-    [InverseProperty(nameof(TheaterLibrary.User.Manager))]
+    [InverseProperty(nameof(GrpcLibrary.Models.User.Manager))]
     public virtual User? User { get; set; }
 }

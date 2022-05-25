@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public sealed class User
 {
@@ -12,26 +12,26 @@ public sealed class User
     
     [Key]
     public int Id { get; set; }
-    
-    public string Name { get; set; }
-    
+
+    public string Name { get; set; } = null!;
+
     [StringLength(256)]
-    public string UserName { get; set; }
-    
+    public string UserName { get; set; } = null!;
+
     [DataType(DataType.EmailAddress)]
     [StringLength(256)]
-    public string Email { get; set; }
-    
+    public string Email { get; set; } = null!;
+
     [DataType(DataType.Password)]
-    public string Password { get; set; }
-    
-    [InverseProperty(nameof(TheaterLibrary.Admin.User))]
+    public string Password { get; set; } = null!;
+
+    [InverseProperty(nameof(GrpcLibrary.Models.Admin.User))]
     public Admin? Admin { get; set; }
 
-    [InverseProperty(nameof(TheaterLibrary.Client.User))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Client.User))]
     public Client? Client { get; set; }
 
-    [InverseProperty(nameof(TheaterLibrary.Manager.User))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Manager.User))]
     public Manager? Manager { get; set; }
     
     [InverseProperty(nameof(Log.User))]

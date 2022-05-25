@@ -17,7 +17,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GrpcLibrary\GrpcLibrary.csproj" />
-      <ProjectReference Include="..\TheaterLibrary\TheaterLibrary.csproj" />
     </ItemGroup>
 
 </Project>

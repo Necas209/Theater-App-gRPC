@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public sealed class Client
 {
@@ -19,7 +19,7 @@ public sealed class Client
     public decimal Funds { get; set; }
     
     [ForeignKey(nameof(Id))]
-    [InverseProperty(nameof(TheaterLibrary.User.Client))]
+    [InverseProperty(nameof(GrpcLibrary.Models.User.Client))]
     public User? User { get; set; }
     
     [InverseProperty(nameof(Reservation.Client))]

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public sealed class Transaction
 {
@@ -18,6 +18,6 @@ public sealed class Transaction
     public string Description { get; set; }
 
     [ForeignKey(nameof(ClientId))]
-    [InverseProperty(nameof(TheaterLibrary.Client.Transactions))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Client.Transactions))]
     public Client? Client { get; set; }
 }

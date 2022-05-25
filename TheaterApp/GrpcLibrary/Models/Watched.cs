@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TheaterLibrary;
+namespace GrpcLibrary.Models;
 
 public class Watched
 {
@@ -9,10 +9,10 @@ public class Watched
     public int ShowId { get; set; }
     
     [ForeignKey(nameof(ClientId))]
-    [InverseProperty(nameof(TheaterLibrary.Client.ShowsWatched))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Client.ShowsWatched))]
     public virtual Client? Client { get; set; }
     
     [ForeignKey(nameof(ShowId))]
-    [InverseProperty(nameof(TheaterLibrary.Show.ClientsWatched))]
+    [InverseProperty(nameof(GrpcLibrary.Models.Show.ClientsWatched))]
     public virtual Show? Show { get; set; }
 }
