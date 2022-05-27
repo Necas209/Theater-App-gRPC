@@ -10,29 +10,29 @@ public class TheaterDbContext: DbContext
     {
     }
     
-    public DbSet<User> Users { get; set; }
-    
-    public DbSet<Client> Clients { get; set; }
-    
-    public DbSet<Manager> Managers { get; set; }
+    public DbSet<User> Users { get; set; } = null!;
 
-    public DbSet<Admin> Admins { get; set; }
-    
-    public DbSet<Theater> Theaters { get; set; }
-    
-    public DbSet<Show> Shows { get; set; }
-    
-    public DbSet<Genre> Genres { get; set; }
-    
-    public DbSet<Session> Sessions { get; set; }
-    
-    public DbSet<Reservation> Reservations { get; set; }
-    
-    public DbSet<Watched> Watched { get; set; }
-    
-    public DbSet<Log> Logs { get; set; }
-    
-    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Client> Clients { get; set; } = null!;
+
+    public DbSet<Manager> Managers { get; set; } = null!;
+
+    public DbSet<Admin> Admins { get; set; } = null!;
+
+    public DbSet<Theater> Theaters { get; set; } = null!;
+
+    public DbSet<Show> Shows { get; set; } = null!;
+
+    public DbSet<Genre> Genres { get; set; } = null!;
+
+    public DbSet<Session> Sessions { get; set; } = null!;
+
+    public DbSet<Reservation> Reservations { get; set; } = null!;
+
+    public DbSet<Watched> Watched { get; set; } = null!;
+
+    public DbSet<Log> Logs { get; set; } = null!;
+
+    public DbSet<Transaction> Transactions { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

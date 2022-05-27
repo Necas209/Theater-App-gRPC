@@ -12,8 +12,8 @@ public class Log
     
     public int UserId { get; set; }
     
-    public string Message { get; set; }
-    
+    public string Message { get; set; } = null!;
+
     [ForeignKey(nameof(UserId))]
     [InverseProperty(nameof(GrpcLibrary.Models.User.Logs))]
     public User? User { get; set; }

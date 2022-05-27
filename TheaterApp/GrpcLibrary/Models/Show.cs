@@ -14,16 +14,16 @@ public sealed class Show
     [Key]
     public int Id { get; set; }
     
-    public string Name { get; set; }
-    
-    public string Synopsis { get; set; }
-    
+    public string Name { get; set; } = null!;
+
+    public string Synopsis { get; set; } = null!;
+
     public int GenreId { get; set; }
     
     [ForeignKey(nameof(GenreId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Genre.Shows))]
-    public Genre Genre { get; set; }
-    
+    public Genre? Genre { get; set; }
+
     [InverseProperty(nameof(Session.Show))]
     public ICollection<Session> Sessions { get; set; }
     

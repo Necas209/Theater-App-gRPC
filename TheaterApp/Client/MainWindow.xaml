@@ -9,10 +9,10 @@
     <Grid>
         <Label Content="UserName:" Margin="0 0 140 100" Width="90" Height="30" 
                FontSize="16" HorizontalContentAlignment="Right"></Label>
-        <TextBox Margin="110 0 10 100" Height="30" Width="120"></TextBox>
+        <TextBox Name="TbUserName" Margin="110 0 10 100" Height="30" Width="120"></TextBox>
         <Label Content="Password:" Margin="0 100 140 100" Width="90" Height="30" 
                FontSize="16" HorizontalContentAlignment="Right"></Label>
-        <PasswordBox Margin="110 100 10 100" Height="30" Width="120"></PasswordBox>
+        <PasswordBox Name="PbPassword" Margin="110 100 10 100" Height="30" Width="120" KeyDown="PbPassword_OnKeyDown"></PasswordBox>
         <Button Name="BtLogin" Content="Login"
                 Margin="0 120 0 0" Width="100" Height="30" Click="BtLogin_OnClick"></Button>
     </Grid>

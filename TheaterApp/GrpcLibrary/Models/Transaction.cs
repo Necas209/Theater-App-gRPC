@@ -14,8 +14,8 @@ public sealed class Transaction
     
     [DataType(DataType.Currency)]
     public decimal Value { get; set; }
-    
-    public string Description { get; set; }
+
+    public string Description { get; set; } = null!;
 
     [ForeignKey(nameof(ClientId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Client.Transactions))]

@@ -13,18 +13,18 @@ public sealed class Theater
     [Key] 
     public int Id { get; set; }
     
-    public string Name { get; set; }
-    
-    public string Location { get; set; }
-    
-    public string Address { get; set; }
-    
+    public string Name { get; set; } = null!;
+
+    public string Location { get; set; } = null!;
+
+    public string Address { get; set; } = null!;
+
     [DataType(DataType.EmailAddress)]
-    public string Email { get; set; }
-    
+    public string Email { get; set; } = null!;
+
     [DataType(DataType.PhoneNumber)]
-    public string PhoneNumber { get; set; }
-    
+    public string PhoneNumber { get; set; } = null!;
+
     [InverseProperty(nameof(Session.Theater))]
     public ICollection<Session> Sessions { get; set; }
 }
