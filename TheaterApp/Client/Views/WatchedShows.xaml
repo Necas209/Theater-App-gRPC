@@ -5,12 +5,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Client.Views"
         mc:Ignorable="d"
-        Title="Shows" Height="300" Width="450">
+        Title="Shows" Height="300" Width="550">
     <Grid>
         
         <Label Content="Espetáculos Assistidos" FontSize="17" Margin="130 5 130 260" HorizontalAlignment="Center"></Label>
         
-        <ListView Margin="30 50 30 10">
+        <ListView Margin="30 50 130 10">
             <ListView.View>
                 <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employee Information">
                     <GridViewColumn Header="Espetáculos" Width="100"/>
@@ -21,5 +21,12 @@
             </ListView.View>
         </ListView>
         
+        <DatePicker Margin="430 50 10 220" IsTodayHighlighted="True" SelectedDateFormat="Long" FirstDayOfWeek="Monday">
+            <DatePicker.BlackoutDates>
+                <CalendarDateRange End="12/13/2020 23:59:00" Start="12/19/2020 11:59 PM"/>
+            </DatePicker.BlackoutDates>
+        </DatePicker>
+        
+        <DatePicker Margin="430 150 10 120" IsTodayHighlighted="True" SelectedDateFormat="Long" FirstDayOfWeek="Monday"/>
     </Grid>
 </Window>
