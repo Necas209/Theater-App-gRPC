@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Input;
 using Greet;
-using Grpc.Net.Client;
 using GrpcLibrary.Models;
 
 namespace Client;
@@ -12,22 +11,11 @@ namespace Client;
 /// </summary>
 public partial class MainWindow
 {
-    private readonly Greeter.GreeterClient _client;
+    private readonly App _app;
 
     public MainWindow()
     {
-        // Configure a channel to use gRPC
-        var channel = GrpcChannel.ForAddress("https://localhost:7046");
-        _client = new Greeter.GreeterClient(channel);
-        // Dispatcher.Invoke(async () =>
-        // {
-        //     var reply = await _client.SayHelloAsync(
-        //         new HelloRequest
-        //         {
-        //             Message = "Hello",
-        //         }
-        //     );
-        // });
+        _app = (Application.Current as App)!;
         InitializeComponent();
     }
 
@@ -55,8 +43,8 @@ public partial class MainWindow
     private async Task Login()
     {
         var passwordHash = User.HashPassword(PbPassword.Password);
-
-        var reply = await _client.LoginAsync(
+        var client = new AuthManager.AuthManagerClient(_app.Channel);
+        var reply = await client.LoginAsync(
             new LoginRequest
             {
                 UserName = TbUserName.Text,
@@ -67,6 +55,7 @@ public partial class MainWindow
         {
             MessageBox.Show("Login successful!", "Info", 
                 MessageBoxButton.OK, MessageBoxImage.Information);
+            _app.UserId = reply.UserId;
         }
         else
         {
