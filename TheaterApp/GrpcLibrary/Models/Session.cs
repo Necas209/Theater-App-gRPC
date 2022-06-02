@@ -30,12 +30,12 @@ public sealed class Session
         
     [ForeignKey(nameof(ShowId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Show.Sessions))]
-    public Show? Show { get; set; }
-    
+    public Show Show { get; set; } = null!;
+
     [ForeignKey(nameof(TheaterId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Theater.Sessions))]
-    public Theater? Theater { get; set; }
-    
+    public Theater Theater { get; set; } = null!;
+
     [InverseProperty(nameof(Reservation.Session))]
     public ICollection<Reservation> Reservations { get; set; }
 }

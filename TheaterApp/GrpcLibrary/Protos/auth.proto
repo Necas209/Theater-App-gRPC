@@ -3,9 +3,8 @@
 package greet;
 
 // The greeting service definition.
-service Greeter {
+service AuthManager {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
   rpc Login (LoginRequest) returns (LoginReply);
 }
 
@@ -17,6 +16,7 @@ message LoginRequest {
 
 message LoginReply {
   bool login_status = 1;
+  int32 user_id = 2;
 }
 
 message HelloRequest {

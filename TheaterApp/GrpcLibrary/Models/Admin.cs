@@ -10,5 +10,5 @@ public class Admin
     
     [ForeignKey(nameof(Id))]
     [InverseProperty(nameof(GrpcLibrary.Models.User.Admin))]
-    public virtual User? User { get; set; }
+    public virtual User User { get; set; } = null!;
 }

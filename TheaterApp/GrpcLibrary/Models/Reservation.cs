@@ -18,9 +18,9 @@ public class Reservation
     
     [ForeignKey(nameof(ClientId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Client.Reservations))]
-    public virtual Client? Client { get; set; }
-    
+    public virtual Client Client { get; set; } = null!;
+
     [ForeignKey(nameof(SessionId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Session.Reservations))]
-    public virtual Session? Session { get; set; }
+    public virtual Session Session { get; set; } = null!;
 }

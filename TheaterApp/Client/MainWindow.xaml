@@ -13,7 +13,7 @@
         <Label Content="Password:" Margin="0 100 140 100" Width="90" Height="30" 
                FontSize="16" HorizontalContentAlignment="Right"></Label>
         <PasswordBox Name="PbPassword" Margin="110 100 10 100" Height="30" Width="120" KeyDown="PbPassword_OnKeyDown"></PasswordBox>
-        <Button Name="BtLogin" Content="Login"
+        <Button Style="{DynamicResource RoundButton}" Name="BtLogin" Content="Login"
                 Margin="0 120 0 0" Width="100" Height="30" Click="BtLogin_OnClick"></Button>
     </Grid>
 </Window>

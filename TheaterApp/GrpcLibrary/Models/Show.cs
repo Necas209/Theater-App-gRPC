@@ -22,7 +22,7 @@ public sealed class Show
     
     [ForeignKey(nameof(GenreId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Genre.Shows))]
-    public Genre? Genre { get; set; }
+    public Genre Genre { get; set; } = null!;
 
     [InverseProperty(nameof(Session.Show))]
     public ICollection<Session> Sessions { get; set; }

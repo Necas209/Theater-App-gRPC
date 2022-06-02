@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+
+package greet;
+
+// The greeting service definition.
+service ClientManager {
+  // Sends a greeting
+  rpc GetReservations (GetReservationsRequest) returns (GetReservationsReply);
+}
+
+message GetReservationsRequest {
+  int32 user_id = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message GetReservationsReply {
+  string reservations = 1;
+}
+

@@ -19,6 +19,9 @@
       <Protobuf Include="Protos\auth.proto">
         <Generator>MSBuild:Compile</Generator>
       </Protobuf>
+      <Protobuf Include="Protos\client.proto">
+          <Generator>MSBuild:Compile</Generator>
+      </Protobuf>
     </ItemGroup>
 
 </Project>

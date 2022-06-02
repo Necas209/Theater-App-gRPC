@@ -10,9 +10,9 @@ public class Watched
     
     [ForeignKey(nameof(ClientId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Client.ShowsWatched))]
-    public virtual Client? Client { get; set; }
-    
+    public virtual Client Client { get; set; } = null!;
+
     [ForeignKey(nameof(ShowId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Show.ClientsWatched))]
-    public virtual Show? Show { get; set; }
+    public virtual Show Show { get; set; } = null!;
 }

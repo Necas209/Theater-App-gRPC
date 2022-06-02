@@ -20,8 +20,8 @@ public sealed class Client
     
     [ForeignKey(nameof(Id))]
     [InverseProperty(nameof(GrpcLibrary.Models.User.Client))]
-    public User? User { get; set; }
-    
+    public User User { get; set; } = null!;
+
     [InverseProperty(nameof(Reservation.Client))]
     public ICollection<Reservation> Reservations { get; set; }
 

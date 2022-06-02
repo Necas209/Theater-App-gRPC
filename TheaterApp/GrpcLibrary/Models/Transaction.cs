@@ -19,5 +19,5 @@ public sealed class Transaction
 
     [ForeignKey(nameof(ClientId))]
     [InverseProperty(nameof(GrpcLibrary.Models.Client.Transactions))]
-    public Client? Client { get; set; }
+    public Client Client { get; set; } = null!;
 }
