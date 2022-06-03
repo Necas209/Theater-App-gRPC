@@ -1,4 +1,3 @@
-using Greet;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
