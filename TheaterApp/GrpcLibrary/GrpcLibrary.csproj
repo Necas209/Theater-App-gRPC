@@ -16,10 +16,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Protobuf Include="Protos\auth.proto">
+        <Protobuf Include="Protos\auth.proto">
         <Generator>MSBuild:Compile</Generator>
       </Protobuf>
       <Protobuf Include="Protos\client.proto">
+          <Generator>MSBuild:Compile</Generator>
+      </Protobuf>
+      <Protobuf Include="Protos\manager.proto">
+          <Generator>MSBuild:Compile</Generator>
+      </Protobuf>
+      <Protobuf Include="Protos\admin.proto">
+          <Generator>MSBuild:Compile</Generator>
+      </Protobuf>
+      <Protobuf Include="Protos\theater.proto">
           <Generator>MSBuild:Compile</Generator>
       </Protobuf>
     </ItemGroup>

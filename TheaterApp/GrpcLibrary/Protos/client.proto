@@ -1,17 +1,73 @@
 ﻿syntax = "proto3";
 
-package greet;
+import "google/protobuf/timestamp.proto";
 
-// The greeting service definition.
 service ClientManager {
-  // Sends a greeting
+  rpc GetClientInfo (GetClientInfoRequest) returns (GetClientInfoReply);
+  rpc AddFunds (AddFundsRequest) returns (AddFundsReply);
+  rpc BuyTickets (BuyTicketsRequest) returns (BuyTicketsReply);
+  rpc Refund (RefundRequest) returns (RefundReply);
+  rpc MarkAsWatched (MarkAsWatchedRequest) returns (MarkAsWatchedReply);
   rpc GetReservations (GetReservationsRequest) returns (GetReservationsReply);
+}
+
+message GetClientInfoRequest {
+  int32 user_id = 1; 
+}
+
+message GetClientInfoReply {
+  string client_info = 1;  
+}
+
+message RefundRequest {
+  int32 user_id = 1;
+  int32 reservation_id = 2;
+}
+
+message RefundReply {
+  bool result = 1;
+  string description = 2;
+  double funds = 3;
+}
+
+message BuyTicketsRequest {
+  int32 client_id = 1;
+  int32 session_id = 2;
+  int32 no_tickets = 3;
+  google.protobuf.Timestamp time_of_purchase = 4;
+}
+
+message BuyTicketsReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message MarkAsWatchedRequest {
+  int32 user_id = 1;
+  int32 show_id = 2;
+}
+
+message MarkAsWatchedReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message AddFundsRequest {
+  int32 user_id = 1;
+  double funds = 2;
+  string payment_method = 3;
+}
+
+message AddFundsReply {
+  bool result = 1;
+  string description = 2;
+  double total_funds = 3;
 }
 
 message GetReservationsRequest {
   int32 user_id = 1;
-  string start_date = 2;
-  string end_date = 3;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
 }
 
 message GetReservationsReply {

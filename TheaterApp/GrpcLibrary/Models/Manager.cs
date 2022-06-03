@@ -9,6 +9,6 @@ public class Manager
     public int Id { get; set; }
     
     [ForeignKey(nameof(Id))]
-    [InverseProperty(nameof(GrpcLibrary.Models.User.Manager))]
-    public virtual User User { get; set; } = null!;
+    [InverseProperty(nameof(Models.User.Manager))]
+    public virtual User? User { get; set; }
 }

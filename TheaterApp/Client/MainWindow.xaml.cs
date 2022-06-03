@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Greet;
 using GrpcLibrary.Models;
 
 namespace Client;

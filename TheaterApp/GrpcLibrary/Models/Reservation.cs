@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GrpcLibrary.Models;
 
-public class Reservation
+public sealed class Reservation
 {
     [Key]
     public int Id { get; set; }
@@ -16,11 +16,13 @@ public class Reservation
     
     public DateTime TimeOfPurchase { get; set; }
     
+    public decimal Total { get; set; }
+    
     [ForeignKey(nameof(ClientId))]
-    [InverseProperty(nameof(GrpcLibrary.Models.Client.Reservations))]
-    public virtual Client Client { get; set; } = null!;
+    [InverseProperty(nameof(Models.Client.Reservations))]
+    public Client? Client { get; set; }
 
     [ForeignKey(nameof(SessionId))]
-    [InverseProperty(nameof(GrpcLibrary.Models.Session.Reservations))]
-    public virtual Session Session { get; set; } = null!;
+    [InverseProperty(nameof(Models.Session.Reservations))]
+    public Session? Session { get; set; }
 }

@@ -9,7 +9,7 @@ public sealed class Client
     {
         Reservations = new HashSet<Reservation>();
         ShowsWatched = new HashSet<Watched>();
-        Transactions = new List<Transaction>();
+        Movements = new List<Movement>();
     }
 
     [Key]
@@ -19,8 +19,8 @@ public sealed class Client
     public decimal Funds { get; set; }
     
     [ForeignKey(nameof(Id))]
-    [InverseProperty(nameof(GrpcLibrary.Models.User.Client))]
-    public User User { get; set; } = null!;
+    [InverseProperty(nameof(Models.User.Client))]
+    public User? User { get; set; }
 
     [InverseProperty(nameof(Reservation.Client))]
     public ICollection<Reservation> Reservations { get; set; }
@@ -28,6 +28,6 @@ public sealed class Client
     [InverseProperty(nameof(Watched.Client))]
     public ICollection<Watched> ShowsWatched { get; set; }
     
-    [InverseProperty(nameof(Transaction.Client))]
-    public ICollection<Transaction> Transactions { get; set; }
+    [InverseProperty(nameof(Movement.Client))]
+    public ICollection<Movement> Movements { get; set; }
 }

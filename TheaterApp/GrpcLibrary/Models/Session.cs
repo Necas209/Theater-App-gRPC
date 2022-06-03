@@ -29,12 +29,12 @@ public sealed class Session
     public decimal TicketPrice { get; set; }
         
     [ForeignKey(nameof(ShowId))]
-    [InverseProperty(nameof(GrpcLibrary.Models.Show.Sessions))]
-    public Show Show { get; set; } = null!;
+    [InverseProperty(nameof(Models.Show.Sessions))]
+    public Show? Show { get; set; }
 
     [ForeignKey(nameof(TheaterId))]
-    [InverseProperty(nameof(GrpcLibrary.Models.Theater.Sessions))]
-    public Theater Theater { get; set; } = null!;
+    [InverseProperty(nameof(Models.Theater.Sessions))]
+    public Theater? Theater { get; set; }
 
     [InverseProperty(nameof(Reservation.Session))]
     public ICollection<Reservation> Reservations { get; set; }

@@ -35,13 +35,13 @@ public sealed class User
     [StringLength(64)]
     public string PasswordHash { get; set; } = null!;
 
-    [InverseProperty(nameof(GrpcLibrary.Models.Admin.User))]
+    [InverseProperty(nameof(Models.Admin.User))]
     public Admin? Admin { get; set; }
 
-    [InverseProperty(nameof(GrpcLibrary.Models.Client.User))]
+    [InverseProperty(nameof(Models.Client.User))]
     public Client? Client { get; set; }
 
-    [InverseProperty(nameof(GrpcLibrary.Models.Manager.User))]
+    [InverseProperty(nameof(Models.Manager.User))]
     public Manager? Manager { get; set; }
     
     [InverseProperty(nameof(Log.User))]

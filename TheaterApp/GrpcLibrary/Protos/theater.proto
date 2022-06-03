@@ -1,0 +1,33 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+service TheaterManager {
+  rpc GetTheaters (GetTheatersRequest) returns (GetTheatersReply);
+  rpc GetShows (GetShowsRequest) returns (GetShowsReply);
+  rpc GetSessions (GetSessionsRequest) returns (GetSessionsReply);
+}
+
+message GetTheatersRequest {
+  
+}
+
+message GetTheatersReply {
+  
+}
+
+message GetShowsRequest {
+  
+}
+
+message GetShowsReply {
+  
+}
+
+message GetSessionsRequest {
+  
+}
+
+message GetSessionsReply {
+  
+}

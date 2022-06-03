@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Windows;
-using Client.ViewModels;
-using Greet;
+using Google.Protobuf.WellKnownTypes;
 using GrpcLibrary.Models;
 
 namespace Client.Views;
@@ -12,40 +11,45 @@ namespace Client.Views;
 public partial class ReservationsWindow
 {
     private readonly App _app;
-    private readonly ReservationsViewModel _model;
+
+    public ObservableCollection<Reservation> Reservations { get; set; }
 
     public ReservationsWindow()
     {
         _app = (Application.Current as App)!;
-        _model = (DataContext as ReservationsViewModel)!;
-        GetReservations();
+        Reservations = new ObservableCollection<Reservation>();
         InitializeComponent();
+        DpStartDate.SelectedDate = DateTime.Today.AddMonths(-3);
+        DpEndDate.SelectedDate = DateTime.Today;
+        GetReservations();
     }
 
     private void GetReservations()
     {
-        Dispatcher.Invoke(async () =>
-        {
-            var client = new ClientManager.ClientManagerClient(_app.Channel);
-            var reply = await client.GetReservationsAsync(
-                new GetReservationsRequest
-                {
-                    UserId = _app.UserId,
-                    EndDate = _model.EndDate.ToString(CultureInfo.InvariantCulture),
-                    StartDate = _model.StartDate.ToString(CultureInfo.InvariantCulture)
-                }
-            );
-            var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);
-            _model.Reservations.Clear();
-            reservations?.ForEach(x => _model.Reservations.Add(x));
-        });
+        if (DpStartDate.SelectedDate == null || DpEndDate.SelectedDate == null)
+            MessageBox.Show("Data de início/fim por selecionar!");
+        else
+            Dispatcher.Invoke(async () =>
+            {
+                var client = new ClientManager.ClientManagerClient(_app.Channel);
+                var reply = await client.GetReservationsAsync(new GetReservationsRequest
+                    {
+                        UserId = _app.UserId,
+                        StartDate = Timestamp.FromDateTime((DateTime)DpStartDate.SelectedDate),
+                        EndDate = Timestamp.FromDateTime((DateTime)DpEndDate.SelectedDate)
+                    }
+                );
+                var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);
+                Reservations.Clear();
+                Reservations = new ObservableCollection<Reservation>(reservations!);
+            });
     }
 
     private void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        if (_model.EndDate > DateTime.Now)
+        if (DpEndDate.SelectedDate > DateTime.Now)
         {
-            MessageBox.Show("Invalid end date!");
+            MessageBox.Show("Data de fim deve ser atual!");
         }
         else
         {

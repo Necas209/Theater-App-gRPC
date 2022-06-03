@@ -32,7 +32,7 @@ public class TheaterDbContext: DbContext
 
     public DbSet<Log> Logs { get; set; } = null!;
 
-    public DbSet<Transaction> Transactions { get; set; } = null!;
+    public DbSet<Movement> Movements { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,8 +47,12 @@ public class TheaterDbContext: DbContext
             .Property(u => u.TicketPrice)
             .HasColumnType("money")
             .HasPrecision(2);
-        modelBuilder.Entity<Transaction>()
+        modelBuilder.Entity<Movement>()
             .Property(u => u.Value)
+            .HasColumnType("money")
+            .HasPrecision(2);
+        modelBuilder.Entity<Reservation>()
+            .Property(u => u.Total)
             .HasColumnType("money")
             .HasPrecision(2);
     }

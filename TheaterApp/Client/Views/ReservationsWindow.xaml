@@ -3,26 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:viewModels="clr-namespace:Client.ViewModels"
         mc:Ignorable="d"
-        Title="Shows" Height="300" Width="550">
-    <Window.DataContext>
-        <viewModels:ReservationsViewModel/>
-    </Window.DataContext>
+        Title="Shows" Height="300" Width="550"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Label Content="Espetáculos Assistidos" FontSize="17" Margin="130 5 130 260" HorizontalAlignment="Center"></Label>
-        <ListView Margin="30 50 130 10">
+        <ListView Margin="30 50 130 10" ItemsSource="{Binding Reservations}">
             <ListView.View>
                 <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Reservas">
-                    <GridViewColumn Header="Espetáculos" Width="100" />
-                    <GridViewColumn Header="N.º Bilhetes" Width="100" />
-                    <GridViewColumn Header="Preço" Width="100" />
-                    <GridViewColumn Header="Data" Width="100" />
+                    <GridViewColumn Header="Espetáculos" Width="100" DisplayMemberBinding="{Binding Session.Show.Name}" />
+                    <GridViewColumn Header="N.º Bilhetes" Width="100" DisplayMemberBinding="{Binding NoTickets}" />
+                    <GridViewColumn Header="Valor Total" Width="100" DisplayMemberBinding="{Binding Total}" />
+                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding Session.Showtime}" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <DatePicker Margin="430 50 10 220" SelectedDate="{Binding StartDate}" IsTodayHighlighted="True" SelectedDateFormat="Long" FirstDayOfWeek="Monday" />
-        <DatePicker Margin="430 150 10 120" SelectedDate="{Binding EndDate}" IsTodayHighlighted="True" SelectedDateFormat="Long" FirstDayOfWeek="Monday" />
+        <DatePicker Name="DpStartDate" Margin="430 50 10 220" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
+        <DatePicker Name="DpEndDate" Margin="430 150 10 120" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
         <Button Style="{DynamicResource RoundButton}" Margin="450 220 30 50" Content="Filtrar" Click="BtFilter_OnClick"/>
     </Grid>
 </Window>

@@ -1,0 +1,83 @@
+﻿syntax = "proto3";
+
+import "Protos/bcl.proto";
+
+message Genre {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Show {
+  int32 id = 1;
+  string name = 2;
+  string synopsis = 3;
+  int32 genre_id = 4;
+  Genre genre = 5;
+}
+
+message Theater {
+  int32 id = 1;
+  string name = 2;
+  string location = 3;
+  string address = 4;
+  string email = 5;
+  string phone_number = 6;
+}
+
+message Session {
+  int32 id = 1;
+  int32 show_id = 2;
+  int32 theater_id = 3;
+  bcl.DateTime showtime = 4;
+  bcl.TimeSpan length = 5;
+  int32 total_seats = 6;
+  int32 available_seats = 7;
+  bcl.DateTime ticket_price = 8;
+  Show show = 9;
+  Theater theater = 10;
+}
+
+message User {
+  int32 id = 1;
+  string name = 2;
+  string user_name = 3;
+  string email = 4;
+  string password_hash = 5;
+  optional Admin admin = 6;
+  optional Client client = 7;
+  optional Manager manager = 8;
+}
+
+message Client {
+  int32 id = 1;
+  bcl.Decimal funds = 2;
+  optional User user = 3;
+}
+
+message Admin {
+  int32 id = 1;
+  optional User user = 2;
+}
+
+message Manager {
+  int32 id = 1;
+  optional User user = 2;
+}
+
+message Watched {
+  int32 client_id = 1;
+  int32 show_id = 2;
+  optional Client client = 3;
+  optional Show show = 4;
+}
+
+message Reservation {
+  int32 id = 1;
+  int32 client_id = 2;
+  int32 session_id = 3;
+  int32 no_tickets = 4;
+  bcl.DateTime time_of_purchase = 5;
+  bcl.DateTime total = 6;
+  optional Client client = 7;
+  optional Session session = 8;
+}

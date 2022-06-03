@@ -1,10 +1,6 @@
 ﻿syntax = "proto3";
 
-package greet;
-
-// The greeting service definition.
 service AuthManager {
-  // Sends a greeting
   rpc Login (LoginRequest) returns (LoginReply);
 }
 
@@ -17,13 +13,4 @@ message LoginRequest {
 message LoginReply {
   bool login_status = 1;
   int32 user_id = 2;
-}
-
-message HelloRequest {
-  string message = 1;
-}
-
-// The response message containing the greetings.
-message HelloReply {
-  string message = 1;
 }
