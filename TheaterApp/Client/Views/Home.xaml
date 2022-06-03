@@ -8,6 +8,8 @@
         Title="Home" Height="450" Width="800">
     <Grid>
         <TextBox Text="Pesquisa" Margin="300 10 300 420"></TextBox>
+        <Button Content="3.30€" Margin="700 8 45 416" Background="Transparent" BorderThickness="0"></Button>
+        <Image Margin="750 -10 0 400"  Source="../Icons/icon.jpg"/>
         <ListView Margin="30 50 30 50">
             <ListView.View>
                 <GridView>

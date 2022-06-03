@@ -19,4 +19,8 @@
       <Compile Remove="Views\CancelPurchase.xaml.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Icons" />
+    </ItemGroup>
+
 </Project>
