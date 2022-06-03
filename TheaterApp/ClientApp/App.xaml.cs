@@ -1,6 +1,6 @@
 ﻿using Grpc.Net.Client;
 
-namespace Client
+namespace ClientApp
 {
     /// <summary>
     /// Interaction logic for App.xaml

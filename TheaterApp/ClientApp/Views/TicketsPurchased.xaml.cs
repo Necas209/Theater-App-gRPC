@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Client.Views;
+namespace ClientApp.Views;
 
 public partial class Shows : Window
 {

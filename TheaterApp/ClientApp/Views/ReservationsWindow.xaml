@@ -1,4 +1,4 @@
-﻿<Window x:Class="Client.Views.ReservationsWindow"
+﻿<Window x:Class="ClientApp.Views.ReservationsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +7,7 @@
         Title="Shows" Height="300" Width="550"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
-        <Label Content="Espetáculos Assistidos" FontSize="17" Margin="130 5 130 260" HorizontalAlignment="Center"></Label>
+        <Label Content="Espetáculos Assistidos" FontSize="17" Margin="130 5 130 260" HorizontalAlignment="Center" />
         <ListView Margin="30 50 130 10" ItemsSource="{Binding Reservations}">
             <ListView.View>
                 <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Reservas">
@@ -20,6 +20,6 @@
         </ListView>
         <DatePicker Name="DpStartDate" Margin="430 50 10 220" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
         <DatePicker Name="DpEndDate" Margin="430 150 10 120" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
-        <Button Style="{DynamicResource RoundButton}" Margin="450 220 30 50" Content="Filtrar" Click="BtFilter_OnClick"/>
+        <Button Style="{DynamicResource RoundButton}" Margin="450 220 30 50" Content="Filtrar" Click="BtFilter_OnClick" />
     </Grid>
 </Window>

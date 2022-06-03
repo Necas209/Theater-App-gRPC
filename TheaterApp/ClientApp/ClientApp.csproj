@@ -5,20 +5,13 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <RootNamespace>ClientApp</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\GrpcLibrary\GrpcLibrary.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Page Remove="Views\CancelPurchase.xaml" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Views\CancelPurchase.xaml.cs" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <Folder Include="Icons" />
     </ItemGroup>

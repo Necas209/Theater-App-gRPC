@@ -6,13 +6,13 @@ using System.Windows;
 using Google.Protobuf.WellKnownTypes;
 using GrpcLibrary.Models;
 
-namespace Client.Views;
+namespace ClientApp.Views;
 
 public partial class ReservationsWindow
 {
     private readonly App _app;
 
-    public ObservableCollection<Reservation> Reservations { get; set; }
+    public ObservableCollection<Reservation> Reservations { get; }
 
     public ReservationsWindow()
     {
@@ -41,7 +41,7 @@ public partial class ReservationsWindow
                 );
                 var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);
                 Reservations.Clear();
-                Reservations = new ObservableCollection<Reservation>(reservations!);
+                reservations?.ForEach(reservation => Reservations.Add(reservation));
             });
     }
 
