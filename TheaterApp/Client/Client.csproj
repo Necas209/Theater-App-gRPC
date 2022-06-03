@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+<<<<<<< Updated upstream
       <Page Remove="Views\CancelPurchase.xaml" />
     </ItemGroup>
 
@@ -21,6 +22,9 @@
 
     <ItemGroup>
       <Folder Include="Icons" />
+=======
+      <Folder Include="ViewModels" />
+>>>>>>> Stashed changes
     </ItemGroup>
 
 </Project>
