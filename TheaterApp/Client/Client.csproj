@@ -11,4 +11,12 @@
       <ProjectReference Include="..\GrpcLibrary\GrpcLibrary.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Page Remove="Views\CancelPurchase.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Views\CancelPurchase.xaml.cs" />
+    </ItemGroup>
+
 </Project>
