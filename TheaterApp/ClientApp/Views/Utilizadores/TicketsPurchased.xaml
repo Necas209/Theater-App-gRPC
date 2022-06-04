@@ -8,7 +8,7 @@
         Title="Shows" Height="340" Width="450">
     <Grid>
         
-        <Label Content="Bilhetes Comprados" FontSize="17" Margin="130 5 130 260" HorizontalAlignment="Center"></Label>
+        <Label Content="Bilhetes Comprados" FontSize="17" Margin="130 5 130 300" HorizontalAlignment="Center"></Label>
         
         <ListView Margin="30 50 30 50">
             <ListView.View>

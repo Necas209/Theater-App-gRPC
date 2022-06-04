@@ -1,0 +1,43 @@
+﻿<Window x:Class="ClientApp.Views.PurchaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="PurchaseWindow" Height="400" Width="500">
+    <Grid>
+        <Label Content="Comprar bilhetes" Margin="200 0 200 370" HorizontalContentAlignment="Center"/>
+        <Label Content="Saldo:" Margin="400 30 60 345" FontSize="10" HorizontalContentAlignment="Right" />
+        <Label Content="3,30€" Name="LbFunds" Margin="440 30 10 345" FontSize="10" />
+        <TextBlock Margin="20 60 20 325" TextWrapping="WrapWithOverflow" Text="Lorem ipsum" FontSize="11"
+                   HorizontalAlignment="Center" />
+        <Label Content="Sinopse" Margin="10 85 430 285 "></Label>
+        <Border Margin="10 109 263.5 110" Background="White" BorderBrush="Gray" BorderThickness="1" ></Border>
+        <ScrollViewer Margin="20 110 265 112">
+            <TextBlock FontSize="10" Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." TextWrapping="WrapWithOverflow"/>
+        </ScrollViewer>
+        <DatePicker Name="DpStartDate" Margin="380 80 20 295" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
+        <ListView FontSize="10" Margin="260 110 20 110">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Data" Width="70" />
+                    <GridViewColumn Header="Hora" Width="70" />
+                    <GridViewColumn Header="Lugares Vagos" Width="80"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+        <Label Content="Nº Bilhetes:" Margin="130 320 305 55" FontSize="10" />
+        <ComboBox Margin="200 320 263.5 60" FontSize="10" HorizontalContentAlignment="Center">
+            <ComboBoxItem IsSelected="True">1 </ComboBoxItem>
+            <ComboBoxItem>2</ComboBoxItem>
+            <ComboBoxItem>3</ComboBoxItem>
+            <ComboBoxItem>4</ComboBoxItem>
+            <ComboBoxItem>5</ComboBoxItem>
+            <ComboBoxItem>6</ComboBoxItem>
+        </ComboBox>
+        <Label Content="Valor a pagar:" Margin="260 320 170 55"  FontSize="10" />
+        <Label Content="15,30€" Margin="330 320 120 55" FontSize="10" />
+        <Button Content="Comprar" Margin="390 355 20 15" Style="{DynamicResource RoundButton }"/>
+    </Grid>
+</Window>

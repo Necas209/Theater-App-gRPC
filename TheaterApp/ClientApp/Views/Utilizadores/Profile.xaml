@@ -14,13 +14,13 @@
         <Button Margin="290 55 90 205" Background="Transparent" BorderThickness="0">
             <Image Source="../Icons/Edit.png" />
         </Button>
-        <Border Margin="10 100 10 70" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" ></Border>
+        <Border Margin="10 100 10 70" Background="White" BorderBrush="Gainsboro" BorderThickness="2" ></Border>
         <Label Content="Alterar palavra-passe" Margin="30 88 265 165" Background="White" FontSize="10" HorizontalContentAlignment="Center"/>
         <Label Content="Palavra-passe antiga:" Margin="30 130 260 120" FontSize="10" HorizontalContentAlignment="Right"/>
         <TextBox Margin="150 130 30 120"></TextBox>
         <Label Content="Palavra-passe nova:" Margin="30 170 260 80" FontSize="10" HorizontalContentAlignment="Right"/>
         <TextBox Margin="150 170 30 80"></TextBox>
-        <Button Content="Salvar Alterações" Margin="300 215 10 45" FontSize="10"></Button>
+        <Button Content="Salvar Alterações" Margin="300 215 10 45" FontSize="10" Style="{DynamicResource RoundButton }"></Button>
         <Button Content="Bilhetes Comprados" Margin="50 245 220 15" Foreground="Blue" FontSize="10" Background="Transparent" BorderThickness="0"></Button>
         <Button Content="Adicionar Fundos à Carteira" Margin="190 245 70 15" Foreground="Blue" FontSize="10" Background="Transparent" BorderThickness="0"></Button>
     </Grid>

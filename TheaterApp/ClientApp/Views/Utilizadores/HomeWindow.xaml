@@ -16,11 +16,11 @@
         <ListView Margin="30 50 30 50">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Localização" Width="120" />
-                    <GridViewColumn Header="Teatro" Width="130" />
-                    <GridViewColumn Header="Espetáculo" Width="150" />
-                    <GridViewColumn Header="Género" Width="100" />
-                    <GridViewColumn Header="Sessão" Width="100" />
+                    <GridViewColumn Header="Localização" Width="140" />
+                    <GridViewColumn Header="Teatro" Width="150" />
+                    <GridViewColumn Header="Espetáculo" Width="160" />
+                    <GridViewColumn Header="Género" Width="110" />
+                    <GridViewColumn Header="Duração" Width="110" />
                     <GridViewColumn Header="Preço" Width="70" />
                     <GridViewColumn Header="Assistido" Width="70" />
                 </GridView>

@@ -11,9 +11,13 @@
     <ItemGroup>
       <ProjectReference Include="..\GrpcLibrary\GrpcLibrary.csproj" />
     </ItemGroup>
-    
+
     <ItemGroup>
-      <Folder Include="Icons" />
+      <Page Remove="Views\Gestão\Perfil.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Views\Gestão\Perfil.xaml.cs" />
     </ItemGroup>
 
 </Project>

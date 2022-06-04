@@ -1,0 +1,22 @@
+﻿<Window x:Class="ClientApp.Views.Administração_do_Sistema.SessionsList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ClientApp.Views.Administração_do_Sistema"
+        mc:Ignorable="d"
+        Title="SessionsList" Height="340" Width="450">
+    <Grid>
+        <Label Content="Lista de Sessões" FontSize="17" Margin="130 5 130 300" HorizontalAlignment="Center"></Label>
+        
+        <ListView Margin="30 50 30 50">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Data/Hora" Width="130"/>
+                    <GridViewColumn Header="Preço" Width="130"/>
+                    <GridViewColumn Header="Lugares Vagos" Width="130"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
