@@ -21,7 +21,7 @@
             </ListView.View>
         </ListView>
         
-        <Button Margin="270 300 30 10 " Content="Cancelar bilhete"></Button>
+        <Button Style="{DynamicResource RoundButton }" Margin="270 300 30 10 " Content="Cancelar bilhete"></Button>
         
     </Grid>
 </Window>

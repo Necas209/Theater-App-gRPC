@@ -8,17 +8,24 @@
     <Grid>
         <TextBox Text="Pesquisa" Margin="300 10 300 420" />
         <Button Content="3.30€" Margin="700 8 45 416" Background="Transparent" BorderThickness="0" />
-        <Image Margin="750 -10 0 400" Source="../Icons/icon.jpg" />
+        
+        <Button Margin="750 3 5 408" Background="Transparent" BorderThickness="0">
+            <Image Source="../Icons/Profile2.png" />
+        </Button>
+        
         <ListView Margin="30 50 30 50">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Localização" Width="150" />
-                    <GridViewColumn Header="Teatro" Width="150" />
-                    <GridViewColumn Header="Espetáculo" Width="185" />
-                    <GridViewColumn Header="Sessão" Width="150" />
-                    <GridViewColumn Header="Preço bilhete" Width="100" />
+                    <GridViewColumn Header="Localização" Width="120" />
+                    <GridViewColumn Header="Teatro" Width="130" />
+                    <GridViewColumn Header="Espetáculo" Width="150" />
+                    <GridViewColumn Header="Género" Width="100" />
+                    <GridViewColumn Header="Sessão" Width="100" />
+                    <GridViewColumn Header="Preço" Width="70" />
+                    <GridViewColumn Header="Assistido" Width="70" />
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button Content="Comprar Bilhete" Style="{DynamicResource RoundButton }" Margin="600 410 30 15"></Button>
     </Grid>
 </Window>
