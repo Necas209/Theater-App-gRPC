@@ -18,6 +18,8 @@ public sealed class Show
 
     public string Synopsis { get; set; } = null!;
 
+    public TimeSpan Length { get; set; }
+    
     public int GenreId { get; set; }
     
     [ForeignKey(nameof(GenreId))]

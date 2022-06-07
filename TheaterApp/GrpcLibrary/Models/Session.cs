@@ -19,8 +19,6 @@ public sealed class Session
     
     public DateTime Showtime { get; set; }
     
-    public TimeSpan Length { get; set; }
-    
     public int TotalSeats { get; set; }
     
     public int AvailableSeats { get; set; }

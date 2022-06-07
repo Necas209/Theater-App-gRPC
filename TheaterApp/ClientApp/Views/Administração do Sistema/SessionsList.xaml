@@ -13,8 +13,8 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Data/Hora" Width="130"/>
-                    <GridViewColumn Header="Preço" Width="130"/>
-                    <GridViewColumn Header="Lugares Vagos" Width="130"/>
+                    <GridViewColumn Header="Preço" Width="100"/>
+                    <GridViewColumn Header="Lugares Disponíveis" Width="130"/>
                 </GridView>
             </ListView.View>
         </ListView>
