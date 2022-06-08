@@ -1,5 +1,6 @@
 ﻿syntax = "proto3";
 
+import "CustomTypes/customtypes.proto";
 import "google/protobuf/timestamp.proto";
 
 service ClientManager {
@@ -27,7 +28,7 @@ message RefundRequest {
 message RefundReply {
   bool result = 1;
   string description = 2;
-  double funds = 3;
+  customTypes.DecimalValue funds = 3;
 }
 
 message BuyTicketsRequest {
@@ -54,14 +55,14 @@ message MarkAsWatchedReply {
 
 message AddFundsRequest {
   int32 user_id = 1;
-  double funds = 2;
+  customTypes.DecimalValue funds = 2;
   string payment_method = 3;
 }
 
 message AddFundsReply {
   bool result = 1;
   string description = 2;
-  double total_funds = 3;
+  customTypes.DecimalValue total_funds = 3;
 }
 
 message GetReservationsRequest {

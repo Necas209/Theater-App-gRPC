@@ -31,16 +31,6 @@ public class ClientService : ClientManager.ClientManagerBase
 
     public override async Task<BuyTicketsReply> BuyTickets(BuyTicketsRequest request, ServerCallContext context)
     {
-        var ticketsAvailable = await _context.Reservations
-            .Where(x => x.SessionId == request.SessionId)
-            .SumAsync(x => x.NoTickets);
-        if (request.NoTickets > ticketsAvailable)
-            return await Task.FromResult(new BuyTicketsReply
-            {
-                Result = false,
-                Description = "Not enough tickets available."
-            });
-
         var client = await _context.Clients.FindAsync(request.ClientId);
         if (client == null)
             return await Task.FromResult(new BuyTicketsReply
@@ -55,6 +45,12 @@ public class ClientService : ClientManager.ClientManagerBase
                 Result = false,
                 Description = "Session ID not found."
             });
+        if (request.NoTickets > session.AvailableSeats)
+            return await Task.FromResult(new BuyTicketsReply
+            {
+                Result = false,
+                Description = "Not enough tickets available."
+            });
         var purchaseTotal = request.NoTickets * session.TicketPrice;
         if (purchaseTotal > client.Funds)
             return await Task.FromResult(new BuyTicketsReply
@@ -62,7 +58,6 @@ public class ClientService : ClientManager.ClientManagerBase
                 Result = false,
                 Description = "Not enough funds available."
             });
-
         await _context.Reservations.AddAsync(new Reservation
         {
             ClientId = request.ClientId,
@@ -77,9 +72,11 @@ public class ClientService : ClientManager.ClientManagerBase
             Description = "Reservation",
             Value = -purchaseTotal
         });
-
         client.Funds -= purchaseTotal;
         _context.Clients.Update(client);
+        session.AvailableSeats -= request.NoTickets;
+        _context.Sessions.Update(session);
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new BuyTicketsReply
         {
             Result = true,
@@ -114,11 +111,12 @@ public class ClientService : ClientManager.ClientManagerBase
             Value = reservation.Total
         });
         _context.Clients.Update(client);
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new RefundReply
         {
             Result = true,
             Description = "Refund successful.",
-            Funds = (double)reservation.Total
+            Funds = reservation.Total
         });
     }
 
@@ -136,6 +134,7 @@ public class ClientService : ClientManager.ClientManagerBase
             ClientId = request.UserId,
             ShowId = request.ShowId
         });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new MarkAsWatchedReply
         {
             Result = true,
@@ -153,18 +152,19 @@ public class ClientService : ClientManager.ClientManagerBase
                 Description = "Client ID not found.",
                 TotalFunds = -1
             });
-        client.Funds += (decimal)request.Funds;
+        client.Funds += request.Funds;
         _context.Clients.Update(client);
         await _context.Movements.AddAsync(new Movement
         {
             ClientId = client.Id,
             Description = $"Funds;{request.PaymentMethod}",
-            Value = (decimal)request.Funds
+            Value = request.Funds
         });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new AddFundsReply
         {
             Result = true,
-            TotalFunds = (double)client.Funds
+            TotalFunds = client.Funds
         });
     }
 

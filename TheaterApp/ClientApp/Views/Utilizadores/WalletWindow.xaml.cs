@@ -3,7 +3,7 @@ using System.Windows;
 using ClientApp.ViewModels;
 using GrpcLibrary.Models;
 
-namespace ClientApp.Views;
+namespace ClientApp.Views.Utilizadores;
 
 public partial class WalletWindow
 {
@@ -39,7 +39,7 @@ public partial class WalletWindow
                 var reply = await client.AddFundsAsync(new AddFundsRequest
                 {
                     UserId = _app.UserId,
-                    Funds = (double)_model.AddedFunds,
+                    Funds = _model.AddedFunds,
                     PaymentMethod = _model.PaymentMethod
                 });
                 if (!reply.Result)

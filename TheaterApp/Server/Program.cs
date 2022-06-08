@@ -21,6 +21,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.MapGrpcService<AuthService>();
 app.MapGrpcService<ClientService>();
+app.MapGrpcService<MgrService>();
 
 app.MapGet("/",
     () =>

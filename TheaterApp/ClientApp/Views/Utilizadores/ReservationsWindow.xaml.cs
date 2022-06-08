@@ -6,7 +6,7 @@ using System.Windows;
 using Google.Protobuf.WellKnownTypes;
 using GrpcLibrary.Models;
 
-namespace ClientApp.Views;
+namespace ClientApp.Views.Utilizadores;
 
 public partial class ReservationsWindow
 {

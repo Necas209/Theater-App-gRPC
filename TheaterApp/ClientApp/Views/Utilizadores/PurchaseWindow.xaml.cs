@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ClientApp.Views;
+namespace ClientApp.Views.Utilizadores;
 
 public partial class PurchaseWindow
 {

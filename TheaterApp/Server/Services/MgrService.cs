@@ -1,0 +1,157 @@
+﻿using Grpc.Core;
+using GrpcLibrary.Models;
+using Microsoft.EntityFrameworkCore;
+using Server.Data;
+
+namespace Server.Services;
+
+public class MgrService : MgrManager.MgrManagerBase
+{
+    private readonly TheaterDbContext _context;
+
+    public MgrService(TheaterDbContext context)
+    {
+        _context = context;
+    }
+
+    public override async Task<AddTheaterReply> AddTheater(AddTheaterRequest request, ServerCallContext context)
+    {
+        if (await _context.Theaters.AnyAsync(x => x.Name == request.Name))
+            return await Task.FromResult(new AddTheaterReply
+            {
+                Result = false,
+                Description = "Theater with given name already exists."
+            });
+        _context.Theaters.Add(new Theater
+        {
+            Name = request.Name,
+            Location = request.Location,
+            Address = request.Address,
+            Email = request.Email,
+            PhoneNumber = request.PhoneNumber
+        });
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new AddTheaterReply
+        {
+            Result = true,
+            Description = "Theater added successfully."
+        });
+    }
+
+    public override async Task<EditTheaterReply> EditTheater(EditTheaterRequest request, ServerCallContext context)
+    {
+        if (await _context.Theaters.FindAsync(request.Id) == null)
+            return await Task.FromResult(new EditTheaterReply
+            {
+                Result = false,
+                Description = "Theater ID not found."
+            });
+        _context.Theaters.Update(new Theater
+        {
+            Id = request.Id,
+            Name = request.Name,
+            Location = request.Location,
+            Address = request.Address,
+            Email = request.Email,
+            PhoneNumber = request.PhoneNumber
+        });
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new EditTheaterReply
+        {
+            Result = true,
+            Description = "Theater updated successfully."
+        });
+    }
+
+    public override async Task<AddShowReply> AddShow(AddShowRequest request, ServerCallContext context)
+    {
+        if (await _context.Shows.AnyAsync(x => x.Name == request.Name))
+            return await Task.FromResult(new AddShowReply
+            {
+                Result = false,
+                Description = "Show with given name already exists."
+            });
+        await _context.Shows.AddAsync(new Show
+        {
+            Name = request.Name,
+            Synopsis = request.Synopsis,
+            Length = request.Length.ToTimeSpan(),
+            GenreId = request.GenreId
+        });
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new AddShowReply
+        {
+            Result = true,
+            Description = "Show added successfully."
+        });
+    }
+
+    public override async Task<EditShowReply> EditShow(EditShowRequest request, ServerCallContext context)
+    {
+        if (await _context.Shows.FindAsync(request.Id) == null)
+            return await Task.FromResult(new EditShowReply
+            {
+                Result = false,
+                Description = "Show ID not found."
+            });
+        _context.Shows.Update(new Show
+        {
+            Id = request.Id,
+            Name = request.Name,
+            Synopsis = request.Synopsis,
+            Length = request.Length.ToTimeSpan(),
+            GenreId = request.GenreId
+        });
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new EditShowReply
+        {
+            Result = true,
+            Description = "Show updated successfully."
+        });
+    }
+
+    public override async Task<AddSessionReply> AddSession(AddSessionRequest request, ServerCallContext context)
+    {
+        if (await _context.Sessions.AnyAsync(x =>
+                x.ShowId == request.ShowId && x.TheaterId == request.TheaterId &&
+                x.Showtime == request.Showtime.ToDateTime()))
+            return await Task.FromResult(new AddSessionReply
+            {
+                Result = false,
+                Description = "Session already exists."
+            });
+        await _context.Sessions.AddAsync(new Session
+        {
+            ShowId = request.ShowId,
+            TheaterId = request.TheaterId,
+            Showtime = request.Showtime.ToDateTime(),
+            TotalSeats = request.TotalSeats,
+            AvailableSeats = request.TotalSeats,
+            TicketPrice = request.TicketPrice
+        });
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new AddSessionReply
+        {
+            Result = true,
+            Description = "Session added successfully."
+        });
+    }
+
+    public override async Task<DelSessionReply> DelSession(DelSessionRequest request, ServerCallContext context)
+    {
+        var session = await _context.Sessions.FindAsync(request.Id);
+        if (session == null)
+            return await Task.FromResult(new DelSessionReply
+            {
+                Result = false,
+                Description = "Session ID not found."
+            });
+        _context.Sessions.Remove(session);
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new DelSessionReply
+        {
+            Result = true,
+            Description = "Session added successfully."
+        });
+    }
+}

@@ -1,4 +1,88 @@
 ﻿syntax = "proto3";
 
+import "CustomTypes/customtypes.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
 service MgrManager {
+  rpc AddTheater (AddTheaterRequest) returns (AddTheaterReply);
+  rpc EditTheater (EditTheaterRequest) returns (EditTheaterReply);
+  rpc AddShow (AddShowRequest) returns (AddShowReply);
+  rpc EditShow (EditShowRequest) returns (EditShowReply);
+  rpc AddSession (AddSessionRequest) returns (AddSessionReply);
+  rpc DelSession (DelSessionRequest) returns (DelSessionReply);
+}
+
+message AddTheaterRequest {
+  string name = 1;
+  string location = 2;
+  string address = 3;
+  string email = 4;
+  string phone_number = 5;
+}
+
+message AddTheaterReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message EditTheaterRequest {
+  int32 id = 1;
+  string name = 2;
+  string location = 3;
+  string address = 4;
+  string email = 5;
+  string phone_number = 6;
+}
+
+message EditTheaterReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message AddShowRequest {
+  string name = 1;
+  string synopsis = 2;
+  google.protobuf.Duration length = 3;
+  int32 genre_id = 4;
+}
+
+message AddShowReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message EditShowRequest {
+  int32 id = 1;
+  string name = 2;
+  string synopsis = 3;
+  google.protobuf.Duration length = 4;
+  int32 genre_id = 5;
+}
+
+message EditShowReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message AddSessionRequest {
+  int32 show_id = 1;
+  int32 theater_id = 2;
+  google.protobuf.Timestamp showtime = 3;
+  int32 total_seats = 4;
+  customTypes.DecimalValue ticket_price = 5;
+}
+
+message AddSessionReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message DelSessionRequest {
+  int32 id = 1;
+}
+
+message DelSessionReply {
+  bool result = 1;
+  string description = 2;
 }
