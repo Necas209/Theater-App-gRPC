@@ -1,4 +1,4 @@
-﻿<Window x:Class="ClientApp.Views.HomeWindow"
+﻿<Window x:Class="ClientApp.Views.Utilizadores.HomeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

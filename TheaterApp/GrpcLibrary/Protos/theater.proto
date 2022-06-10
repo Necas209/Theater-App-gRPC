@@ -1,7 +1,5 @@
 ﻿syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
-
 service TheaterManager {
   rpc GetTheaters (GetTheatersRequest) returns (GetTheatersReply);
   rpc GetShows (GetShowsRequest) returns (GetShowsReply);
@@ -9,19 +7,21 @@ service TheaterManager {
 }
 
 message GetTheatersRequest {
-  
+  string name = 1;
+  string location = 2;
 }
 
 message GetTheatersReply {
-  
+  string theaters = 1;
 }
 
 message GetShowsRequest {
-  
+  string name = 1;
+  int32 genre_id = 2;
 }
 
 message GetShowsReply {
-  
+  string shows = 1;
 }
 
 message GetSessionsRequest {

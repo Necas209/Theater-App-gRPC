@@ -1,0 +1,25 @@
+﻿<Window x:Class="ClientApp.Views.Admin.PurchasesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="TicketsPurchasedAdmin" Height="340" Width="550">
+    <Grid>
+        
+        <Label Content="Bilhetes Comprados" FontSize="17" Margin="130 5 130 300" HorizontalAlignment="Center"></Label>
+        
+        <ListView Margin="30 50 30 50">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id do Utilizador" Width="100"/>
+                    <GridViewColumn Header="Espetáculos" Width="100"/>
+                    <GridViewColumn Header="N.º Bilhetes" Width="100"/>
+                    <GridViewColumn Header="Preço" Width="100"/>
+                    <GridViewColumn Header="Data" Width="100"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+    </Grid>
+</Window>

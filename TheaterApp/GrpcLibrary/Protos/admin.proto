@@ -3,40 +3,41 @@
 import "google/protobuf/timestamp.proto";
 
 service AdminManager {
-  rpc RegAdmin (RegAdminRequest) returns (RegAdminReply);
-  rpc RegManager (RegManagerRequest) returns (RegManagerReply);
+  rpc AddUser (AddUserRequest) returns (AddUserReply);
   rpc GetLogs (GetLogsRequest) returns (GetLogsReply);
-  rpc GetTicketsPurchased (GetPurchasesRequest) returns (GetPurchasesReply);
+  rpc GetPurchases (GetPurchasesRequest) returns (GetPurchasesReply);
 }
 
-message RegAdminRequest {
-  
+message AddUserRequest {
+  int32 user_id = 1;
+  string name = 2;
+  string user_name = 3;
+  string email = 4;
+  string password_hash = 5;
+  string user_type = 6;
 }
 
-message RegAdminReply {
-  
-}
-
-message RegManagerRequest {
-  
-}
-
-message RegManagerReply {
-  
+message AddUserReply {
+  bool result = 1;
+  string description = 2;
 }
 
 message GetLogsRequest {
-  
+  int32 user_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
 }
 
 message GetLogsReply {
-  
+  string logs = 1;
 }
 
 message GetPurchasesRequest {
-  
+  int32 user_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
 }
 
 message GetPurchasesReply {
-  
+  string purchases = 1;
 }

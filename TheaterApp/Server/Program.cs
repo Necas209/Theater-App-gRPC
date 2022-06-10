@@ -22,6 +22,8 @@ var app = builder.Build();
 app.MapGrpcService<AuthService>();
 app.MapGrpcService<ClientService>();
 app.MapGrpcService<MgrService>();
+app.MapGrpcService<AdminService>();
+app.MapGrpcService<TheaterService>();
 
 app.MapGet("/",
     () =>
