@@ -3,21 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:ClientApp.Views.Gestão"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:vm="clr-namespace:ClientApp.ViewModels"
         mc:Ignorable="d"
-        Title="AddShowsWindow" Height="320" Width="400">
+        Title="AddShowsWindow" Height="380" Width="400">
+    <Window.DataContext>
+        <vm:AddShowViewModel />
+    </Window.DataContext>
     <Grid>
-        <Label Content="Adicionar Espetáculo" FontSize="17" Margin="110 5 110 235" HorizontalAlignment="Center"></Label>
-        <Label Content="Nome:" Margin="20 40 300 225" HorizontalAlignment="Right"></Label>
-        <TextBox Margin="110 40 100 255"></TextBox>
-        <Label Content="Sinopse:" Margin="20 80 300 185" HorizontalAlignment="Right"></Label >
-        <ScrollViewer Margin="110 80 100 132">
-            <TextBox FontSize="10"  TextWrapping="WrapWithOverflow"/>
+        <Label Content="Adicionar Espetáculo" FontSize="17" Margin="110 10 110 310" HorizontalAlignment="Center" />
+        <Label Content="Nome:" Margin="20 80 320 270" HorizontalAlignment="Right" />
+        <TextBox Margin="110 80 100 270" Text="{Binding Name}" />
+        <Label Content="Sinopse:" Margin="20 120 320 230" HorizontalAlignment="Right" />
+        <ScrollViewer Margin="110 120 100 150">
+            <TextBox FontSize="10" TextWrapping="WrapWithOverflow" Text="{Binding Synopsis}" />
         </ScrollViewer>
-        <Label Content="Género:" Margin="20 200 300 90" HorizontalAlignment="Right"></Label >
-        <ComboBox Margin="110 200 170 90"></ComboBox>
-        <Label Content="Duração:" Margin="20 240 300 50" HorizontalAlignment="Right"></Label>
-        <TextBox Margin="110 240 170 50"></TextBox>
-        <Button Content="Adicionar" Margin="280 280 20 10"></Button>
+        <Label Content="Género:" Margin="20 240 320 110" HorizontalAlignment="Right" />
+        <ComboBox Margin="110 240 100 110" ItemsSource="{Binding Genres}" DisplayMemberPath="Name"
+                  SelectedItem="{Binding Genre}" />
+        <Label Content="Duração:" Margin="20 280 320 70" HorizontalAlignment="Right" />
+        <xctk:TimeSpanUpDown Margin="110 280 100 70" Value="{Binding Length}" />
+        <Button Content="Adicionar" Margin="300 330 20 20" Style="{StaticResource RoundButton}"
+                Click="BtAddShow_OnClick" />
     </Grid>
 </Window>

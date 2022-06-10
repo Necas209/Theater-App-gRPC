@@ -12,6 +12,13 @@ public sealed class User
         Logs = new HashSet<Log>();
     }
     
+    public enum UserType
+    {
+        Client,
+        Admin,
+        Manager
+    }
+
     public static string HashPassword(string password)
     {
         using var mySha256 = SHA256.Create();

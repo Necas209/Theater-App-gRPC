@@ -14,22 +14,22 @@ public partial class LoginWindow
 
     public LoginWindow()
     {
-        _app = (Application.Current as App)!;
         InitializeComponent();
+        _app = (Application.Current as App)!;
     }
 
     private void BtLogin_OnClick(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(TbUserName.Text) || string.IsNullOrWhiteSpace(PbPassword.Password))
-            MessageBox.Show("Missing information!", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            ShowError("Missing information!");
         else
             Dispatcher.Invoke(async () => await Login());
     }
 
     private void PbPassword_OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Return) BtLogin_OnClick(BtLogin, e);
+        if (e.Key == Key.Return)
+            BtLogin_OnClick(BtLogin, e);
     }
 
     private async Task Login()
@@ -47,11 +47,16 @@ public partial class LoginWindow
             MessageBox.Show("Login successful!", "Info",
                 MessageBoxButton.OK, MessageBoxImage.Information);
             _app.UserId = reply.UserId;
+            _app.UserType = (User.UserType)reply.UserType;
         }
         else
         {
-            MessageBox.Show("Login failed!", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            ShowError("Login failed!");
         }
+    }
+
+    private static void ShowError(string s)
+    {
+        MessageBox.Show("Erro", s, MessageBoxButton.OK, MessageBoxImage.Error);
     }
 }

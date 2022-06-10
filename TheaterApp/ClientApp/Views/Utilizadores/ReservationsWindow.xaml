@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="clr-namespace:ClientApp.ViewModels"
         mc:Ignorable="d"
-        Title="Shows" Height="300" Width="550"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        Title="Shows" Height="300" Width="550">
+    <Window.DataContext>
+        <vm:ReservationsViewModel />
+    </Window.DataContext>
     <Grid>
         <Label Content="Espetáculos Assistidos" FontSize="17" Margin="130 5 130 260" HorizontalAlignment="Center" />
         <ListView Margin="30 50 130 10" ItemsSource="{Binding Reservations}">
@@ -18,8 +21,10 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <DatePicker Name="DpStartDate" Margin="430 50 10 220" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
-        <DatePicker Name="DpEndDate" Margin="430 150 10 120" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
+        <DatePicker Margin="430 50 10 220" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+                    SelectedDate="{Binding StartDate}" />
+        <DatePicker Margin="430 150 10 120" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+                    SelectedDate="{Binding EndDate}" />
         <Button Style="{DynamicResource RoundButton}" Margin="450 220 30 50" Content="Filtrar" Click="BtFilter_OnClick" />
     </Grid>
 </Window>

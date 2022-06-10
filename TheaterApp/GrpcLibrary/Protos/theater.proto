@@ -1,8 +1,11 @@
 ﻿syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+    
 service TheaterManager {
   rpc GetTheaters (GetTheatersRequest) returns (GetTheatersReply);
   rpc GetShows (GetShowsRequest) returns (GetShowsReply);
+  rpc GetGenres (GetGenresRequest) returns (GetGenresReply);
   rpc GetSessions (GetSessionsRequest) returns (GetSessionsReply);
 }
 
@@ -24,10 +27,24 @@ message GetShowsReply {
   string shows = 1;
 }
 
+message GetGenresRequest {
+  int32 user_id = 1;  
+}
+
+message GetGenresReply {
+  string genres = 1;  
+}
+
 message GetSessionsRequest {
-  
+  int32 user_id = 1;
+  string show_name = 2;
+  int32 genre_id = 3;
+  string theater_name = 4;
+  string theater_location = 5;
+  google.protobuf.Timestamp start_date = 6;
+  google.protobuf.Timestamp end_date = 7;
 }
 
 message GetSessionsReply {
-  
+  string sessions = 1;
 }

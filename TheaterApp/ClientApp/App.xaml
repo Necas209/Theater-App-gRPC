@@ -17,5 +17,6 @@
                 </Style>
             </Style.Resources>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Application.Resources>
 </Application>

@@ -13,4 +13,5 @@ message LoginRequest {
 message LoginReply {
   bool login_status = 1;
   int32 user_id = 2;
+  int32 user_type = 3;
 }
