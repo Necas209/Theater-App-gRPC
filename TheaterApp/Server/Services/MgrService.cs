@@ -63,6 +63,30 @@ public class MgrService : MgrManager.MgrManagerBase
         });
     }
 
+    public override async Task<DelTheaterReply> DelTheater(DelTheaterRequest request, ServerCallContext context)
+    {
+        if (await _context.Sessions.AnyAsync(x => x.TheaterId == request.Id))
+            return await Task.FromResult(new DelTheaterReply
+            {
+                Result = false,
+                Description = "Theater already has sessions."
+            });
+        var theater = await _context.Theaters.FindAsync(request.Id);
+        if (theater == null)
+            return await Task.FromResult(new DelTheaterReply
+            {
+                Result = false,
+                Description = "Theater ID not found."
+            });
+        _context.Theaters.Remove(theater);
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new DelTheaterReply
+        {
+            Result = true,
+            Description = "Theater removed successfully."
+        });
+    }
+
     public override async Task<AddShowReply> AddShow(AddShowRequest request, ServerCallContext context)
     {
         if (await _context.Shows.AnyAsync(x => x.Name == request.Name))
@@ -110,6 +134,30 @@ public class MgrService : MgrManager.MgrManagerBase
         });
     }
 
+    public override async Task<DelShowReply> DelShow(DelShowRequest request, ServerCallContext context)
+    {
+        if (await _context.Sessions.AnyAsync(x => x.ShowId == request.Id))
+            return await Task.FromResult(new DelShowReply
+            {
+                Result = false,
+                Description = "Show already has sessions."
+            });
+        var show = await _context.Shows.FindAsync(request.Id);
+        if (show == null)
+            return await Task.FromResult(new DelShowReply
+            {
+                Result = false,
+                Description = "Show ID not found."
+            });
+        _context.Shows.Remove(show);
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new DelShowReply
+        {
+            Result = true,
+            Description = "Show removed successfully."
+        });
+    }
+
     public override async Task<AddSessionReply> AddSession(AddSessionRequest request, ServerCallContext context)
     {
         if (await _context.Sessions.AnyAsync(x =>
@@ -139,6 +187,12 @@ public class MgrService : MgrManager.MgrManagerBase
 
     public override async Task<DelSessionReply> DelSession(DelSessionRequest request, ServerCallContext context)
     {
+        if (await _context.Reservations.AnyAsync(x => x.SessionId == request.Id))
+            return await Task.FromResult(new DelSessionReply
+            {
+                Result = false,
+                Description = "Session already reserved."
+            });
         var session = await _context.Sessions.FindAsync(request.Id);
         if (session == null)
             return await Task.FromResult(new DelSessionReply
@@ -151,7 +205,7 @@ public class MgrService : MgrManager.MgrManagerBase
         return await Task.FromResult(new DelSessionReply
         {
             Result = true,
-            Description = "Session added successfully."
+            Description = "Session removed successfully."
         });
     }
 }

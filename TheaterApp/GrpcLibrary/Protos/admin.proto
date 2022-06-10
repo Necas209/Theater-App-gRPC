@@ -3,4 +3,40 @@
 import "google/protobuf/timestamp.proto";
 
 service AdminManager {
+  rpc RegAdmin (RegAdminRequest) returns (RegAdminReply);
+  rpc RegManager (RegManagerRequest) returns (RegManagerReply);
+  rpc GetLogs (GetLogsRequest) returns (GetLogsReply);
+  rpc GetTicketsPurchased (GetPurchasesRequest) returns (GetPurchasesReply);
+}
+
+message RegAdminRequest {
+  
+}
+
+message RegAdminReply {
+  
+}
+
+message RegManagerRequest {
+  
+}
+
+message RegManagerReply {
+  
+}
+
+message GetLogsRequest {
+  
+}
+
+message GetLogsReply {
+  
+}
+
+message GetPurchasesRequest {
+  
+}
+
+message GetPurchasesReply {
+  
 }

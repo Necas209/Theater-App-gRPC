@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ClientApp.Views.Administração_do_Sistema;
+namespace ClientApp.Views.Admin;
 
 public partial class Profile : Window
 {

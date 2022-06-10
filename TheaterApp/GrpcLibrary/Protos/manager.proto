@@ -7,8 +7,10 @@ import "google/protobuf/duration.proto";
 service MgrManager {
   rpc AddTheater (AddTheaterRequest) returns (AddTheaterReply);
   rpc EditTheater (EditTheaterRequest) returns (EditTheaterReply);
+  rpc DelTheater (DelTheaterRequest) returns (DelTheaterReply);
   rpc AddShow (AddShowRequest) returns (AddShowReply);
   rpc EditShow (EditShowRequest) returns (EditShowReply);
+  rpc DelShow (DelShowRequest) returns (DelShowReply);
   rpc AddSession (AddSessionRequest) returns (AddSessionReply);
   rpc DelSession (DelSessionRequest) returns (DelSessionReply);
 }
@@ -19,6 +21,7 @@ message AddTheaterRequest {
   string address = 3;
   string email = 4;
   string phone_number = 5;
+  int32 user_id = 6;
 }
 
 message AddTheaterReply {
@@ -33,9 +36,20 @@ message EditTheaterRequest {
   string address = 4;
   string email = 5;
   string phone_number = 6;
+  int32 user_id = 7;
 }
 
 message EditTheaterReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message DelTheaterRequest {
+  int32 id = 1;
+  int32 user_id = 2;
+}
+
+message DelTheaterReply {
   bool result = 1;
   string description = 2;
 }
@@ -45,6 +59,7 @@ message AddShowRequest {
   string synopsis = 2;
   google.protobuf.Duration length = 3;
   int32 genre_id = 4;
+  int32 user_id = 5;
 }
 
 message AddShowReply {
@@ -58,9 +73,20 @@ message EditShowRequest {
   string synopsis = 3;
   google.protobuf.Duration length = 4;
   int32 genre_id = 5;
+  int32 user_id = 6;
 }
 
 message EditShowReply {
+  bool result = 1;
+  string description = 2;
+}
+
+message DelShowRequest {
+  int32 id = 1;
+  int32 user_id = 2;
+}
+
+message DelShowReply {
   bool result = 1;
   string description = 2;
 }
@@ -71,6 +97,7 @@ message AddSessionRequest {
   google.protobuf.Timestamp showtime = 3;
   int32 total_seats = 4;
   customTypes.DecimalValue ticket_price = 5;
+  int32 user_id = 6;
 }
 
 message AddSessionReply {
@@ -80,6 +107,7 @@ message AddSessionReply {
 
 message DelSessionRequest {
   int32 id = 1;
+  int32 user_id = 2;
 }
 
 message DelSessionReply {

@@ -12,7 +12,7 @@
         <Label Content="UserName:" Margin="30 50 310 200" FontSize="10" HorizontalContentAlignment="Left"/>
         <TextBox Margin="95 50 120 200" IsEnabled="False" TextWrapping="WrapWithOverflow"></TextBox>
         <Button Margin="290 55 90 205" Background="Transparent" BorderThickness="0">
-            <Image Source="../Icons/Edit.png" />
+            <Image Source="../../Icons/Edit.png" />
         </Button>
         <Border Margin="10 100 10 70" Background="White" BorderBrush="Gainsboro" BorderThickness="2" ></Border>
         <Label Content="Alterar palavra-passe" Margin="30 88 265 165" Background="White" FontSize="10" HorizontalContentAlignment="Center"/>
