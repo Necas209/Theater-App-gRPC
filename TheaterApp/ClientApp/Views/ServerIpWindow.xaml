@@ -4,8 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="ServerIpWindow" Height="70" Width="380">
-    <Grid>
+        Title="ServerIpWindow" SizeToContent="WidthAndHeight">
+    <Grid Height="70" Width="380">
         <Label Content="IP Servidor:" Margin="20 20 290 20" />
         <TextBox Margin="100 20 100 20" />
         <Button Style="{DynamicResource RoundButton}" Content="Conectar" Margin="290 20 10 20" />

@@ -11,19 +11,13 @@
     <ItemGroup>
       <ProjectReference Include="..\GrpcLibrary\GrpcLibrary.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Page Remove="Views\Gestão\Perfil.xaml" />
-      <Page Remove="Views\RegisterWindow.xaml" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Views\Gestão\Perfil.xaml.cs" />
-      <Compile Remove="Views\RegisterWindow.xaml.cs" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ViewModels\Admins" />
     </ItemGroup>
 
 </Project>

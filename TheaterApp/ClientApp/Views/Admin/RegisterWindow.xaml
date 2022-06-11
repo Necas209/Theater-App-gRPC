@@ -3,25 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:ClientApp.Views.Admin"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="360" Width="400">
-    <Grid>
-        <Label Content="Registar" Margin="100 0 100 330" HorizontalAlignment="Center"/>
-        <Label Content="Tipo de Utilizador:" Margin="20 40 260 295" HorizontalAlignment="Right"></Label>
+        Title="RegisterWindow" SizeToContent="WidthAndHeight">
+    <Grid Height="360" Width="400">
+        <Label Content="Registar" Margin="100 0 100 330" HorizontalAlignment="Center" />
+        <Label Content="Tipo de Utilizador:" Margin="20 40 260 295" HorizontalAlignment="Right" />
         <ComboBox Margin="140 40 100 295">
             <ComboBoxItem>Administrador</ComboBoxItem>
             <ComboBoxItem>Gestor</ComboBoxItem>
         </ComboBox>
-        <Label Content="UserName:" Margin="20 85 260 250" HorizontalAlignment="Right"/>
+        <Label Content="UserName:" Margin="20 85 260 250" HorizontalAlignment="Right" />
         <TextBox Margin="140 85 100 250" />
-        <Label Content="Nome:" Margin="20 135 260 200" HorizontalAlignment="Right"/>
+        <Label Content="Nome:" Margin="20 135 260 200" HorizontalAlignment="Right" />
         <TextBox Margin="140 135 100 200" />
-        <Label Content="Email:" Margin="20 185 260 150" HorizontalAlignment="Right"/>
+        <Label Content="Email:" Margin="20 185 260 150" HorizontalAlignment="Right" />
         <TextBox Margin="140 185 100 150" />
-        <Label Content="Password:" Margin="20 235 260 100" HorizontalAlignment="Right"/>
+        <Label Content="Password:" Margin="20 235 260 100" HorizontalAlignment="Right" />
         <TextBox Margin="140 235 100 100" />
-        <Label Content="Confirmar Password:" Margin="20 280 260 55" HorizontalAlignment="Right"/>
+        <Label Content="Confirmar Password:" Margin="20 280 260 55" HorizontalAlignment="Right" />
         <TextBox Margin="140 280 100 55" />
         <Button Style="{DynamicResource RoundButton}" Content="Registar" Margin="280 320 20 15" />
     </Grid>

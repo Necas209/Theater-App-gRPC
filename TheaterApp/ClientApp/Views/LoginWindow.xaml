@@ -4,15 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="270" Width="300">
-    <Grid>
+        xmlns:vm="clr-namespace:ClientApp.ViewModels"
+        Title="MainWindow" SizeToContent="WidthAndHeight">
+    <Window.DataContext>
+        <vm:LoginViewModel />
+    </Window.DataContext>
+    <Grid Height="270" Width="300">
+        <Label Content="Login" FontSize="18" Margin="100 10 100 220" HorizontalContentAlignment="Center" Height="35" />
         <Label Content="UserName:" Margin="0 0 140 100" Width="90" Height="30"
-               FontSize="16" HorizontalContentAlignment="Right" />
-        <TextBox Name="TbUserName" Margin="110 0 10 100" Height="30" Width="120" />
+               FontSize="14" HorizontalContentAlignment="Right" />
+        <TextBox Name="TbUserName" Margin="110 0 10 100" Height="30" Width="120" Text="{Binding UserName}" />
         <Label Content="Password:" Margin="0 100 140 100" Width="90" Height="30"
-               FontSize="16" HorizontalContentAlignment="Right" />
+               FontSize="14" HorizontalContentAlignment="Right" />
         <PasswordBox Name="PbPassword" Margin="110 100 10 100" Height="30" Width="120" KeyDown="PbPassword_OnKeyDown" />
-        <Button Style="{DynamicResource RoundButton}" Name="BtLogin" Content="Login"
-                Margin="0 120 0 0" Width="100" Height="30" Click="BtLogin_OnClick" />
+        <Button Style="{DynamicResource RoundButton}" Content="Login" Margin="0 120 0 0" Width="100" Height="30"
+                Click="BtLogin_OnClick" />
+        <Button Content="Ainda não está registado?" Height="20" Margin="50 230 50 20" Foreground="Blue" FontSize="12"
+                Background="Transparent" BorderThickness="0" Click="BtRegister_OnClick" />
     </Grid>
 </Window>

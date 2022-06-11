@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using ClientApp.ViewModels;
+using ClientApp.Views.Clients;
 using GrpcLibrary.Models;
 
 namespace ClientApp.Views;
@@ -11,52 +13,50 @@ namespace ClientApp.Views;
 public partial class LoginWindow
 {
     private readonly App _app;
+    private readonly LoginViewModel _model;
 
     public LoginWindow()
     {
         InitializeComponent();
-        _app = (Application.Current as App)!;
-    }
-
-    private void BtLogin_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (string.IsNullOrWhiteSpace(TbUserName.Text) || string.IsNullOrWhiteSpace(PbPassword.Password))
-            ShowError("Missing information!");
-        else
-            Dispatcher.Invoke(async () => await Login());
-    }
-
-    private void PbPassword_OnKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Return)
-            BtLogin_OnClick(BtLogin, e);
-    }
-
-    private async Task Login()
-    {
-        var passwordHash = User.HashPassword(PbPassword.Password);
-        var client = new AuthManager.AuthManagerClient(_app.Channel);
-        var reply = await client.LoginAsync(new LoginRequest
-            {
-                UserName = TbUserName.Text,
-                PasswordHash = passwordHash
-            }
-        );
-        if (reply.LoginStatus)
-        {
-            MessageBox.Show("Login successful!", "Info",
-                MessageBoxButton.OK, MessageBoxImage.Information);
-            _app.UserId = reply.UserId;
-            _app.UserType = (User.UserType)reply.UserType;
-        }
-        else
-        {
-            ShowError("Login failed!");
-        }
+        _app = (App)Application.Current;
+        _model = (LoginViewModel)DataContext;
+        _model.ShowError += ShowError;
     }
 
     private static void ShowError(string s)
     {
-        MessageBox.Show("Erro", s, MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
+    private void BtLogin_OnClick(object sender, RoutedEventArgs e)
+    {
+        Dispatcher.Invoke(async () =>
+        {
+            var result = await _model.Login(_app, PbPassword.SecurePassword);
+            if (result)
+            {
+                Window window = _app.UserType switch
+                {
+                    User.UserType.Client => new ProfileWindow(),
+                    User.UserType.Admin => new Admin.ProfileWindow(),
+                    User.UserType.Manager => new Management.ProfileWindow(),
+                    _ => throw new InvalidEnumArgumentException()
+                };
+                Hide();
+                window.ShowDialog();
+            }
+        });
+    }
+
+    private void PbPassword_OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+            BtLogin_OnClick(sender, e);
+    }
+
+    private void BtRegister_OnClick(object sender, RoutedEventArgs e)
+    {
+        var window = new RegisterWindow();
+        window.ShowDialog();
     }
 }

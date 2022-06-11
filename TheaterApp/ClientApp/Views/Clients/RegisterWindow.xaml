@@ -1,0 +1,22 @@
+﻿<Window x:Class="ClientApp.Views.Clients.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="RegisterWindow" SizeToContent="WidthAndHeight">
+    <Grid Height="330" Width="400">
+        <Label Content="Registar" Margin="100 0 100 300" HorizontalAlignment="Center" />
+        <Label Content="UserName:" Margin="20 40 260 265" HorizontalAlignment="Right" />
+        <TextBox Margin="140 40 100 265" />
+        <Label Content="Nome:" Margin="20 90 260 215" HorizontalAlignment="Right" />
+        <TextBox Margin="140 90 100 215" />
+        <Label Content="Email:" Margin="20 140 260 165" HorizontalAlignment="Right" />
+        <TextBox Margin="140 140 100 165" />
+        <Label Content="Password:" Margin="20 190 260 115" HorizontalAlignment="Right" />
+        <TextBox Margin="140 190 100 115" />
+        <Label Content="Confirmar Password:" Margin="20 240 260 65" HorizontalAlignment="Right" />
+        <TextBox Margin="140 240 100 65" />
+        <Button Style="{DynamicResource RoundButton}" Content="Registar" Margin="280 280 20 20" />
+    </Grid>
+</Window>
