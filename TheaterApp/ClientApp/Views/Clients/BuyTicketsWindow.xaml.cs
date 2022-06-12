@@ -2,11 +2,11 @@
 
 namespace ClientApp.Views.Clients;
 
-public partial class PurchaseWindow
+public partial class BuyTicketsWindow
 {
     private readonly App _app;
 
-    public PurchaseWindow()
+    public BuyTicketsWindow()
     {
         _app = (Application.Current as App)!;
         InitializeComponent();

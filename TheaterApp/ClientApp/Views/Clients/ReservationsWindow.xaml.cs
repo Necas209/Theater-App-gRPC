@@ -1,31 +1,38 @@
-﻿using System;
-using System.Windows;
-using ClientApp.ViewModels;
+﻿using System.Windows;
 using ClientApp.ViewModels.Clients;
 
 namespace ClientApp.Views.Clients;
 
 public partial class ReservationsWindow
 {
-    private readonly App _app;
     private readonly ReservationsViewModel _model;
 
     public ReservationsWindow()
     {
         InitializeComponent();
-        _app = (Application.Current as App)!;
         _model = (DataContext as ReservationsViewModel)!;
         _model.ShowError += ShowError;
-        Dispatcher.Invoke(async () => { await _model.GetReservations(); });
+        _model.ShowMsg += ShowMsg;
+        Dispatcher.Invoke(async () => await _model.GetReservations());
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)
     {
-        MessageBox.Show("Erro", s, MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show( s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     private void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => { await _model.GetReservations(); });
+        Dispatcher.Invoke(async () => await _model.GetReservations());
+    }
+
+    private void BtCancelReservation_OnClick(object sender, RoutedEventArgs e)
+    {
+        Dispatcher.Invoke(async () => await _model.CancelReservation());
     }
 }

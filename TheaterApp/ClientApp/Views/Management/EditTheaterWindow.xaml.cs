@@ -11,14 +11,14 @@ public partial class EditTheaterWindow
     public EditTheaterWindow(Theater theater)
     {
         InitializeComponent();
-        _model = new EditTheaterViewModel
+        _model = (EditTheaterViewModel)DataContext;
         {
-            Name = theater.Name,
-            Location = theater.Location,
-            Address = theater.Address,
-            Email = theater.Email,
-            PhoneNumber = theater.PhoneNumber
-        };
+            _model.Name = theater.Name;
+            _model.Location = theater.Location;
+            _model.Address = theater.Address;
+            _model.Email = theater.Email;
+            _model.PhoneNumber = theater.PhoneNumber;
+        }
         _model.ShowError += ShowError;
         _model.ShowMsg += ShowMsg;
     }

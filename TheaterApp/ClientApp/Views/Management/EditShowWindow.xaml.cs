@@ -11,15 +11,14 @@ public partial class EditShowWindow
     public EditShowWindow(Show show)
     {
         InitializeComponent();
-        _model = new EditShowViewModel
+        _model = (EditShowViewModel)DataContext;
         {
-            Name = show.Name,
-            Synopsis = show.Synopsis,
-            Length = show.Length
-        };
-        DataContext = _model;
-        _model.ShowError += ShowError;
-        _model.ShowMsg += ShowMsg;
+            _model.Name = show.Name;
+            _model.Synopsis = show.Synopsis;
+            _model.Length = show.Length;
+            _model.ShowError += ShowError;
+            _model.ShowMsg += ShowMsg;
+        }
         Dispatcher.Invoke(async () => await _model.GetGenres());
     }
 

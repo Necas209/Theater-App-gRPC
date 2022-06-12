@@ -10,14 +10,33 @@ namespace ClientApp.ViewModels.Managers;
 
 public class EditShowViewModel : BaseViewModel
 {
+    private string? _name;
+    private string? _synopsis;
+
     public EditShowViewModel()
     {
         Genres = new ObservableCollection<Genre>();
     }
 
-    public string Name { get; set; } = null!;
+    public string? Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged(nameof(Name));
+        }
+    }
 
-    public string Synopsis { get; set; } = null!;
+    public string? Synopsis
+    {
+        get => _synopsis;
+        set
+        {
+            _synopsis = value;
+            OnPropertyChanged(nameof(Synopsis));
+        }
+    }
 
     public TimeSpan Length { get; set; }
 

@@ -8,7 +8,10 @@ namespace ClientApp.ViewModels;
 
 public class ProfileViewModel : BaseViewModel
 {
-    private string _passwordHash = null!;
+    private string? _email;
+    private string? _name;
+    private string? _passwordHash;
+    private string? _userName;
 
     public ProfileViewModel()
     {
@@ -23,11 +26,36 @@ public class ProfileViewModel : BaseViewModel
 
     public bool IsClient { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged(nameof(Name));
+        }
+    }
 
-    public string UserName { get; private set; } = null!;
+    public string? UserName
+    {
+        get => _userName;
+        set
+        {
+            _userName = value;
+            OnPropertyChanged(nameof(UserName));
+        }
+    }
 
-    [DataType(DataType.EmailAddress)] public string Email { get; set; } = null!;
+    [DataType(DataType.EmailAddress)]
+    public string? Email
+    {
+        get => _email;
+        set
+        {
+            _email = value;
+            OnPropertyChanged(nameof(Email));
+        }
+    }
 
     public event StringMethod? ShowError;
 
@@ -73,7 +101,7 @@ public class ProfileViewModel : BaseViewModel
             });
             if (!reply.Result)
                 ShowError?.Invoke(reply.Description);
-            else 
+            else
                 ShowMsg?.Invoke(reply.Description);
         }
     }

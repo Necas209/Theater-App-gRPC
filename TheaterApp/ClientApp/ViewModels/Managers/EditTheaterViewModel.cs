@@ -5,15 +5,63 @@ namespace ClientApp.ViewModels.Managers;
 
 public class EditTheaterViewModel : BaseViewModel
 {
-    public string Name { get; set; } = null!;
+    private string? _address;
+    private string? _email;
+    private string? _location;
+    private string? _name;
+    private string? _phoneNumber;
 
-    public string Location { get; set; } = null!;
+    public string? Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged(nameof(Name));
+        }
+    }
 
-    public string Address { get; set; } = null!;
+    public string? Location
+    {
+        get => _location;
+        set
+        {
+            _location = value;
+            OnPropertyChanged(nameof(Location));
+        }
+    }
 
-    [DataType(DataType.EmailAddress)] public string Email { get; set; } = null!;
+    public string? Address
+    {
+        get => _address;
+        set
+        {
+            _address = value;
+            OnPropertyChanged(nameof(Address));
+        }
+    }
 
-    [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; set; } = null!;
+    [DataType(DataType.EmailAddress)]
+    public string? Email
+    {
+        get => _email;
+        set
+        {
+            _email = value;
+            OnPropertyChanged(nameof(Email));
+        }
+    }
+
+    [DataType(DataType.PhoneNumber)]
+    public string? PhoneNumber
+    {
+        get => _phoneNumber;
+        set
+        {
+            _phoneNumber = value;
+            OnPropertyChanged(nameof(PhoneNumber));
+        }
+    }
 
     public event StringMethod? ShowError;
 

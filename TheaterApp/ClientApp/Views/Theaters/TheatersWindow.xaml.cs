@@ -11,9 +11,15 @@ public partial class TheatersWindow
     public TheatersWindow()
     {
         InitializeComponent();
-        _model = (DataContext as TheatersViewModel)!;
+        _model = (TheatersViewModel)DataContext;
         _model.ShowError += ShowError;
+        _model.ShowMsg += ShowMsg;
         Dispatcher.Invoke(async () => await _model.GetTheaters());
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)

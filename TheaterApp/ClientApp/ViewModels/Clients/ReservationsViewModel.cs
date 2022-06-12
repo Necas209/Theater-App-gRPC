@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 using Google.Protobuf.WellKnownTypes;
 using GrpcLibrary.Models;
 
@@ -20,11 +19,15 @@ public class ReservationsViewModel : BaseViewModel
 
     public ObservableCollection<Reservation> Reservations { get; set; }
 
+    public Reservation? Reservation { get; set; }
+
     public DateTime StartDate { get; set; }
 
     public DateTime EndDate { get; set; }
 
     public event StringMethod? ShowError;
+
+    public event StringMethod? ShowMsg;
 
     public async Task GetReservations()
     {
@@ -49,6 +52,33 @@ public class ReservationsViewModel : BaseViewModel
             var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);
             Reservations.Clear();
             reservations?.ForEach(reservation => Reservations.Add(reservation));
+        }
+    }
+
+    public async Task CancelReservation()
+    {
+        if (Reservation == null)
+        {
+            ShowError?.Invoke("Selecione uma compra primeiro.");
+        }
+        else
+        {
+            var client = new ClientManager.ClientManagerClient(App.Channel);
+            var reply = await client.RefundAsync(new RefundRequest
+            {
+                UserId = App.UserId,
+                ReservationId = Reservation.Id
+            });
+            if (!reply.Result)
+            {
+                ShowError?.Invoke(reply.Description);
+            }
+            else
+            {
+                ShowMsg?.Invoke(reply.Description);
+                Reservations.Remove(Reservation);
+                Reservation = null;
+            }
         }
     }
 }

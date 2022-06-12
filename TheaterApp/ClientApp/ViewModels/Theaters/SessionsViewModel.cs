@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 using Google.Protobuf.WellKnownTypes;
 using GrpcLibrary.Models;
 
@@ -31,6 +30,8 @@ public class SessionsViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
+    public event StringMethod? ShowMsg;
+
     public async Task DelSession()
     {
         if (Session == null)
@@ -46,7 +47,15 @@ public class SessionsViewModel : BaseViewModel
                 Id = Session.Id
             });
             if (!reply.Result)
+            {
                 ShowError?.Invoke(reply.Description);
+            }
+            else
+            {
+                ShowMsg?.Invoke(reply.Description);
+                Sessions.Remove(Session);
+                Session = null;
+            }
         }
     }
 

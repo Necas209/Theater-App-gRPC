@@ -10,22 +10,22 @@
         <vm:ProfileViewModel />
     </Window.DataContext>
     <Grid Height="450" Width="400">
-        <Label Content="Perfil" Margin="180 5 180 400" HorizontalContentAlignment="Center" Height="25" />
-        <Label Content="UserName:" Margin="30 50 310 370" FontSize="10" HorizontalContentAlignment="Right" />
-        <TextBox Text="{Binding UserName, Mode=OneWay}" Margin="95 50 120 370" IsEnabled="False" TextWrapping="WrapWithOverflow" />
-        <Label Content="Nome:" Margin="30 100 310 320" FontSize="10" HorizontalContentAlignment="Right" />
-        <TextBox Text="{Binding Name}" Margin="95 100 120 320" />
-        <Label Content="Email:" Margin="30 150 310 270" FontSize="10" HorizontalContentAlignment="Right" />
-        <TextBox Text="{Binding Email}" Margin="95 150 120 270" />
+        <Label Content="Perfil" Margin="170 10 170 410" FontSize="18" HorizontalContentAlignment="Center" />
+        <Label Content="UserName:" Margin="30 50 300 370" HorizontalContentAlignment="Right" />
+        <TextBox Text="{Binding UserName}" Margin="110 50 100 370" IsEnabled="False"/>
+        <Label Content="Nome:" Margin="30 100 300 320" HorizontalContentAlignment="Right" />
+        <TextBox Text="{Binding Name}" Margin="110 100 100 320" />
+        <Label Content="Email:" Margin="30 150 300 270" HorizontalContentAlignment="Right" />
+        <TextBox Text="{Binding Email}" Margin="110 150 100 270" />
         <Border Margin="10 200 10 140" Background="White" BorderBrush="Gainsboro" BorderThickness="2" />
-        <Label Content="Alterar Palavra-passe" Margin="30 188 265 235" Background="White" FontSize="10"
+        <Label Content="Alterar Palavra-passe" Margin="30 188 240 235" Background="White"
                HorizontalContentAlignment="Center" />
-        <Label Content="Palavra-passe atual:" Margin="30 230 260 190" FontSize="10" HorizontalContentAlignment="Right" />
-        <PasswordBox Name="PbOldPassword" Margin="150 230 30 190" />
-        <Label Content="Palavra-passe nova:" Margin="30 270 260 80" FontSize="10" HorizontalContentAlignment="Right" />
-        <PasswordBox Name="PbNewPassword" Margin="150 270 30 150" />
-        <Button Content="Salvar Alterações" Margin="300 315 10 115" FontSize="10"
-                Style="{DynamicResource RoundButton}" Click="BtSaveInfo_OnClick" />
+        <Label Content="Palavra-passe atual:" Margin="30 230 250 190" HorizontalContentAlignment="Right" />
+        <PasswordBox Name="PbOldPassword" Margin="160 230 30 190" />
+        <Label Content="Palavra-passe nova:" Margin="30 270 250 80" HorizontalContentAlignment="Right" />
+        <PasswordBox Name="PbNewPassword" Margin="160 270 30 150" />
+        <Button Content="Salvar Alterações" Margin="290 320 10 105" Style="{DynamicResource RoundButton}"
+                Click="BtSaveInfo_OnClick" />
         <!--Client-->
         <Button Content="Bilhetes Comprados" Margin="50 360 220 70" Foreground="Blue" FontSize="10"
                 Background="Transparent" BorderThickness="0" Click="BtReservations_OnClick"

@@ -4,26 +4,89 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
+        xmlns:vm="clr-namespace:ClientApp.ViewModels.Clients"
         Title="HomeWindow" SizeToContent="WidthAndHeight">
+    <Window.DataContext>
+        <vm:HomeViewModel />
+    </Window.DataContext>
     <Grid Height="450" Width="800">
-        <TextBox Text="Pesquisa" Margin="300 10 300 420" />
-        <Button Content="3.30€" Margin="700 8 45 416" Background="Transparent" BorderThickness="0" />
-        <Button Margin="750 3 5 408" Background="Transparent" BorderThickness="0">
-            <Image Source="../Icons/Profile2.png" />
-        </Button>
-        <ListView Margin="30 50 30 50">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Localização" Width="140" />
-                    <GridViewColumn Header="Teatro" Width="150" />
-                    <GridViewColumn Header="Espetáculo" Width="160" />
-                    <GridViewColumn Header="Género" Width="110" />
-                    <GridViewColumn Header="Duração" Width="110" />
-                    <GridViewColumn Header="Preço" Width="70" />
-                    <GridViewColumn Header="Assistido" Width="70" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Content="Comprar Bilhete" Style="{DynamicResource RoundButton }" Margin="600 410 30 15" />
+        <Label Margin="300 10 300 400" Content="HomePage" FontSize="20" HorizontalContentAlignment="Center" />
+        <Label Content="{Binding Client.Funds}" ContentStringFormat="C" Margin="700 8 45 416" />
+        <Button Template="{StaticResource ProfileButton}" Margin="740 10 10 390" Click="BtProfile_OnClick" />
+        <TabControl Margin="30 50 30 50">
+            <TabItem Header="Teatros" Width="150">
+                <Grid>
+                    <ListView Margin="0 0 150 0" ItemsSource="{Binding Theaters}"
+                              SelectedItem="{Binding Theater}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Nome" Width="115" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Localização" Width="115"
+                                                DisplayMemberBinding="{Binding Location}" />
+                                <GridViewColumn Header="Endereço" Width="115" DisplayMemberBinding="{Binding Address}" />
+                                <GridViewColumn Header="Email" Width="115" DisplayMemberBinding="{Binding Email}" />
+                                <GridViewColumn Header="Telefone" Width="115"
+                                                DisplayMemberBinding="{Binding PhoneNumber}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Margin="600 40 10 250" Content="Nome:" />
+                    <TextBox Margin="600 90 10 200" Text="{Binding TheaterName}" />
+                    <Label Margin="600 140 10 150" Content="Localização:" />
+                    <TextBox Margin="600 190 10 100" Text="{Binding Location}" />
+                    <Button Margin="620 260 30 30" Content="Filtrar" Click="BtFilterTheaters_OnClick"
+                            Style="{DynamicResource RoundButton}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Espetáculos" Width="150">
+                <Grid>
+                    <ListView Margin="0 0 200 0" ItemsSource="{Binding Shows}"
+                              SelectedItem="{Binding Show}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Nome" Width="100" DisplayMemberBinding="{Binding Name}" />
+                                <GridViewColumn Header="Sinopse" Width="200" DisplayMemberBinding="{Binding Synopsis}" />
+                                <GridViewColumn Header="Género" Width="120" DisplayMemberBinding="{Binding Genre.Name}" />
+                                <GridViewColumn Header="Duração" Width="100" DisplayMemberBinding="{Binding Length}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Margin="550 40 10 250" Content="Nome:" />
+                    <TextBox Margin="550 90 10 200" Text="{Binding ShowName}" />
+                    <Label Margin="550 140 10 150" Content="Género:" />
+                    <ComboBox Margin="550 190 10 100" ItemsSource="{Binding Genres}" DisplayMemberPath="Name"
+                              SelectedItem="{Binding Genre}" />
+                    <Button Margin="570 260 30 30" Content="Filtrar" Click="BtFilterShows_OnClick"
+                            Style="{DynamicResource RoundButton}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Sessões" Width="150">
+                <Grid>
+                    <ListView Margin="0 0 150 0" ItemsSource="{Binding Sessions}"
+                              SelectedItem="{Binding Session}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Data/Hora" Width="130"
+                                                DisplayMemberBinding="{Binding  Showtime}" />
+                                <GridViewColumn Header="Preço" Width="130" DisplayMemberBinding="{Binding TicketPrice}" />
+                                <GridViewColumn Header="Lugares Vagos" Width="130"
+                                                DisplayMemberBinding="{Binding AvailableSeats}" />
+                                <GridViewColumn Header="Total Lugares" Width="130"
+                                                DisplayMemberBinding="{Binding TotalSeats}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Margin="600 40 10 250" Content="Data Início:" />
+                    <DatePicker Margin="600 90 10 200" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+                                SelectedDate="{Binding  StartDate}" />
+                    <Label Margin="600 140 10 150" Content="Data Fim:" />
+                    <DatePicker Margin="600 190 10 100" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+                                SelectedDate="{Binding EndDate}" />
+                    <Button Margin="620 260 30 30" Content="Filtrar" Click="BtFilterSessions_OnClick"
+                            Style="{DynamicResource RoundButton}" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <!-- <Button Content="Comprar Bilhete" Style="{DynamicResource RoundButton}" Margin="600 410 30 15" /> -->
     </Grid>
 </Window>

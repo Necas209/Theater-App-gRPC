@@ -13,11 +13,17 @@ public partial class ShowsWindow
         InitializeComponent();
         _model = (DataContext as ShowsViewModel)!;
         _model.ShowError += ShowError;
+        _model.ShowMsg += ShowMsg;
         Dispatcher.Invoke(async () =>
         {
             await _model.GetShows();
             await _model.GetGenres();
         });
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)

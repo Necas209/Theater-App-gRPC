@@ -4,19 +4,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
+        xmlns:vm="clr-namespace:ClientApp.ViewModels.Clients"
         Title="RegisterWindow" SizeToContent="WidthAndHeight">
-    <Grid Height="330" Width="400">
-        <Label Content="Registar" Margin="100 0 100 300" HorizontalAlignment="Center" />
-        <Label Content="UserName:" Margin="20 40 260 265" HorizontalAlignment="Right" />
-        <TextBox Margin="140 40 100 265" />
-        <Label Content="Nome:" Margin="20 90 260 215" HorizontalAlignment="Right" />
-        <TextBox Margin="140 90 100 215" />
-        <Label Content="Email:" Margin="20 140 260 165" HorizontalAlignment="Right" />
-        <TextBox Margin="140 140 100 165" />
-        <Label Content="Password:" Margin="20 190 260 115" HorizontalAlignment="Right" />
-        <TextBox Margin="140 190 100 115" />
-        <Label Content="Confirmar Password:" Margin="20 240 260 65" HorizontalAlignment="Right" />
-        <TextBox Margin="140 240 100 65" />
-        <Button Style="{DynamicResource RoundButton}" Content="Registar" Margin="280 280 20 20" />
+    <Window.DataContext>
+        <vm:RegisterViewModel />
+    </Window.DataContext>
+    <Grid Height="360" Width="400">
+        <Label Content="Registar" FontSize="18" Margin="100 10 100 310" HorizontalAlignment="Center" />
+        <Label Content="UserName:" Margin="20 60 260 270" HorizontalAlignment="Right" />
+        <TextBox Margin="150 60 90 270" Text="{Binding UserName}" />
+        <Label Content="Nome:" Margin="20 100 260 230" HorizontalAlignment="Right" />
+        <TextBox Margin="150 100 90 230" Text="{Binding Name}" />
+        <Label Content="Email:" Margin="20 140 260 190" HorizontalAlignment="Right" />
+        <TextBox Margin="150 140 90 190" Text="{Binding Email}" />
+        <Label Content="Password:" Margin="20 180 260 150" HorizontalAlignment="Right" />
+        <PasswordBox Name="PbPassword" Margin="150 180 90 150" />
+        <Label Content="Confirmar Password:" Margin="20 220 260 110" HorizontalAlignment="Right" />
+        <PasswordBox Name="PbConfirmPassword" Margin="150 220 90 110" />
+        <Button Content="Registar" Margin="280 280 30 40" Style="{DynamicResource RoundButton}"
+                Click="BtRegister_OnClick" />
     </Grid>
 </Window>

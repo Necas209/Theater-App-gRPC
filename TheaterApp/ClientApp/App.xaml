@@ -17,6 +17,16 @@
                 </Style>
             </Style.Resources>
         </Style>
+        <ControlTemplate x:Key="ProfileButton">
+            <Border x:Name="theBorder" BorderBrush="Transparent" BorderThickness="1">
+                <Image Source="../../Icons/Profile2.png" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" TargetName="theBorder" Value="DodgerBlue" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Application.Resources>
 </Application>

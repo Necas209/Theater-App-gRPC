@@ -22,6 +22,7 @@ public class ClientService : ClientManager.ClientManagerBase
             .Where(x => x.Id == request.UserId)
             .Include(x => x.User)
             .FirstAsync();
+        if (client.User != null) client.User.Client = null;
         var clientInfo = JsonSerializer.Serialize(client);
         return await Task.FromResult(new GetClientInfoReply
         {

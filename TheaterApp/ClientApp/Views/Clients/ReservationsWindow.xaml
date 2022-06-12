@@ -9,9 +9,10 @@
     <Window.DataContext>
         <clients:ReservationsViewModel />
     </Window.DataContext>
-    <Grid Height="300" Width="550">
-        <Label Content="Espetáculos Assistidos" FontSize="17" Margin="130 5 130 260" HorizontalAlignment="Center" />
-        <ListView Margin="30 50 130 10" ItemsSource="{Binding Reservations}">
+    <Grid Height="350" Width="550">
+        <Label Content="Bilhetes Reservados" FontSize="16" Margin="130 5 130 260" HorizontalAlignment="Center" />
+        <ListView Margin="30 50 130 60" ItemsSource="{Binding Reservations}" 
+                  SelectedItem="{Binding Reservation}">
             <ListView.View>
                 <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Reservas">
                     <GridViewColumn Header="Espetáculos" Width="100" DisplayMemberBinding="{Binding Session.Show.Name}" />
@@ -21,10 +22,13 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <DatePicker Margin="430 50 10 220" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+        <DatePicker Margin="430 50 10 270" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
                     SelectedDate="{Binding StartDate}" />
-        <DatePicker Margin="430 150 10 120" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+        <DatePicker Margin="430 150 10 170" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
                     SelectedDate="{Binding EndDate}" />
-        <Button Style="{DynamicResource RoundButton}" Margin="450 220 30 50" Content="Filtrar" Click="BtFilter_OnClick" />
+        <Button Style="{StaticResource RoundButton}" Margin="450 220 30 100" Content="Filtrar"
+                Click="BtFilter_OnClick" />
+        <Button Style="{StaticResource RoundButton}" Margin="300 305 130 15" Content="Anular Compra"
+                Click="BtCancelReservation_OnClick" />
     </Grid>
 </Window>

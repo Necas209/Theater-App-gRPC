@@ -29,6 +29,8 @@ public class ShowsViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
+    public event StringMethod? ShowMsg;
+
     public async Task GetGenres()
     {
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
@@ -72,7 +74,15 @@ public class ShowsViewModel : BaseViewModel
                 Id = Show.Id
             });
             if (!reply.Result)
+            {
                 ShowError?.Invoke(reply.Description);
+            }
+            else
+            {
+                ShowMsg?.Invoke(reply.Description);
+                Shows.Remove(Show);
+                Show = null;
+            }
         }
     }
 }

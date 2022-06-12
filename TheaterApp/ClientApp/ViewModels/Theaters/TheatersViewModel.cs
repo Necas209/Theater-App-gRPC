@@ -26,6 +26,8 @@ public class TheatersViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
+    public event StringMethod? ShowMsg;
+
     public async Task GetTheaters()
     {
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
@@ -58,7 +60,15 @@ public class TheatersViewModel : BaseViewModel
                 Id = Theater.Id
             });
             if (!reply.Result)
+            {
                 ShowError?.Invoke(reply.Description);
+            }
+            else
+            {
+                ShowMsg?.Invoke(reply.Description);
+                Theaters.Remove(Theater);
+                Theater = null;
+            }
         }
     }
 }
