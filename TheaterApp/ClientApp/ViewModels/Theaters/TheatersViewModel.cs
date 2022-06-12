@@ -8,11 +8,9 @@ namespace ClientApp.ViewModels.Theaters;
 
 public class TheatersViewModel : BaseViewModel
 {
-    private bool _isManager;
-
     public TheatersViewModel()
     {
-        Name = Location = "";
+        IsManager = App.UserType == User.UserType.Manager;
         Theaters = new ObservableCollection<Theater>();
     }
 
@@ -20,27 +18,20 @@ public class TheatersViewModel : BaseViewModel
 
     public Theater? Theater { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
-    public string Location { get; set; }
-    
-    public bool IsManager
-    {
-        get => _isManager;
-        set
-        {
-            _isManager = value;
-            OnPropertyChanged(nameof(IsManager));
-        }
-    }
+    public string Location { get; set; } = null!;
+
+    public bool IsManager { get; set; }
 
     public event StringMethod? ShowError;
 
-    public async Task GetTheaters(App app)
+    public async Task GetTheaters()
     {
-        var client = new TheaterManager.TheaterManagerClient(app.Channel);
+        var client = new TheaterManager.TheaterManagerClient(App.Channel);
         var reply = await client.GetTheatersAsync(new GetTheatersRequest
         {
+            UserId = App.UserId,
             Name = Name,
             Location = Location
         });
@@ -52,7 +43,7 @@ public class TheatersViewModel : BaseViewModel
         }
     }
 
-    public async Task DelTheater(App app)
+    public async Task DelTheater()
     {
         if (Theater == null)
         {
@@ -60,10 +51,10 @@ public class TheatersViewModel : BaseViewModel
         }
         else
         {
-            var client = new MgrManager.MgrManagerClient(app.Channel);
+            var client = new MgrManager.MgrManagerClient(App.Channel);
             var reply = await client.DelTheaterAsync(new DelTheaterRequest
             {
-                UserId = app.UserId,
+                UserId = App.UserId,
                 Id = Theater.Id
             });
             if (!reply.Result)

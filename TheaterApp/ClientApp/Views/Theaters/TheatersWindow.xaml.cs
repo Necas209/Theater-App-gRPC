@@ -1,34 +1,29 @@
 ﻿using System.Windows;
 using ClientApp.ViewModels.Theaters;
 using ClientApp.Views.Management;
-using GrpcLibrary.Models;
 
 namespace ClientApp.Views.Theaters;
 
 public partial class TheatersWindow
 {
-    private readonly App _app;
     private readonly TheatersViewModel _model;
 
     public TheatersWindow()
     {
         InitializeComponent();
-        _app = (Application.Current as App)!;
         _model = (DataContext as TheatersViewModel)!;
         _model.ShowError += ShowError;
-        if (_app.UserType == User.UserType.Manager)
-            _model.IsManager = true;
-        Dispatcher.Invoke(async () => await _model.GetTheaters(_app));
+        Dispatcher.Invoke(async () => await _model.GetTheaters());
     }
 
     private static void ShowError(string s)
     {
-        MessageBox.Show("Erro", s, MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     private void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetTheaters(_app));
+        Dispatcher.Invoke(async () => await _model.GetTheaters());
     }
 
     private void BtAddTheater_OnClick(object sender, RoutedEventArgs e)
@@ -52,6 +47,6 @@ public partial class TheatersWindow
 
     private void BtDelTheater_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.DelTheater(_app));
+        Dispatcher.Invoke(async () => await _model.DelTheater());
     }
 }

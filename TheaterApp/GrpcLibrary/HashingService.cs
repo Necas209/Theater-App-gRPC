@@ -32,4 +32,28 @@ public static class HashingService
         var pwHash = HashSecureString(password, mySha256.ComputeHash);
         return Convert.ToHexString(pwHash).ToLower();
     }
+
+    public static bool SecureStringEqual(SecureString secureString1, SecureString secureString2)
+    {
+        if (secureString1 == null)
+            throw new ArgumentNullException(nameof(secureString1));
+        if (secureString2 == null)
+            throw new ArgumentNullException(nameof(secureString2));
+        if (secureString1.Length != secureString2.Length) return false;
+        var ssBStr1Ptr = IntPtr.Zero;
+        var ssBStr2Ptr = IntPtr.Zero;
+        try
+        {
+            ssBStr1Ptr = Marshal.SecureStringToBSTR(secureString1);
+            ssBStr2Ptr = Marshal.SecureStringToBSTR(secureString2);
+            var str1 = Marshal.PtrToStringBSTR(ssBStr1Ptr);
+            var str2 = Marshal.PtrToStringBSTR(ssBStr2Ptr);
+            return str1.Equals(str2);
+        }
+        finally
+        {
+            if (ssBStr1Ptr != IntPtr.Zero) Marshal.ZeroFreeBSTR(ssBStr1Ptr);
+            if (ssBStr2Ptr != IntPtr.Zero) Marshal.ZeroFreeBSTR(ssBStr2Ptr);
+        }
+    }
 }

@@ -10,8 +10,9 @@ service TheaterManager {
 }
 
 message GetTheatersRequest {
-  string name = 1;
-  string location = 2;
+  int32 user_id = 1;
+  string name = 2;
+  string location = 3;
 }
 
 message GetTheatersReply {
@@ -19,8 +20,9 @@ message GetTheatersReply {
 }
 
 message GetShowsRequest {
-  string name = 1;
-  int32 genre_id = 2;
+  int32 user_id = 1;
+  string name = 2;
+  int32 genre_id = 3;
 }
 
 message GetShowsReply {

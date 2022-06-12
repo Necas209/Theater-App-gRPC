@@ -16,7 +16,7 @@ public partial class ReservationsWindow
         _app = (Application.Current as App)!;
         _model = (DataContext as ReservationsViewModel)!;
         _model.ShowError += ShowError;
-        Dispatcher.Invoke(async () => { await _model.GetReservations(_app); });
+        Dispatcher.Invoke(async () => { await _model.GetReservations(); });
     }
 
     private static void ShowError(string s)
@@ -26,6 +26,6 @@ public partial class ReservationsWindow
 
     private void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => { await _model.GetReservations(_app); });
+        Dispatcher.Invoke(async () => { await _model.GetReservations(); });
     }
 }

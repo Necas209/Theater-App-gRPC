@@ -6,13 +6,11 @@ namespace ClientApp.Views.Management;
 
 public partial class EditShowWindow
 {
-    private readonly App _app;
     private readonly EditShowViewModel _model;
 
     public EditShowWindow(Show show)
     {
         InitializeComponent();
-        _app = (App)Application.Current;
         _model = new EditShowViewModel
         {
             Name = show.Name,
@@ -21,7 +19,13 @@ public partial class EditShowWindow
         };
         DataContext = _model;
         _model.ShowError += ShowError;
-        Dispatcher.Invoke(async () => await _model.GetGenres(_app));
+        _model.ShowMsg += ShowMsg;
+        Dispatcher.Invoke(async () => await _model.GetGenres());
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)
@@ -31,6 +35,6 @@ public partial class EditShowWindow
 
     private void BtEditShow_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.SaveShow(_app));
+        Dispatcher.Invoke(async () => await _model.SaveShow());
     }
 }

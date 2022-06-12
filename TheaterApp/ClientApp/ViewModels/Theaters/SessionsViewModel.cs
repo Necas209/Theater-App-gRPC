@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 using Google.Protobuf.WellKnownTypes;
 using GrpcLibrary.Models;
 
@@ -10,24 +11,17 @@ namespace ClientApp.ViewModels.Theaters;
 
 public class SessionsViewModel : BaseViewModel
 {
-    private bool _isManager;
-
     public SessionsViewModel()
     {
+        StartDate = DateTime.Today;
+        EndDate = DateTime.Today.AddDays(7);
+        IsManager = App.UserType == User.UserType.Manager;
         Sessions = new ObservableCollection<Session>();
     }
 
     public ObservableCollection<Session> Sessions { get; set; }
 
-    public bool IsManager
-    {
-        get => _isManager;
-        set
-        {
-            _isManager = value;
-            OnPropertyChanged(nameof(IsManager));
-        }
-    }
+    public bool IsManager { get; set; }
 
     public DateTime StartDate { get; set; }
 
@@ -37,7 +31,7 @@ public class SessionsViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
-    public async Task DelSession(App app)
+    public async Task DelSession()
     {
         if (Session == null)
         {
@@ -45,10 +39,10 @@ public class SessionsViewModel : BaseViewModel
         }
         else
         {
-            var client = new MgrManager.MgrManagerClient(app.Channel);
+            var client = new MgrManager.MgrManagerClient(App.Channel);
             var reply = await client.DelSessionAsync(new DelSessionRequest
             {
-                UserId = app.UserId,
+                UserId = App.UserId,
                 Id = Session.Id
             });
             if (!reply.Result)
@@ -56,7 +50,7 @@ public class SessionsViewModel : BaseViewModel
         }
     }
 
-    public async Task GetSessions(App app)
+    public async Task GetSessions()
     {
         if (EndDate < StartDate)
         {
@@ -64,10 +58,10 @@ public class SessionsViewModel : BaseViewModel
         }
         else
         {
-            var client = new TheaterManager.TheaterManagerClient(app.Channel);
+            var client = new TheaterManager.TheaterManagerClient(App.Channel);
             var reply = await client.GetSessionsAsync(new GetSessionsRequest
             {
-                UserId = app.UserId,
+                UserId = App.UserId,
                 StartDate = Timestamp.FromDateTime(StartDate),
                 EndDate = Timestamp.FromDateTime(EndDate)
             });

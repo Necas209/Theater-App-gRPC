@@ -1,0 +1,30 @@
+﻿<Window x:Class="ClientApp.Views.Admins.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        xmlns:vm="clr-namespace:ClientApp.ViewModels.Admins"
+        Title="RegisterWindow" SizeToContent="WidthAndHeight">
+    <Window.DataContext>
+        <vm:RegisterViewModel />
+    </Window.DataContext>
+    <Grid Height="400" Width="400">
+        <Label Content="Registar" FontSize="18" Margin="100 10 100 310" HorizontalAlignment="Center" />
+        <Label Content="Tipo de Utilizador:" Margin="20 60 260 310" HorizontalAlignment="Right" />
+        <ComboBox Margin="150 60 90 310" ItemsSource="{Binding UserTypes}" DisplayMemberPath="Value"
+                  SelectedValuePath="Key" SelectedValue="{Binding UserType}" />
+        <Label Content="UserName:" Margin="20 100 260 270" HorizontalAlignment="Right" />
+        <TextBox Margin="150 100 90 270" Text="{Binding UserName}" />
+        <Label Content="Nome:" Margin="20 140 260 230" HorizontalAlignment="Right" />
+        <TextBox Margin="150 140 90 230" Text="{Binding Name}" />
+        <Label Content="Email:" Margin="20 180 260 190" HorizontalAlignment="Right" />
+        <TextBox Margin="150 180 90 190" Text="{Binding Email}" />
+        <Label Content="Password:" Margin="20 220 260 150" HorizontalAlignment="Right" />
+        <PasswordBox Name="PbPassword" Margin="150 220 90 150" />
+        <Label Content="Confirmar Password:" Margin="20 260 260 110" HorizontalAlignment="Right" />
+        <PasswordBox Name="PbConfirmPassword" Margin="150 260 90 110" />
+        <Button Content="Registar" Margin="280 320 30 40" Style="{DynamicResource RoundButton}"
+                Click="BtRegister_OnClick" />
+    </Grid>
+</Window>

@@ -30,21 +30,34 @@ public class AdminService : AdminManager.AdminManagerBase
             UserName = request.UserName,
             PasswordHash = request.PasswordHash
         };
-        switch (request.UserType)
+        switch ((User.UserType)request.UserType)
         {
-            case "Admin":
+            case User.UserType.Admin:
                 user.Admin = new Admin();
                 break;
-            case "Manager":
+            case User.UserType.Manager:
                 user.Manager = new Manager();
                 break;
+            case User.UserType.Client:
+                return await Task.FromResult(new AddUserReply
+                {
+                    Result = false,
+                    Description = "Client type not available."
+                });
+            default:
+                return await Task.FromResult(new AddUserReply
+                {
+                    Result = false,
+                    Description = "Unknown user type."
+                });
         }
 
         await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new AddUserReply
         {
             Result = true,
-            Description = $"{request.UserType} added successfully."
+            Description = $"{Enum.GetName(typeof(User.UserType), request.UserType)} added successfully."
         });
     }
 

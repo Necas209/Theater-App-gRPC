@@ -1,38 +1,33 @@
 ﻿using System.Windows;
 using ClientApp.ViewModels.Theaters;
 using ClientApp.Views.Management;
-using GrpcLibrary.Models;
 
 namespace ClientApp.Views.Theaters;
 
 public partial class ShowsWindow
 {
-    private readonly App _app;
     private readonly ShowsViewModel _model;
 
     public ShowsWindow()
     {
         InitializeComponent();
-        _app = (Application.Current as App)!;
         _model = (DataContext as ShowsViewModel)!;
         _model.ShowError += ShowError;
-        if (_app.UserType == User.UserType.Manager)
-            _model.IsManager = true;
         Dispatcher.Invoke(async () =>
         {
-            await _model.GetShows(_app);
-            await _model.GetGenres(_app);
+            await _model.GetShows();
+            await _model.GetGenres();
         });
     }
 
     private static void ShowError(string s)
     {
-        MessageBox.Show("Erro", s, MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     private void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetShows(_app));
+        Dispatcher.Invoke(async () => await _model.GetShows());
     }
 
     private void BtAddShow_OnClick(object sender, RoutedEventArgs e)
@@ -56,6 +51,6 @@ public partial class ShowsWindow
 
     private void BtDelShow_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.DelShow(_app));
+        Dispatcher.Invoke(async () => await _model.DelShow());
     }
 }

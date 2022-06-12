@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 using Google.Protobuf.WellKnownTypes;
 using GrpcLibrary.Models;
 
-namespace ClientApp.ViewModels.Clients;
+namespace ClientApp.ViewModels.Admins;
 
-public class ReservationsViewModel : BaseViewModel
+public class PurchasesViewModel : BaseViewModel
 {
-    public ReservationsViewModel()
+    public PurchasesViewModel()
     {
         StartDate = DateTime.Today.AddMonths(-3);
         EndDate = DateTime.Now;
-        Reservations = new ObservableCollection<Reservation>();
+        Purchases = new ObservableCollection<Reservation>();
     }
 
-    public ObservableCollection<Reservation> Reservations { get; set; }
+    public ObservableCollection<Reservation> Purchases { get; set; }
 
     public DateTime StartDate { get; set; }
 
@@ -26,7 +25,7 @@ public class ReservationsViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
-    public async Task GetReservations()
+    public async Task GetPurchases()
     {
         if (EndDate > DateTime.Today)
         {
@@ -38,17 +37,17 @@ public class ReservationsViewModel : BaseViewModel
         }
         else
         {
-            var client = new ClientManager.ClientManagerClient(App.Channel);
-            var reply = await client.GetReservationsAsync(new GetReservationsRequest
+            var client = new AdminManager.AdminManagerClient(App.Channel);
+            var reply = await client.GetPurchasesAsync(new GetPurchasesRequest
                 {
                     UserId = App.UserId,
                     StartDate = Timestamp.FromDateTime(StartDate),
                     EndDate = Timestamp.FromDateTime(EndDate)
                 }
             );
-            var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);
-            Reservations.Clear();
-            reservations?.ForEach(reservation => Reservations.Add(reservation));
+            var purchases = JsonSerializer.Deserialize<List<Reservation>>(reply.Purchases);
+            Purchases.Clear();
+            purchases?.ForEach(purchase => purchases.Add(purchase));
         }
     }
 }

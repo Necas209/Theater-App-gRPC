@@ -27,18 +27,20 @@ public class EditShowViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
-    public async Task GetGenres(App app)
+    public event StringMethod? ShowMsg;
+
+    public async Task GetGenres()
     {
-        var client = new TheaterManager.TheaterManagerClient(app.Channel);
+        var client = new TheaterManager.TheaterManagerClient(App.Channel);
         var reply = await client.GetGenresAsync(new GetGenresRequest
         {
-            UserId = app.UserId
+            UserId = App.UserId
         });
         var genres = JsonSerializer.Deserialize<List<Genre>>(reply.Genres);
         genres?.ForEach(genre => Genres.Add(genre));
     }
 
-    public async Task SaveShow(App app)
+    public async Task SaveShow()
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
@@ -58,16 +60,17 @@ public class EditShowViewModel : BaseViewModel
         }
         else
         {
-            var client = new MgrManager.MgrManagerClient(app.Channel);
+            var client = new MgrManager.MgrManagerClient(App.Channel);
             var reply = await client.EditShowAsync(new EditShowRequest
             {
-                UserId = app.UserId,
+                UserId = App.UserId,
                 Name = Name,
                 Synopsis = Synopsis,
                 Length = Duration.FromTimeSpan(Length),
                 GenreId = Genre.Id
             });
             if (!reply.Result) ShowError?.Invoke(reply.Description);
+            else ShowMsg?.Invoke(reply.Description);
         }
     }
 }

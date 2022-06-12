@@ -6,13 +6,11 @@ namespace ClientApp.Views.Management;
 
 public partial class EditTheaterWindow
 {
-    private readonly App _app;
     private readonly EditTheaterViewModel _model;
 
     public EditTheaterWindow(Theater theater)
     {
         InitializeComponent();
-        _app = (App)Application.Current;
         _model = new EditTheaterViewModel
         {
             Name = theater.Name,
@@ -22,6 +20,12 @@ public partial class EditTheaterWindow
             PhoneNumber = theater.PhoneNumber
         };
         _model.ShowError += ShowError;
+        _model.ShowMsg += ShowMsg;
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)
@@ -31,6 +35,6 @@ public partial class EditTheaterWindow
 
     private void BtSaveTheater_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.SaveTheater(_app));
+        Dispatcher.Invoke(async () => await _model.SaveTheater());
     }
 }

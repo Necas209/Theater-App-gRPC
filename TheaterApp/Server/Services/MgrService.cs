@@ -13,7 +13,7 @@ public class MgrService : MgrManager.MgrManagerBase
     {
         _context = context;
     }
-
+    
     public override async Task<AddTheaterReply> AddTheater(AddTheaterRequest request, ServerCallContext context)
     {
         if (await _context.Theaters.AnyAsync(x => x.Name == request.Name))

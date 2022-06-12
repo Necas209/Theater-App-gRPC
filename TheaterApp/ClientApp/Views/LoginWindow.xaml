@@ -13,7 +13,7 @@
         <Label Content="Login" FontSize="18" Margin="100 10 100 220" HorizontalContentAlignment="Center" Height="35" />
         <Label Content="UserName:" Margin="0 0 140 100" Width="90" Height="30"
                FontSize="14" HorizontalContentAlignment="Right" />
-        <TextBox Name="TbUserName" Margin="110 0 10 100" Height="30" Width="120" Text="{Binding UserName}" />
+        <TextBox Margin="110 0 10 100" Height="30" Width="120" Text="{Binding UserName}" />
         <Label Content="Password:" Margin="0 100 140 100" Width="90" Height="30"
                FontSize="14" HorizontalContentAlignment="Right" />
         <PasswordBox Name="PbPassword" Margin="110 100 10 100" Height="30" Width="120" KeyDown="PbPassword_OnKeyDown" />

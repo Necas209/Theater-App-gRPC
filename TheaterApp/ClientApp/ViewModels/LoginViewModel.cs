@@ -11,7 +11,7 @@ public class LoginViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
-    public async Task<bool> Login(App app, SecureString password)
+    public async Task<bool> Login(SecureString password)
     {
         if (string.IsNullOrWhiteSpace(UserName) || password.Length == 0)
         {
@@ -20,7 +20,7 @@ public class LoginViewModel : BaseViewModel
         else
         {
             var passwordHash = HashingService.HashPassword(password);
-            var client = new AuthManager.AuthManagerClient(app.Channel);
+            var client = new AuthManager.AuthManagerClient(App.Channel);
             var reply = await client.LoginAsync(new LoginRequest
                 {
                     UserName = UserName,
@@ -29,8 +29,8 @@ public class LoginViewModel : BaseViewModel
             );
             if (reply.LoginStatus)
             {
-                app.UserId = reply.UserId;
-                app.UserType = (User.UserType)reply.UserType;
+                App.UserId = reply.UserId;
+                App.UserType = (User.UserType)reply.UserType;
             }
             else
             {

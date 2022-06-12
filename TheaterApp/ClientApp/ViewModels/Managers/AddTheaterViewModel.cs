@@ -17,6 +17,8 @@ public class AddTheaterViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
+    public event StringMethod? ShowMsg;
+
     public async Task AddTheater(App app)
     {
         if (string.IsNullOrWhiteSpace(Name))
@@ -52,6 +54,7 @@ public class AddTheaterViewModel : BaseViewModel
                 PhoneNumber = PhoneNumber
             });
             if (!reply.Result) ShowError?.Invoke(reply.Description);
+            else ShowMsg?.Invoke(reply.Description);
         }
     }
 }

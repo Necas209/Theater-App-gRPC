@@ -8,11 +8,9 @@ namespace ClientApp.ViewModels.Theaters;
 
 public class ShowsViewModel : BaseViewModel
 {
-    private bool _isManager;
-
     public ShowsViewModel()
     {
-        Name = "";
+        IsManager = App.UserType == User.UserType.Manager;
         Shows = new ObservableCollection<Show>();
         Genres = new ObservableCollection<Genre>();
     }
@@ -21,40 +19,33 @@ public class ShowsViewModel : BaseViewModel
 
     public Show? Show { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public Genre? Genre { get; set; }
 
     public ObservableCollection<Genre> Genres { get; set; }
-    
-    public bool IsManager
-    {
-        get => _isManager;
-        set
-        {
-            _isManager = value;
-            OnPropertyChanged(nameof(IsManager));
-        }
-    }
+
+    public bool IsManager { get; set; }
 
     public event StringMethod? ShowError;
 
-    public async Task GetGenres(App app)
+    public async Task GetGenres()
     {
-        var client = new TheaterManager.TheaterManagerClient(app.Channel);
+        var client = new TheaterManager.TheaterManagerClient(App.Channel);
         var reply = await client.GetGenresAsync(new GetGenresRequest
         {
-            UserId = app.UserId
+            UserId = App.UserId
         });
         var genres = JsonSerializer.Deserialize<List<Genre>>(reply.Genres);
         genres?.ForEach(genre => Genres.Add(genre));
     }
-    
-    public async Task GetShows(App app)
+
+    public async Task GetShows()
     {
-        var client = new TheaterManager.TheaterManagerClient(app.Channel);
+        var client = new TheaterManager.TheaterManagerClient(App.Channel);
         var reply = await client.GetShowsAsync(new GetShowsRequest
         {
+            UserId = App.UserId,
             Name = Name,
             GenreId = Genre?.Id ?? -1
         });
@@ -65,8 +56,8 @@ public class ShowsViewModel : BaseViewModel
             shows?.ForEach(show => Shows.Add(show));
         }
     }
-    
-    public async Task DelShow(App app)
+
+    public async Task DelShow()
     {
         if (Show == null)
         {
@@ -74,10 +65,10 @@ public class ShowsViewModel : BaseViewModel
         }
         else
         {
-            var client = new MgrManager.MgrManagerClient(app.Channel);
+            var client = new MgrManager.MgrManagerClient(App.Channel);
             var reply = await client.DelShowAsync(new DelShowRequest
             {
-                UserId = app.UserId,
+                UserId = App.UserId,
                 Id = Show.Id
             });
             if (!reply.Result)

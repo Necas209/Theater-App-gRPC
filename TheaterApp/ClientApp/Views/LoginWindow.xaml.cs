@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using ClientApp.ViewModels;
 using ClientApp.Views.Clients;
@@ -32,18 +31,17 @@ public partial class LoginWindow
     {
         Dispatcher.Invoke(async () =>
         {
-            var result = await _model.Login(_app, PbPassword.SecurePassword);
+            var result = await _model.Login(PbPassword.SecurePassword);
             if (result)
             {
                 Window window = _app.UserType switch
                 {
-                    User.UserType.Client => new ProfileWindow(),
-                    User.UserType.Admin => new Admin.ProfileWindow(),
-                    User.UserType.Manager => new Management.ProfileWindow(),
-                    _ => throw new InvalidEnumArgumentException()
+                    User.UserType.Client => new HomeWindow(),
+                    _ => new ProfileWindow()
                 };
                 Hide();
                 window.ShowDialog();
+                Show();
             }
         });
     }

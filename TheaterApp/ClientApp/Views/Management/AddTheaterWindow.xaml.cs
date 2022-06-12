@@ -13,7 +13,13 @@ public partial class AddTheaterWindow
         InitializeComponent();
         _app = (App)Application.Current;
         _model = (AddTheaterViewModel)DataContext;
-        _model.ShowError += ShowError;
+        _model.ShowError += ShowError;        
+        _model.ShowMsg += ShowMsg;
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)

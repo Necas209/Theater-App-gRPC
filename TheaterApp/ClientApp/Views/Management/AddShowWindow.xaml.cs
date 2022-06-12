@@ -14,7 +14,13 @@ public partial class AddShowWindow
         _app = (Application.Current as App)!;
         _model = (DataContext as AddShowViewModel)!;
         _model.ShowError += ShowError;
+        _model.ShowMsg += ShowMsg;
         Dispatcher.Invoke(async () => await _model.GetGenres(_app));
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)

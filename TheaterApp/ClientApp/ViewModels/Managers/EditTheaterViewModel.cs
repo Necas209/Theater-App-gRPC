@@ -17,7 +17,9 @@ public class EditTheaterViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
-    public async Task SaveTheater(App app)
+    public event StringMethod? ShowMsg;
+
+    public async Task SaveTheater()
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
@@ -41,10 +43,10 @@ public class EditTheaterViewModel : BaseViewModel
         }
         else
         {
-            var client = new MgrManager.MgrManagerClient(app.Channel);
+            var client = new MgrManager.MgrManagerClient(App.Channel);
             var reply = await client.EditTheaterAsync(new EditTheaterRequest
             {
-                UserId = app.UserId,
+                UserId = App.UserId,
                 Name = Name,
                 Location = Location,
                 Address = Address,
@@ -52,6 +54,7 @@ public class EditTheaterViewModel : BaseViewModel
                 PhoneNumber = PhoneNumber
             });
             if (!reply.Result) ShowError?.Invoke(reply.Description);
+            else ShowMsg?.Invoke(reply.Description);
         }
     }
 }

@@ -34,24 +34,36 @@ public class AddSessionViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
-    public async Task AddSession(App app)
+    public event StringMethod? ShowMsg;
+
+    public async Task AddSession()
     {
         if (Show == null)
+        {
             ShowError?.Invoke("Selecione um espetáculo");
+        }
         else if (Theater == null)
+        {
             ShowError?.Invoke("Selecione um teatro.");
+        }
         else if (Showtime <= DateTime.Now)
+        {
             ShowError?.Invoke("Data deverá ser futura.");
+        }
         else if (TicketPrice <= 0)
+        {
             ShowError?.Invoke($"Preço do bilhete deverá ser superior a {0:C}");
+        }
         else if (TotalSeats <= 0)
+        {
             ShowError?.Invoke("Número de lugares deverá ser superior a 0.");
+        }
         else
         {
-            var client = new MgrManager.MgrManagerClient(app.Channel);
+            var client = new MgrManager.MgrManagerClient(App.Channel);
             var reply = await client.AddSessionAsync(new AddSessionRequest
             {
-                UserId = app.UserId,
+                UserId = App.UserId,
                 ShowId = Show.Id,
                 TheaterId = Theater.Id,
                 Showtime = Timestamp.FromDateTime(Showtime),
@@ -60,10 +72,12 @@ public class AddSessionViewModel : BaseViewModel
             });
             if (!reply.Result)
                 ShowError?.Invoke(reply.Description);
+            else
+                ShowMsg?.Invoke(reply.Description);
         }
     }
 
-    public async Task GetShows(App app, string textInput)
+    public async Task GetShows(string textInput)
     {
         if (textInput.Length == 0)
         {
@@ -71,7 +85,7 @@ public class AddSessionViewModel : BaseViewModel
         }
         else
         {
-            var client = new TheaterManager.TheaterManagerClient(app.Channel);
+            var client = new TheaterManager.TheaterManagerClient(App.Channel);
             var reply = await client.GetShowsAsync(new GetShowsRequest
             {
                 Name = textInput
@@ -85,7 +99,7 @@ public class AddSessionViewModel : BaseViewModel
         }
     }
 
-    public async Task GetTheaters(App app, string textInput)
+    public async Task GetTheaters(string textInput)
     {
         if (textInput.Length == 0)
         {
@@ -93,7 +107,7 @@ public class AddSessionViewModel : BaseViewModel
         }
         else
         {
-            var client = new TheaterManager.TheaterManagerClient(app.Channel);
+            var client = new TheaterManager.TheaterManagerClient(App.Channel);
             var reply = await client.GetTheatersAsync(new GetTheatersRequest
             {
                 Name = textInput

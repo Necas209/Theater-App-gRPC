@@ -7,38 +7,44 @@ namespace ClientApp.Views.Management;
 
 public partial class AddSessionWindow
 {
-    private readonly App _app;
     private readonly AddSessionViewModel _model;
 
     public AddSessionWindow()
     {
         InitializeComponent();
-        _app = (App)Application.Current;
         _model = (AddSessionViewModel)DataContext;
         _model.ShowError += ShowError;
+        _model.ShowMsg += ShowMsg;
     }
 
     private static void ShowError(string s)
     {
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
 
     private void CbShows_OnKeyDown(object sender, KeyEventArgs e)
     {
         var text = ((ComboBox)sender).Text;
         if (e.Key == Key.Enter)
-            Dispatcher.Invoke(async () => await _model.GetShows(_app, text));
+            Dispatcher.Invoke(async () => await _model.GetShows(text));
     }
 
     private void CbTheaters_OnKeyDown(object sender, KeyEventArgs e)
     {
         var text = ((ComboBox)sender).Text;
         if (e.Key == Key.Enter)
-            Dispatcher.Invoke(async () => await _model.GetTheaters(_app, text));
+            Dispatcher.Invoke(async () => await _model.GetTheaters(text));
     }
 
     private void BtAddSession_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.AddSession(_app));
+        Dispatcher.Invoke(async () =>
+        {
+            await _model.AddSession();
+        });
     }
 }
