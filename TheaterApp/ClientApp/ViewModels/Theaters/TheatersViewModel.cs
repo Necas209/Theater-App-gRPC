@@ -18,9 +18,9 @@ public class TheatersViewModel : BaseViewModel
 
     public Theater? Theater { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? Name { get; set; }
 
-    public string Location { get; set; } = null!;
+    public string? Location { get; set; }
 
     public bool IsManager { get; set; }
 
@@ -34,8 +34,8 @@ public class TheatersViewModel : BaseViewModel
         var reply = await client.GetTheatersAsync(new GetTheatersRequest
         {
             UserId = App.UserId,
-            Name = Name,
-            Location = Location
+            Name = string.IsNullOrWhiteSpace(Name) ? null : Name,
+            Location = string.IsNullOrWhiteSpace(Location) ? null : Location
         });
         var theaters = JsonSerializer.Deserialize<List<Theater>>(reply.Theaters);
         if (theaters?.Count != 0)

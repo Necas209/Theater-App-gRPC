@@ -14,10 +14,10 @@
         <Label Content="{Binding Client.Funds}" ContentStringFormat="C" Margin="700 8 45 416" />
         <Button Template="{StaticResource ProfileButton}" Margin="740 10 10 390" Click="BtProfile_OnClick" />
         <TabControl Margin="30 50 30 50">
-            <TabItem Header="Teatros" Width="150">
+            <TabItem Name="TiTheaters" Header="Teatros" Width="150">
                 <Grid>
                     <ListView Margin="0 0 150 0" ItemsSource="{Binding Theaters}"
-                              SelectedItem="{Binding Theater}">
+                              SelectedItem="{Binding Theater}" SelectionChanged="LvTheaters_OnSelectionChanged">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Nome" Width="115" DisplayMemberBinding="{Binding Name}" />
@@ -38,10 +38,10 @@
                             Style="{DynamicResource RoundButton}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Espetáculos" Width="150">
+            <TabItem Name="TiShows" Header="Espetáculos" Width="150">
                 <Grid>
                     <ListView Margin="0 0 200 0" ItemsSource="{Binding Shows}"
-                              SelectedItem="{Binding Show}">
+                              SelectedItem="{Binding Show}" SelectionChanged="LvShows_OnSelectionChanged">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Nome" Width="100" DisplayMemberBinding="{Binding Name}" />
@@ -60,7 +60,7 @@
                             Style="{DynamicResource RoundButton}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Sessões" Width="150">
+            <TabItem Name="TiSessions" Header="Sessões" Width="150">
                 <Grid>
                     <ListView Margin="0 0 150 0" ItemsSource="{Binding Sessions}"
                               SelectedItem="{Binding Session}">
@@ -76,17 +76,18 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Label Margin="600 40 10 250" Content="Data Início:" />
-                    <DatePicker Margin="600 90 10 200" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+                    <Label Margin="600 10 10 280" Content="Data Início:" />
+                    <DatePicker Margin="600 60 10 230" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
                                 SelectedDate="{Binding  StartDate}" />
-                    <Label Margin="600 140 10 150" Content="Data Fim:" />
-                    <DatePicker Margin="600 190 10 100" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+                    <Label Margin="600 110 10 180" Content="Data Fim:" />
+                    <DatePicker Margin="600 160 10 130" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
                                 SelectedDate="{Binding EndDate}" />
-                    <Button Margin="620 260 30 30" Content="Filtrar" Click="BtFilterSessions_OnClick"
+                    <Button Margin="620 210 30 80" Content="Filtrar" Click="BtFilterSessions_OnClick"
                             Style="{DynamicResource RoundButton}" />
+                    <Button Content="Comprar Bilhetes" Margin="600 270 10 20" Style="{DynamicResource RoundButton}"
+                            Click="BtBuyTickets_OnClick" />
                 </Grid>
             </TabItem>
         </TabControl>
-        <!-- <Button Content="Comprar Bilhete" Style="{DynamicResource RoundButton}" Margin="600 410 30 15" /> -->
     </Grid>
 </Window>

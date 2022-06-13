@@ -40,17 +40,24 @@ public class ShowsViewModel : BaseViewModel
         });
         var genres = JsonSerializer.Deserialize<List<Genre>>(reply.Genres);
         genres?.ForEach(genre => Genres.Add(genre));
+        Genres.Add(new Genre
+        {
+            Id = 0,
+            Name = "Todos"
+        });
     }
 
     public async Task GetShows()
     {
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
-        var reply = await client.GetShowsAsync(new GetShowsRequest
+        var request = new GetShowsRequest
         {
             UserId = App.UserId,
-            Name = Name,
-            GenreId = Genre?.Id ?? -1
-        });
+            Name = string.IsNullOrWhiteSpace(Name) ? null : Name
+        };
+        if (Genre != null && Genre.Id != 0)
+            request.GenreId = Genre.Id;
+        var reply = await client.GetShowsAsync(request);
         var shows = JsonSerializer.Deserialize<List<Show>>(reply.Shows);
         if (shows?.Count != 0)
         {

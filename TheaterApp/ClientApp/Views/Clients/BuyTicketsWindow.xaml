@@ -4,45 +4,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
+        xmlns:vm="clr-namespace:ClientApp.ViewModels.Clients"
         Title="BuyTicketsWindow" SizeToContent="WidthAndHeight">
-    <Grid Height="400" Width="500">
-        <Label Content="Comprar bilhetes" Margin="200 0 200 370" HorizontalContentAlignment="Center" />
-        <Label Content="Saldo:" Margin="400 30 60 345" HorizontalContentAlignment="Right" />
-        <Label Content="3,30€" Name="LbFunds" Margin="440 30 10 345" />
-        <TextBlock Margin="20 60 20 325" TextWrapping="WrapWithOverflow" Text="Lorem ipsum"
-                   HorizontalAlignment="Center" />
-        <Label Content="Sinopse" Margin="10 85 430 285 " />
-        <Border Margin="10 109 263.5 110" Background="White" BorderBrush="Gray" BorderThickness="1" />
-        <ScrollViewer Margin="20 110 265 112">
-            <TextBlock
-                Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
-            esse cillum dolore eu fugiat nulla pariatur. "
-                TextWrapping="WrapWithOverflow" />
+    <Window.DataContext>
+        <vm:BuyTicketsViewModel />
+    </Window.DataContext>
+    <Grid Height="420" Width="500">
+        <Label Content="Comprar Bilhetes" Margin="180 5 180 380" FontSize="16" HorizontalContentAlignment="Center" />
+        <Label Content="Saldo:" Margin="350 30 80 360" HorizontalContentAlignment="Right" />
+        <Label Margin="430 30 20 360" Content="{Binding Client.Funds}" ContentStringFormat="C" />
+        <Label Content="Data:" Margin="20 70 350 320" />
+        <TextBox Margin="20 110 260 280 " Text="{Binding Session.Showtime}" IsEnabled="False" />
+        <Label Content="Sinopse:" Margin="20 150 350 240" />
+        <Border Margin="20 190 260 120" Background="White" BorderBrush="Gray" BorderThickness="1" />
+        <ScrollViewer Margin="20 190 260 120">
+            <TextBlock Text="{Binding Session.Show.Synopsis}" TextWrapping="WrapWithOverflow" />
         </ScrollViewer>
-        <DatePicker Name="DpStartDate" Margin="380 80 20 295" IsTodayHighlighted="True" FirstDayOfWeek="Monday" />
-        <ListView Margin="260 110 20 110">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Data" Width="70" />
-                    <GridViewColumn Header="Hora" Width="70" />
-                    <GridViewColumn Header="Lugares Vagos" Width="80" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-
-        <Label Content="Nº Bilhetes:" Margin="130 320 305 55" />
-        <ComboBox Margin="200 320 263.5 60" HorizontalContentAlignment="Center">
-            <ComboBoxItem IsSelected="True">1 </ComboBoxItem>
-            <ComboBoxItem>2</ComboBoxItem>
-            <ComboBoxItem>3</ComboBoxItem>
-            <ComboBoxItem>4</ComboBoxItem>
-            <ComboBoxItem>5</ComboBoxItem>
-            <ComboBoxItem>6</ComboBoxItem>
-        </ComboBox>
-        <Label Content="Valor a pagar:" Margin="260 320 170 55" />
-        <Label Content="15,30€" Margin="330 320 120 55" />
-        <Button Content="Comprar" Margin="390 355 20 15" Style="{DynamicResource RoundButton }" />
+        <Label Content="Teatro:" Margin="270 70 80 320" />
+        <TextBox Margin="270 110 80 280" Text="{Binding Session.Theater.Name}" IsEnabled="False" />
+        <Label Content="Espetáculo:" Margin="270 150 80 240" />
+        <TextBox Margin="270 190 80 200" Text="{Binding Session.Show.Name}" IsEnabled="False" />
+        <Label Content="Duração:" Margin="270 230 80 160" />
+        <TextBox Margin="270 270 80 120" Text="{Binding Session.Show.Length}" IsEnabled="False" />
+        <Label Content="Bilhetes Disponíveis:" Margin="20 320 360 70" HorizontalContentAlignment="Right" />
+        <TextBox Margin="150 320 260 70" Text="{Binding Session.AvailableSeats}" IsEnabled="False" />
+        <Label Content="Nº Bilhetes:" Margin="20 360 360 30" HorizontalContentAlignment="Right" />
+        <ComboBox Margin="150 360 260 30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                  ItemsSource="{Binding Tickets}" SelectedItem="{Binding NoTickets}" />
+        <Label Content="Valor a pagar:" Margin="270 320 140 70" />
+        <Label Margin="360 320 80 70" Content="{Binding Total}" ContentStringFormat="C" />
+        <Button Content="Comprar" Margin="410 360 20 30" Click="BtBuyTickets_OnClick"
+                Style="{DynamicResource RoundButton}" />
     </Grid>
 </Window>

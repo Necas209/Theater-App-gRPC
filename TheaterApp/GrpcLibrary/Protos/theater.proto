@@ -7,12 +7,23 @@ service TheaterManager {
   rpc GetShows (GetShowsRequest) returns (GetShowsReply);
   rpc GetGenres (GetGenresRequest) returns (GetGenresReply);
   rpc GetSessions (GetSessionsRequest) returns (GetSessionsReply);
+  rpc GetSession (GetSessionRequest) returns (GetSessionReply);
+}
+
+message GetSessionRequest {
+  int32 id = 1;
+}
+
+message GetSessionReply {
+  bool result = 1;
+  string description = 2;
+  string session = 3;
 }
 
 message GetTheatersRequest {
   int32 user_id = 1;
-  string name = 2;
-  string location = 3;
+  optional string name = 2;
+  optional string location = 3;
 }
 
 message GetTheatersReply {
@@ -21,8 +32,9 @@ message GetTheatersReply {
 
 message GetShowsRequest {
   int32 user_id = 1;
-  string name = 2;
-  int32 genre_id = 3;
+  optional string name = 2;
+  optional int32 genre_id = 3;
+  optional int32 theater_id = 4;
 }
 
 message GetShowsReply {
@@ -39,12 +51,10 @@ message GetGenresReply {
 
 message GetSessionsRequest {
   int32 user_id = 1;
-  string show_name = 2;
-  int32 genre_id = 3;
-  string theater_name = 4;
-  string theater_location = 5;
-  google.protobuf.Timestamp start_date = 6;
-  google.protobuf.Timestamp end_date = 7;
+  optional int32 show_id = 2;
+  optional int32 theater_id = 3;
+  google.protobuf.Timestamp start_date = 4;
+  google.protobuf.Timestamp end_date = 5;
 }
 
 message GetSessionsReply {
