@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Grpc.Core;
 using GrpcLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +23,10 @@ public class ClientService : ClientManager.ClientManagerBase
             .Where(x => x.Id == request.UserId)
             .Include(x => x.User)
             .FirstAsync();
-        if (client.User != null) client.User.Client = null;
-        var clientInfo = JsonSerializer.Serialize(client);
+        var clientInfo = JsonSerializer.Serialize(client, new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.IgnoreCycles
+        });
         await _context.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
@@ -133,8 +136,7 @@ public class ClientService : ClientManager.ClientManagerBase
             return await Task.FromResult(new AddFundsReply
             {
                 Result = false,
-                Description = "Client ID not found.",
-                TotalFunds = -1
+                Description = "Client ID not found."
             });
         client.Funds += request.Funds;
         _context.Clients.Update(client);
@@ -153,6 +155,7 @@ public class ClientService : ClientManager.ClientManagerBase
         return await Task.FromResult(new AddFundsReply
         {
             Result = true,
+            Description = "Funds added successfully.",
             TotalFunds = client.Funds
         });
     }

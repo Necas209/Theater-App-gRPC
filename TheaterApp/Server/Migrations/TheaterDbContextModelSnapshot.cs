@@ -29,7 +29,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Client", b =>
@@ -43,7 +43,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Genre", b =>
@@ -60,7 +60,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Log", b =>
@@ -85,7 +85,7 @@ namespace Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Logs");
+                    b.ToTable("Logs", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Manager", b =>
@@ -95,7 +95,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Managers");
+                    b.ToTable("Managers", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Movement", b =>
@@ -124,7 +124,7 @@ namespace Server.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Movements");
+                    b.ToTable("Movements", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Reservation", b =>
@@ -157,7 +157,7 @@ namespace Server.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Session", b =>
@@ -193,7 +193,7 @@ namespace Server.Migrations
 
                     b.HasIndex("TheaterId");
 
-                    b.ToTable("Sessions");
+                    b.ToTable("Sessions", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Show", b =>
@@ -222,7 +222,7 @@ namespace Server.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Shows");
+                    b.ToTable("Shows", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Theater", b =>
@@ -255,7 +255,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Theaters");
+                    b.ToTable("Theaters", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.User", b =>
@@ -287,7 +287,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Watched", b =>
@@ -302,7 +302,7 @@ namespace Server.Migrations
 
                     b.HasIndex("ShowId");
 
-                    b.ToTable("Watched");
+                    b.ToTable("Watched", (string)null);
                 });
 
             modelBuilder.Entity("GrpcLibrary.Models.Admin", b =>

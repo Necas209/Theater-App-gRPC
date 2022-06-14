@@ -17,11 +17,12 @@ public class AuthService : AuthManager.AuthManagerBase
     public override async Task<LoginReply> Login(LoginRequest request, ServerCallContext context)
     {
         var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == request.UserName && u.PasswordHash == request.PasswordHash);
+            .Where(u => u.UserName == request.UserName && u.PasswordHash == request.PasswordHash)
+            .FirstOrDefaultAsync();
         if (user == null)
             return await Task.FromResult(new LoginReply
             {
-                LoginStatus = user != null
+                LoginStatus = false
             });
         var userType = await FindUserTypeAsync(user.Id);
         await _context.Logs.AddAsync(new Log

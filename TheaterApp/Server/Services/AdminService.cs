@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Grpc.Core;
 using GrpcLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -96,7 +97,10 @@ public class AdminService : AdminManager.AdminManagerBase
             .Where(x => x.Stamp >= startDate && x.Stamp <= endDate)
             .Include(x => x.User)
             .ToListAsync();
-        var json = JsonSerializer.Serialize(logs);
+        var json = JsonSerializer.Serialize(logs, new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.IgnoreCycles
+        });
         await _context.Logs.AddAsync(new Log
         {
             UserId = request.UserId,

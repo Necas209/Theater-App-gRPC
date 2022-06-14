@@ -41,19 +41,15 @@ public class TheaterDbContext: DbContext
             .HasKey(u => new { u.ClientId, u.ShowId });
         modelBuilder.Entity<Client>()
             .Property(u => u.Funds)
-            .HasColumnType("money")
-            .HasPrecision(2);
+            .HasColumnType("money");
         modelBuilder.Entity<Session>()
             .Property(u => u.TicketPrice)
-            .HasColumnType("money")
-            .HasPrecision(2);
+            .HasColumnType("money");
         modelBuilder.Entity<Movement>()
             .Property(u => u.Value)
-            .HasColumnType("money")
-            .HasPrecision(2);
+            .HasColumnType("money");
         modelBuilder.Entity<Reservation>()
             .Property(u => u.Total)
-            .HasColumnType("money")
-            .HasPrecision(2);
+            .HasColumnType("money");
     }
 }

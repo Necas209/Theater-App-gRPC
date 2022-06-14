@@ -10,7 +10,7 @@
         <vm:LogsViewModel />
     </Window.DataContext>
     <Grid Height="340" Width="550">
-        <Label Content="Lista de Sessões" FontSize="17" Margin="130 5 130 300" HorizontalAlignment="Center" />
+        <Label Content="Lista de Pedidos" FontSize="17" Margin="130 5 130 300" HorizontalAlignment="Center" />
         <ListView Margin="30 50 130 50" ItemsSource="{Binding Logs}">
             <ListView.View>
                 <GridView>
