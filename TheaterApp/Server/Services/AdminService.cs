@@ -53,6 +53,11 @@ public class AdminService : AdminManager.AdminManagerBase
         }
 
         await _context.Users.AddAsync(user);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(AddUser)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new AddUserReply
         {
@@ -71,6 +76,12 @@ public class AdminService : AdminManager.AdminManagerBase
             .Include(x => x.Session).ThenInclude(x => x!.Show)
             .ToListAsync();
         var json = JsonSerializer.Serialize(purchases);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetPurchases)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetPurchasesReply
         {
             Purchases = json
@@ -86,6 +97,12 @@ public class AdminService : AdminManager.AdminManagerBase
             .Include(x => x.User)
             .ToListAsync();
         var json = JsonSerializer.Serialize(logs);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetLogs)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetLogsReply
         {
             Logs = json

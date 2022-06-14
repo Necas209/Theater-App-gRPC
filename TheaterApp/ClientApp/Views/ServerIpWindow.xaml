@@ -4,10 +4,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
+        xmlns:vm="clr-namespace:ClientApp.ViewModels"
         Title="ServerIpWindow" SizeToContent="WidthAndHeight">
-    <Grid Height="70" Width="380">
-        <Label Content="IP Servidor:" Margin="20 20 290 20" />
-        <TextBox Margin="100 20 100 20" />
-        <Button Style="{DynamicResource RoundButton}" Content="Conectar" Margin="290 20 10 20" />
+    <Window.DataContext>
+        <vm:ServerIpViewModel />
+    </Window.DataContext>
+    <Grid Height="130" Width="380">
+        <Label Margin="100 20 100 80" Content="Conectar ao Servidor" FontSize="18" />
+        <Label Content="IP Servidor:" Margin="20 80 290 20" />
+        <TextBox Margin="100 80 100 20" Text="{Binding IpAddress}" VerticalContentAlignment="Center" />
+        <Button Margin="290 80 10 20" Content="Conectar" Click="BtConnect_OnClick"
+                Style="{DynamicResource RoundButton}" />
     </Grid>
 </Window>

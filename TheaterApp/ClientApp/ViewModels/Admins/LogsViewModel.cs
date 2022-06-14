@@ -37,8 +37,8 @@ public class LogsViewModel : BaseViewModel
             var reply = await client.GetLogsAsync(new GetLogsRequest
             {
                 UserId = App.UserId,
-                StartDate = Timestamp.FromDateTime(StartDate),
-                EndDate = Timestamp.FromDateTime(EndDate)
+                StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+                EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
             });
             var logs = JsonSerializer.Deserialize<List<Log>>(reply.Logs);
             if (logs != null)

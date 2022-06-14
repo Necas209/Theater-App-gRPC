@@ -24,6 +24,12 @@ public class ClientService : ClientManager.ClientManagerBase
             .FirstAsync();
         if (client.User != null) client.User.Client = null;
         var clientInfo = JsonSerializer.Serialize(client);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetClientInfo)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetClientInfoReply
         {
             ClientInfo = clientInfo
@@ -59,6 +65,13 @@ public class ClientService : ClientManager.ClientManagerBase
                 Result = false,
                 Description = "Not enough funds available."
             });
+        // Update available seats and funds
+        session.AvailableSeats -= request.NoTickets;
+        _context.Sessions.Update(session);
+        client.Funds -= purchaseTotal;
+        _context.Clients.Update(client);
+        await _context.SaveChangesAsync();
+        // Add reservation, movement and log
         await _context.Reservations.AddAsync(new Reservation
         {
             ClientId = request.ClientId,
@@ -73,51 +86,16 @@ public class ClientService : ClientManager.ClientManagerBase
             Description = "Reservation",
             Value = -purchaseTotal
         });
-        client.Funds -= purchaseTotal;
-        _context.Clients.Update(client);
-        session.AvailableSeats -= request.NoTickets;
-        _context.Sessions.Update(session);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.ClientId,
+            Message = nameof(BuyTickets)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new BuyTicketsReply
         {
             Result = true,
             Description = "Operation successful."
-        });
-    }
-
-    public override async Task<RefundReply> Refund(RefundRequest request, ServerCallContext context)
-    {
-        var reservation = await _context.Reservations.FindAsync(request.ReservationId);
-        if (reservation == null)
-            return await Task.FromResult(new RefundReply
-            {
-                Result = false,
-                Description = "Reservation ID not found.",
-                Funds = -1
-            });
-        var client = await _context.Clients.FindAsync(request.UserId);
-        if (client == null)
-            return await Task.FromResult(new RefundReply
-            {
-                Result = false,
-                Description = "Client ID not found",
-                Funds = -1
-            });
-        client.Funds += reservation.Total;
-        _context.Reservations.Remove(reservation);
-        await _context.Movements.AddAsync(new Movement
-        {
-            ClientId = request.UserId,
-            Description = "Refund",
-            Value = reservation.Total
-        });
-        _context.Clients.Update(client);
-        await _context.SaveChangesAsync();
-        return await Task.FromResult(new RefundReply
-        {
-            Result = true,
-            Description = "Refund successful.",
-            Funds = reservation.Total
         });
     }
 
@@ -134,6 +112,11 @@ public class ClientService : ClientManager.ClientManagerBase
         {
             ClientId = request.UserId,
             ShowId = request.ShowId
+        });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(MarkAsWatched)
         });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new MarkAsWatchedReply
@@ -161,11 +144,61 @@ public class ClientService : ClientManager.ClientManagerBase
             Description = $"Funds;{request.PaymentMethod}",
             Value = request.Funds
         });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(AddFunds)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new AddFundsReply
         {
             Result = true,
             TotalFunds = client.Funds
+        });
+    }
+
+    public override async Task<RefundReply> Refund(RefundRequest request, ServerCallContext context)
+    {
+        var reservation = await _context.Reservations.FindAsync(request.ReservationId);
+        if (reservation == null)
+            return await Task.FromResult(new RefundReply
+            {
+                Result = false,
+                Description = "Reservation ID not found.",
+                Funds = -1
+            });
+        var client = await _context.Clients.FindAsync(request.UserId);
+        if (client == null)
+            return await Task.FromResult(new RefundReply
+            {
+                Result = false,
+                Description = "Client ID not found",
+                Funds = -1
+            });
+        var session = await _context.Sessions.FindAsync(reservation.SessionId);
+        session!.AvailableSeats += reservation.NoTickets;
+        _context.Sessions.Update(session);
+        client.Funds += reservation.Total;
+        _context.Clients.Update(client);
+        await _context.SaveChangesAsync();
+        _context.Reservations.Remove(reservation);
+        await _context.Movements.AddAsync(new Movement
+        {
+            ClientId = request.UserId,
+            Description = "Refund",
+            Value = reservation.Total
+        });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(Refund)
+        });
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(new RefundReply
+        {
+            Result = true,
+            Description = "Refund successful.",
+            Funds = reservation.Total
         });
     }
 
@@ -182,6 +215,12 @@ public class ClientService : ClientManager.ClientManagerBase
             .Include(x => x.Session).ThenInclude(x => x!.Theater)
             .ToListAsync();
         var json = JsonSerializer.Serialize(reservations);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetReservations)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetReservationsReply
         {
             Reservations = json

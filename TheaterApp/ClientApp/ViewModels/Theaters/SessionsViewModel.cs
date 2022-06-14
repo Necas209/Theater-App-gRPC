@@ -71,8 +71,8 @@ public class SessionsViewModel : BaseViewModel
             var reply = await client.GetSessionsAsync(new GetSessionsRequest
             {
                 UserId = App.UserId,
-                StartDate = Timestamp.FromDateTime(StartDate),
-                EndDate = Timestamp.FromDateTime(EndDate)
+                StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+                EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
             });
             var sessions = JsonSerializer.Deserialize<List<Session>>(reply.Sessions);
             Sessions.Clear();

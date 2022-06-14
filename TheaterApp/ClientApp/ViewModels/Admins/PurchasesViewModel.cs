@@ -41,8 +41,8 @@ public class PurchasesViewModel : BaseViewModel
             var reply = await client.GetPurchasesAsync(new GetPurchasesRequest
                 {
                     UserId = App.UserId,
-                    StartDate = Timestamp.FromDateTime(StartDate),
-                    EndDate = Timestamp.FromDateTime(EndDate)
+                    StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+                    EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
                 }
             );
             var purchases = JsonSerializer.Deserialize<List<Reservation>>(reply.Purchases);

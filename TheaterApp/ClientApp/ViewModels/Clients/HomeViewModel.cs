@@ -14,6 +14,8 @@ public class HomeViewModel : BaseViewModel
 
     public HomeViewModel()
     {
+        StartDate = DateTime.Today;
+        EndDate = DateTime.Today.AddDays(7);
         Theaters = new ObservableCollection<Theater>();
         Shows = new ObservableCollection<Show>();
         Genres = new ObservableCollection<Genre>();
@@ -61,15 +63,20 @@ public class HomeViewModel : BaseViewModel
 
     public event StringMethod? ShowError;
 
+    public event StringMethod? ShowMsg;
+
     public async Task GetTheaters()
     {
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
-        var reply = await client.GetTheatersAsync(new GetTheatersRequest
+        var request = new GetTheatersRequest
         {
-            UserId = App.UserId,
-            Name = TheaterName,
-            Location = Location
-        });
+            UserId = App.UserId
+        };
+        if (!string.IsNullOrWhiteSpace(TheaterName))
+            request.Name = TheaterName;
+        if (!string.IsNullOrWhiteSpace(Location))
+            request.Location = Location;
+        var reply = await client.GetTheatersAsync(request);
         var theaters = JsonSerializer.Deserialize<List<Theater>>(reply.Theaters);
         if (theaters != null)
         {
@@ -135,8 +142,9 @@ public class HomeViewModel : BaseViewModel
         var request = new GetShowsRequest
         {
             UserId = App.UserId,
-            Name = string.IsNullOrWhiteSpace(ShowName) ? null : ShowName
         };
+        if (!string.IsNullOrWhiteSpace(ShowName))
+            request.Name = ShowName;
         if (Genre != null && Genre.Id != 0)
             request.GenreId = Genre.Id;
         var reply = await client.GetShowsAsync(request);
@@ -160,8 +168,8 @@ public class HomeViewModel : BaseViewModel
             var request = new GetSessionsRequest
             {
                 UserId = App.UserId,
-                StartDate = Timestamp.FromDateTime(StartDate),
-                EndDate = Timestamp.FromDateTime(EndDate)
+                StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+                EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
             };
             if (Theater != null)
                 request.TheaterId = Theater.Id;
@@ -171,6 +179,27 @@ public class HomeViewModel : BaseViewModel
             var sessions = JsonSerializer.Deserialize<List<Session>>(reply.Sessions);
             Sessions.Clear();
             sessions?.ForEach(session => Sessions.Add(session));
+        }
+    }
+
+    public async Task MarkAsWatched()
+    {
+        if (Show == null)
+        {
+            ShowError?.Invoke("Selecione um espetáculo primeiro.");
+        }
+        else
+        {
+            var client = new ClientManager.ClientManagerClient(App.Channel);
+            var reply = await client.MarkAsWatchedAsync(new MarkAsWatchedRequest
+            {
+                UserId = App.UserId,
+                ShowId = Show.Id
+            });
+            if (!reply.Result)
+                ShowError?.Invoke(reply.Description);
+            else
+                ShowMsg?.Invoke(reply.Description);
         }
     }
 }

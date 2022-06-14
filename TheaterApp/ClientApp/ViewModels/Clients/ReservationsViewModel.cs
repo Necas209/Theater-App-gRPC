@@ -45,8 +45,8 @@ public class ReservationsViewModel : BaseViewModel
             var reply = await client.GetReservationsAsync(new GetReservationsRequest
                 {
                     UserId = App.UserId,
-                    StartDate = Timestamp.FromDateTime(StartDate),
-                    EndDate = Timestamp.FromDateTime(EndDate)
+                    StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+                    EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
                 }
             );
             var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);

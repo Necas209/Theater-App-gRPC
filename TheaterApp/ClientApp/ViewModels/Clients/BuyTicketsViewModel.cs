@@ -86,6 +86,7 @@ public class BuyTicketsViewModel : BaseViewModel
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
         var reply = await client.GetSessionAsync(new GetSessionRequest
         {
+            UserId = App.UserId,
             Id = sessionId
         });
         if (!reply.Result)
@@ -111,7 +112,7 @@ public class BuyTicketsViewModel : BaseViewModel
             {
                 ClientId = App.UserId,
                 NoTickets = NoTickets,
-                TimeOfPurchase = Timestamp.FromDateTime(DateTime.Now),
+                TimeOfPurchase = Timestamp.FromDateTime(DateTime.UtcNow),
                 SessionId = Session!.Id
             });
             if (!reply.Result)

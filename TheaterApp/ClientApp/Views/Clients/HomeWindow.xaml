@@ -14,7 +14,7 @@
         <Label Content="{Binding Client.Funds}" ContentStringFormat="C" Margin="700 8 45 416" />
         <Button Template="{StaticResource ProfileButton}" Margin="740 10 10 390" Click="BtProfile_OnClick" />
         <TabControl Margin="30 50 30 50">
-            <TabItem Name="TiTheaters" Header="Teatros" Width="150">
+            <TabItem Name="TabTheaters" Header="Teatros" Width="150">
                 <Grid>
                     <ListView Margin="0 0 150 0" ItemsSource="{Binding Theaters}"
                               SelectedItem="{Binding Theater}" SelectionChanged="LvTheaters_OnSelectionChanged">
@@ -38,7 +38,7 @@
                             Style="{DynamicResource RoundButton}" />
                 </Grid>
             </TabItem>
-            <TabItem Name="TiShows" Header="Espetáculos" Width="150">
+            <TabItem Name="TabShows" Header="Espetáculos" Width="150" IsSelected="True">
                 <Grid>
                     <ListView Margin="0 0 200 0" ItemsSource="{Binding Shows}"
                               SelectedItem="{Binding Show}" SelectionChanged="LvShows_OnSelectionChanged">
@@ -51,16 +51,18 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Label Margin="550 40 10 250" Content="Nome:" />
-                    <TextBox Margin="550 90 10 200" Text="{Binding ShowName}" />
-                    <Label Margin="550 140 10 150" Content="Género:" />
-                    <ComboBox Margin="550 190 10 100" ItemsSource="{Binding Genres}" DisplayMemberPath="Name"
+                    <Label Margin="550 10 10 280" Content="Nome:" />
+                    <TextBox Margin="550 60 10 230" Text="{Binding ShowName}" />
+                    <Label Margin="550 110 10 180" Content="Género:" />
+                    <ComboBox Margin="550 160 10 130" ItemsSource="{Binding Genres}" DisplayMemberPath="Name"
                               SelectedItem="{Binding Genre}" />
-                    <Button Margin="570 260 30 30" Content="Filtrar" Click="BtFilterShows_OnClick"
+                    <Button Margin="590 210 50 80" Content="Filtrar" Click="BtFilterShows_OnClick"
                             Style="{DynamicResource RoundButton}" />
+                    <Button Margin="590 270 50 20" Content="Assistido?" Click="BtWatched_OnClick"
+                            Style="{StaticResource RoundButton}" />
                 </Grid>
             </TabItem>
-            <TabItem Name="TiSessions" Header="Sessões" Width="150">
+            <TabItem Name="TabSessions" Header="Sessões" Width="150">
                 <Grid>
                     <ListView Margin="0 0 150 0" ItemsSource="{Binding Sessions}"
                               SelectedItem="{Binding Session}">

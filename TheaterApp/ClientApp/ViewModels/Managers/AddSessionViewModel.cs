@@ -66,7 +66,7 @@ public class AddSessionViewModel : BaseViewModel
                 UserId = App.UserId,
                 ShowId = Show.Id,
                 TheaterId = Theater.Id,
-                Showtime = Timestamp.FromDateTime(Showtime),
+                Showtime = Timestamp.FromDateTime(Showtime.ToUniversalTime()),
                 TotalSeats = TotalSeats,
                 TicketPrice = TicketPrice
             });

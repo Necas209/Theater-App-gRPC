@@ -24,6 +24,12 @@ public class AuthService : AuthManager.AuthManagerBase
                 LoginStatus = user != null
             });
         var userType = await FindUserTypeAsync(user.Id);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = user.Id,
+            Message = nameof(Login)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new LoginReply
         {
             LoginStatus = true,
@@ -44,7 +50,12 @@ public class AuthService : AuthManager.AuthManagerBase
                 PasswordHash = user.PasswordHash,
                 UserExists = true
             });
-
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetUserInfo)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetUserInfoReply
         {
             UserExists = false
@@ -65,6 +76,11 @@ public class AuthService : AuthManager.AuthManagerBase
         user.UserName = request.UserName;
         user.PasswordHash = request.PasswordHash;
         _context.Users.Update(user);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(UpdUserInfo)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new UpdUserInfoReply
         {
@@ -72,7 +88,7 @@ public class AuthService : AuthManager.AuthManagerBase
             Description = "User information updated successfully."
         });
     }
-    
+
     public override async Task<RegisterReply> Register(RegisterRequest request, ServerCallContext context)
     {
         if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
@@ -89,7 +105,11 @@ public class AuthService : AuthManager.AuthManagerBase
             PasswordHash = request.PasswordHash,
             Client = new Client()
         };
-        _context.Users.Add(user);
+        user.Logs.Add(new Log
+        {
+            Message = nameof(Register)
+        });
+        await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
         return await Task.FromResult(new RegisterReply
         {

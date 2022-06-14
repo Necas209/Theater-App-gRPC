@@ -13,12 +13,18 @@ public partial class HomeWindow
         InitializeComponent();
         _model = (HomeViewModel)DataContext;
         _model.ShowError += ShowError;
+        _model.ShowMsg += ShowMsg;
         Dispatcher.Invoke(async () =>
         {
             await _model.GetClientInfo();
             await _model.GetTheaters();
             await _model.GetGenres();
         });
+    }
+
+    private static void ShowMsg(string s)
+    {
+        MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowError(string s)
@@ -52,8 +58,8 @@ public partial class HomeWindow
         Dispatcher.Invoke(async () =>
         {
             await _model.GetShowsByTheater();
-            TiTheaters.IsSelected = false;
-            TiShows.IsSelected = true;
+            TabTheaters.IsSelected = false;
+            TabShows.IsSelected = true;
         });
     }
 
@@ -62,19 +68,26 @@ public partial class HomeWindow
         Dispatcher.Invoke(async () =>
         {
             await _model.GetSessions();
-            TiShows.IsSelected = false;
-            TiSessions.IsSelected = true;
+            TabShows.IsSelected = false;
+            TabSessions.IsSelected = true;
         });
     }
 
     private void BtBuyTickets_OnClick(object sender, RoutedEventArgs e)
     {
         if (_model.Session == null)
+        {
             ShowError("Selecione uma sessão primeiro");
+        }
         else
         {
             var window = new BuyTicketsWindow(_model.Session.Id);
             window.ShowDialog();
         }
+    }
+
+    private void BtWatched_OnClick(object sender, RoutedEventArgs e)
+    {
+        Dispatcher.Invoke(async () => await _model.MarkAsWatched());
     }
 }

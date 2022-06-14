@@ -13,7 +13,7 @@ public class MgrService : MgrManager.MgrManagerBase
     {
         _context = context;
     }
-    
+
     public override async Task<AddTheaterReply> AddTheater(AddTheaterRequest request, ServerCallContext context)
     {
         if (await _context.Theaters.AnyAsync(x => x.Name == request.Name))
@@ -22,13 +22,18 @@ public class MgrService : MgrManager.MgrManagerBase
                 Result = false,
                 Description = "Theater with given name already exists."
             });
-        _context.Theaters.Add(new Theater
+        await _context.Theaters.AddAsync(new Theater
         {
             Name = request.Name,
             Location = request.Location,
             Address = request.Address,
             Email = request.Email,
             PhoneNumber = request.PhoneNumber
+        });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(AddTheater)
         });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new AddTheaterReply
@@ -55,6 +60,11 @@ public class MgrService : MgrManager.MgrManagerBase
             Email = request.Email,
             PhoneNumber = request.PhoneNumber
         });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(EditTheater)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new EditTheaterReply
         {
@@ -79,6 +89,11 @@ public class MgrService : MgrManager.MgrManagerBase
                 Description = "Theater ID not found."
             });
         _context.Theaters.Remove(theater);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(DelTheater)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new DelTheaterReply
         {
@@ -101,6 +116,11 @@ public class MgrService : MgrManager.MgrManagerBase
             Synopsis = request.Synopsis,
             Length = request.Length.ToTimeSpan(),
             GenreId = request.GenreId
+        });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(AddShow)
         });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new AddShowReply
@@ -126,6 +146,11 @@ public class MgrService : MgrManager.MgrManagerBase
             Length = request.Length.ToTimeSpan(),
             GenreId = request.GenreId
         });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(EditShow)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new EditShowReply
         {
@@ -150,6 +175,11 @@ public class MgrService : MgrManager.MgrManagerBase
                 Description = "Show ID not found."
             });
         _context.Shows.Remove(show);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(DelShow)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new DelShowReply
         {
@@ -177,6 +207,11 @@ public class MgrService : MgrManager.MgrManagerBase
             AvailableSeats = request.TotalSeats,
             TicketPrice = request.TicketPrice
         });
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(AddSession)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new AddSessionReply
         {
@@ -201,6 +236,11 @@ public class MgrService : MgrManager.MgrManagerBase
                 Description = "Session ID not found."
             });
         _context.Sessions.Remove(session);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(DelSession)
+        });
         await _context.SaveChangesAsync();
         return await Task.FromResult(new DelSessionReply
         {

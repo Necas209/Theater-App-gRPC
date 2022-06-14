@@ -31,17 +31,21 @@ public class TheatersViewModel : BaseViewModel
     public async Task GetTheaters()
     {
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
-        var reply = await client.GetTheatersAsync(new GetTheatersRequest
+        var request = new GetTheatersRequest
         {
-            UserId = App.UserId,
-            Name = string.IsNullOrWhiteSpace(Name) ? null : Name,
-            Location = string.IsNullOrWhiteSpace(Location) ? null : Location
-        });
+            UserId = App.UserId
+        };
+        if (!string.IsNullOrWhiteSpace(Name))
+            request.Name = Name;
+        if (!string.IsNullOrWhiteSpace(Location))
+            request.Location = Location;
+        var reply = await client.GetTheatersAsync(request);
         var theaters = JsonSerializer.Deserialize<List<Theater>>(reply.Theaters);
-        if (theaters?.Count != 0)
+        if (theaters != null)
         {
             Theaters.Clear();
-            theaters?.ForEach(show => Theaters.Add(show));
+            Theater = null;
+            theaters.ForEach(show => Theaters.Add(show));
         }
     }
 

@@ -53,8 +53,9 @@ public class ShowsViewModel : BaseViewModel
         var request = new GetShowsRequest
         {
             UserId = App.UserId,
-            Name = string.IsNullOrWhiteSpace(Name) ? null : Name
         };
+        if (!string.IsNullOrWhiteSpace(Name))
+            request.Name = Name;
         if (Genre != null && Genre.Id != 0)
             request.GenreId = Genre.Id;
         var reply = await client.GetShowsAsync(request);

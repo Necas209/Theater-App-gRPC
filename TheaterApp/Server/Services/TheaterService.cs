@@ -29,6 +29,12 @@ public class TheaterService : TheaterManager.TheaterManagerBase
                 Description = "Session ID not found."
             });
         var json = JsonSerializer.Serialize(session);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetSession)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetSessionReply
         {
             Result = true,
@@ -44,6 +50,12 @@ public class TheaterService : TheaterManager.TheaterManagerBase
                         (!request.HasLocation || x.Location.Contains(request.Location)))
             .ToListAsync();
         var json = JsonSerializer.Serialize(theaters);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetTheaters)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetTheatersReply
         {
             Theaters = json
@@ -66,6 +78,12 @@ public class TheaterService : TheaterManager.TheaterManagerBase
                             (!request.HasGenreId || x.GenreId == request.GenreId))
                 .ToListAsync();
         var json = JsonSerializer.Serialize(shows);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetShows)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetShowsReply
         {
             Shows = json
@@ -77,6 +95,12 @@ public class TheaterService : TheaterManager.TheaterManagerBase
         var genres = await _context.Genres
             .ToListAsync();
         var json = JsonSerializer.Serialize(genres);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetGenres)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetGenresReply
         {
             Genres = json
@@ -95,6 +119,12 @@ public class TheaterService : TheaterManager.TheaterManagerBase
             .Include(x => x.Show)
             .ToListAsync();
         var json = JsonSerializer.Serialize(sessions);
+        await _context.Logs.AddAsync(new Log
+        {
+            UserId = request.UserId,
+            Message = nameof(GetSessions)
+        });
+        await _context.SaveChangesAsync();
         return await Task.FromResult(new GetSessionsReply
         {
             Sessions = json

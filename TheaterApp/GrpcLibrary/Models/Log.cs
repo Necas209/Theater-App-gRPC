@@ -5,6 +5,11 @@ namespace GrpcLibrary.Models;
 
 public class Log
 {
+    public Log()
+    {
+        Stamp = DateTime.Now;
+    }
+
     [Key] public int Id { get; set; }
 
     public DateTime Stamp { get; set; }

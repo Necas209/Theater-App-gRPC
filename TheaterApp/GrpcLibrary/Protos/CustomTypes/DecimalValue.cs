@@ -22,7 +22,7 @@ public partial class DecimalValue
 
     private static decimal ToDecimal(DecimalValue decimalValue)
     {
-        return decimalValue.Units + decimalValue.Nanos / NanoFactor;
+        return decimal.Round(decimalValue.Units + decimalValue.Nanos / NanoFactor, 2);
     }
 
     public static DecimalValue FromDecimal(decimal value)
