@@ -44,7 +44,7 @@ public class AddTheaterViewModel : BaseViewModel
         {
             ShowError?.Invoke("Endereço em falta");
         }
-        else if (Regex.IsMatch(PhoneNumber, "^(?:[92]\\d{2}(?:\\s?\\d{3}){2})$"))
+        else if (!Regex.IsMatch(PhoneNumber, "^(?:[92]\\d{2}(?:\\s?\\d{3}){2})$"))
         {
             ShowError?.Invoke("Telefone em falta ou inválido.");
         }
