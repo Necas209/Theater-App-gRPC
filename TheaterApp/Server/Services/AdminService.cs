@@ -75,8 +75,12 @@ public class AdminService : AdminManager.AdminManagerBase
             .Where(x => x.TimeOfPurchase >= startDate && x.TimeOfPurchase <= endDate)
             .Include(x => x.Session).ThenInclude(x => x!.Theater)
             .Include(x => x.Session).ThenInclude(x => x!.Show)
+            .OrderByDescending(x => x.TimeOfPurchase)
             .ToListAsync();
-        var json = JsonSerializer.Serialize(purchases);
+        var json = JsonSerializer.Serialize(purchases, new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.IgnoreCycles
+        });
         await _context.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
@@ -96,6 +100,7 @@ public class AdminService : AdminManager.AdminManagerBase
         var logs = await _context.Logs
             .Where(x => x.Stamp >= startDate && x.Stamp <= endDate)
             .Include(x => x.User)
+            .OrderByDescending(x => x.Stamp)
             .ToListAsync();
         var json = JsonSerializer.Serialize(logs, new JsonSerializerOptions
         {

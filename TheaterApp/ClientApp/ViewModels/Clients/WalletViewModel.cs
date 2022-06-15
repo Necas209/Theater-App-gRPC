@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GrpcLibrary.Models;
@@ -8,6 +10,15 @@ namespace ClientApp.ViewModels.Clients;
 public class WalletViewModel : BaseViewModel
 {
     private Client? _client;
+
+    public WalletViewModel()
+    {
+        PaymentMethods = new List<string>
+        {
+            "Multibanco", "Cartão de Crédito", "Paypal", "MB Way"
+        };
+        PaymentMethod = PaymentMethods.First();
+    }
 
     public Client? Client
     {
@@ -21,7 +32,9 @@ public class WalletViewModel : BaseViewModel
 
     [DataType(DataType.Currency)] public decimal AddedFunds { get; set; }
 
-    public string? PaymentMethod { get; set; }
+    public List<string> PaymentMethods { get; }
+
+    public string PaymentMethod { get; set; }
 
     public event StringMethod? ShowError;
 
@@ -42,10 +55,6 @@ public class WalletViewModel : BaseViewModel
         if (AddedFunds <= 0)
         {
             ShowError?.Invoke($"Fundos adicionados deverão ser superiores a {0:C}!");
-        }
-        else if (PaymentMethod == null)
-        {
-            ShowError?.Invoke("Deverá selecionar um método de pagamento.");
         }
         else
         {

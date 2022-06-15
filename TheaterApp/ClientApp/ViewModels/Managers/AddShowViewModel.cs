@@ -12,16 +12,18 @@ public class AddShowViewModel : BaseViewModel
 {
     public AddShowViewModel()
     {
+        Name = "";
+        Synopsis = "";
         Genres = new ObservableCollection<Genre>();
     }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
-    public string Synopsis { get; set; } = null!;
+    public string Synopsis { get; set; }
 
     public TimeSpan Length { get; set; }
 
-    public ObservableCollection<Genre> Genres { get; set; }
+    public ObservableCollection<Genre> Genres { get; }
 
     public Genre? Genre { get; set; }
 

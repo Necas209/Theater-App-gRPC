@@ -20,9 +20,8 @@ public class ClientService : ClientManager.ClientManagerBase
         ServerCallContext context)
     {
         var client = await _context.Clients
-            .Where(x => x.Id == request.UserId)
             .Include(x => x.User)
-            .FirstAsync();
+            .SingleOrDefaultAsync(x => x.Id == request.UserId);
         var clientInfo = JsonSerializer.Serialize(client, new JsonSerializerOptions
         {
             ReferenceHandler = ReferenceHandler.IgnoreCycles
@@ -216,8 +215,12 @@ public class ClientService : ClientManager.ClientManagerBase
                         && x.TimeOfPurchase >= startDate)
             .Include(x => x.Session).ThenInclude(x => x!.Show)
             .Include(x => x.Session).ThenInclude(x => x!.Theater)
+            .OrderByDescending(x => x.TimeOfPurchase)
             .ToListAsync();
-        var json = JsonSerializer.Serialize(reservations);
+        var json = JsonSerializer.Serialize(reservations, new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.IgnoreCycles
+        });
         await _context.Logs.AddAsync(new Log
         {
             UserId = request.UserId,

@@ -1,19 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ClientApp.ViewModels.Managers;
 
 public class AddTheaterViewModel : BaseViewModel
 {
-    public string Name { get; set; } = null!;
+    public AddTheaterViewModel()
+    {
+        Name = "";
+        Location = "";
+        Address = "";
+        Email = "";
+        PhoneNumber = "";
+    }
 
-    public string Location { get; set; } = null!;
+    public string Name { get; set; }
 
-    public string Address { get; set; } = null!;
+    public string Location { get; set; }
 
-    [DataType(DataType.EmailAddress)] public string Email { get; set; } = null!;
+    public string Address { get; set; }
 
-    [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; set; } = null!;
+    [DataType(DataType.EmailAddress)] public string Email { get; set; }
+
+    [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; set; }
 
     public event StringMethod? ShowError;
 
@@ -33,13 +44,13 @@ public class AddTheaterViewModel : BaseViewModel
         {
             ShowError?.Invoke("Endereço em falta");
         }
-        else if (string.IsNullOrWhiteSpace(Email))
+        else if (Regex.IsMatch(PhoneNumber, "^(?:[92]\\d{2}(?:\\s?\\d{3}){2})$"))
         {
-            ShowError?.Invoke("Email em falta");
+            ShowError?.Invoke("Telefone em falta ou inválido.");
         }
-        else if (string.IsNullOrWhiteSpace(PhoneNumber))
+        else if (!MailAddress.TryCreate(Email, out _))
         {
-            ShowError?.Invoke("Telefone em falta");
+            ShowError?.Invoke("Email em falta ou inválido.");
         }
         else
         {

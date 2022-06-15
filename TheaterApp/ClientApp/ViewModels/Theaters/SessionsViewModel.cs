@@ -18,7 +18,7 @@ public class SessionsViewModel : BaseViewModel
         Sessions = new ObservableCollection<Session>();
     }
 
-    public ObservableCollection<Session> Sessions { get; set; }
+    public ObservableCollection<Session> Sessions { get; }
 
     public bool IsManager { get; set; }
 

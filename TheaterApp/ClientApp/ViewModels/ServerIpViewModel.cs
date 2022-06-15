@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Net.Client;
 
@@ -18,7 +17,7 @@ public class ServerIpViewModel : BaseViewModel
 
     public event StringMethod? ShowMsg;
 
-    public async Task<bool> Connect()
+    public bool Connect()
     {
         if (string.IsNullOrWhiteSpace(IpAddress))
         {
@@ -33,7 +32,7 @@ public class ServerIpViewModel : BaseViewModel
             App.Channel = GrpcChannel.ForAddress(address.Equals(IPAddress.Loopback)
                 ? "https://localhost:7046"
                 : $"https://{address}:7046");
-            if (await Task.FromResult(true))
+            if (App.Channel.State == ConnectivityState.Ready)
             {
                 ShowMsg?.Invoke("Conexão ao servidor com sucesso");
                 return true;
@@ -43,19 +42,5 @@ public class ServerIpViewModel : BaseViewModel
         }
 
         return false;
-    }
-
-    private async Task<bool> IsReadyAsync()
-    {
-        try
-        {
-            await App.Channel!.ConnectAsync();
-        }
-        catch (TaskCanceledException)
-        {
-            return false;
-        }
-
-        return App.Channel.State == ConnectivityState.Ready;
     }
 }

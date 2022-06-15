@@ -51,7 +51,7 @@ public class BuyTicketsViewModel : BaseViewModel
         }
     }
 
-    public IEnumerable<int> Tickets { get; set; }
+    public IEnumerable<int> Tickets { get; }
 
     public decimal Total
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using System.Security;
 using System.Threading.Tasks;
 using GrpcLibrary;
@@ -11,6 +12,9 @@ public class RegisterViewModel : BaseViewModel
 {
     public RegisterViewModel()
     {
+        Name = "";
+        UserName = "";
+        Email = "";
         UserType = User.UserType.Admin;
         UserTypes = new Dictionary<User.UserType, string>
         {
@@ -19,13 +23,13 @@ public class RegisterViewModel : BaseViewModel
         };
     }
 
-    public string UserName { get; set; } = null!;
+    public string UserName { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
-    [DataType(DataType.EmailAddress)] public string Email { get; set; } = null!;
+    [DataType(DataType.EmailAddress)] public string Email { get; set; }
 
-    public Dictionary<User.UserType, string> UserTypes { get; set; }
+    public Dictionary<User.UserType, string> UserTypes { get; }
 
     public User.UserType UserType { get; set; }
 
@@ -37,23 +41,23 @@ public class RegisterViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(UserName))
         {
-            ShowError?.Invoke("UserName em falta");
+            ShowError?.Invoke("UserName em falta.");
         }
         else if (string.IsNullOrWhiteSpace(Name))
         {
-            ShowError?.Invoke("Nome em falta");
+            ShowError?.Invoke("Nome em falta.");
         }
-        else if (string.IsNullOrWhiteSpace(Email))
+        else if (!MailAddress.TryCreate(Email, out _))
         {
-            ShowError?.Invoke("Email em falta");
+            ShowError?.Invoke("Email em falta ou inválido.");
         }
         else if (password.Length == 0 || confirmPassword.Length == 0)
         {
-            ShowError?.Invoke("Password em falta");
+            ShowError?.Invoke("Password em falta.");
         }
         else if (!HashingService.SecureStringEqual(password, confirmPassword))
         {
-            ShowError?.Invoke("Passwords não coincidem");
+            ShowError?.Invoke("Passwords não coincidem.");
         }
         else
         {

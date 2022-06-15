@@ -7,7 +7,12 @@ namespace ClientApp.ViewModels;
 
 public class LoginViewModel : BaseViewModel
 {
-    public string UserName { get; set; } = null!;
+    public LoginViewModel()
+    {
+        UserName = "";
+    }
+
+    public string UserName { get; set; }
 
     public event StringMethod? ShowError;
 

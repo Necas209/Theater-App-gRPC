@@ -16,9 +16,8 @@ public class AuthService : AuthManager.AuthManagerBase
 
     public override async Task<LoginReply> Login(LoginRequest request, ServerCallContext context)
     {
-        var user = await _context.Users
-            .Where(u => u.UserName == request.UserName && u.PasswordHash == request.PasswordHash)
-            .FirstOrDefaultAsync();
+        var user = await _context.Users.SingleOrDefaultAsync(u =>
+            u.UserName == request.UserName && u.PasswordHash == request.PasswordHash);
         if (user == null)
             return await Task.FromResult(new LoginReply
             {
@@ -42,14 +41,10 @@ public class AuthService : AuthManager.AuthManagerBase
     public override async Task<GetUserInfoReply> GetUserInfo(GetUserInfoRequest request, ServerCallContext context)
     {
         var user = await _context.Users.FindAsync(request.UserId);
-        if (user != null)
+        if (user == null)
             return await Task.FromResult(new GetUserInfoReply
             {
-                UserName = user.UserName,
-                Name = user.Name,
-                Email = user.Email,
-                PasswordHash = user.PasswordHash,
-                UserExists = true
+                UserExists = false
             });
         await _context.Logs.AddAsync(new Log
         {
@@ -59,7 +54,11 @@ public class AuthService : AuthManager.AuthManagerBase
         await _context.SaveChangesAsync();
         return await Task.FromResult(new GetUserInfoReply
         {
-            UserExists = false
+            UserName = user.UserName,
+            Name = user.Name,
+            Email = user.Email,
+            PasswordHash = user.PasswordHash,
+            UserExists = true
         });
     }
 
@@ -72,10 +71,13 @@ public class AuthService : AuthManager.AuthManagerBase
                 Result = false,
                 Description = "User ID not found."
             });
-        user.Name = request.Name;
-        user.Email = request.Email;
-        user.UserName = request.UserName;
-        user.PasswordHash = request.PasswordHash;
+        {
+            user.Id = request.UserId;
+            user.Name = request.Name;
+            user.Email = request.Email;
+            user.UserName = request.UserName;
+            user.PasswordHash = request.PasswordHash;
+        }
         _context.Users.Update(user);
         await _context.Logs.AddAsync(new Log
         {
@@ -123,6 +125,6 @@ public class AuthService : AuthManager.AuthManagerBase
     {
         if (await _context.Clients.FindAsync(userId) != null)
             return User.UserType.Client;
-        return await _context.Managers.FindAsync(userId) != null ? User.UserType.Manager : User.UserType.Admin;
+        return await _context.Admins.FindAsync(userId) != null ? User.UserType.Admin : User.UserType.Manager;
     }
 }

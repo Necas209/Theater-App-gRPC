@@ -14,6 +14,9 @@ public class HomeViewModel : BaseViewModel
 
     public HomeViewModel()
     {
+        TheaterName = "";
+        Location = "";
+        ShowName = "";
         StartDate = DateTime.Today;
         EndDate = DateTime.Today.AddDays(7);
         Theaters = new ObservableCollection<Theater>();
@@ -33,27 +36,27 @@ public class HomeViewModel : BaseViewModel
     }
 
     // Theaters Tab
-    public ObservableCollection<Theater> Theaters { get; set; }
+    public ObservableCollection<Theater> Theaters { get; }
 
     public Theater? Theater { get; set; }
 
-    public string? TheaterName { get; set; }
+    public string TheaterName { get; set; }
 
-    public string? Location { get; set; }
+    public string Location { get; set; }
 
     // Shows Tab
-    public ObservableCollection<Show> Shows { get; set; }
+    public ObservableCollection<Show> Shows { get; }
 
-    public ObservableCollection<Genre> Genres { get; set; }
+    public ObservableCollection<Genre> Genres { get; }
 
     public Show? Show { get; set; }
 
-    public string? ShowName { get; set; }
+    public string ShowName { get; set; }
 
     public Genre? Genre { get; set; }
 
     // Sessions Tab
-    public ObservableCollection<Session> Sessions { get; set; }
+    public ObservableCollection<Session> Sessions { get; }
 
     public Session? Session { get; set; }
 
@@ -141,7 +144,7 @@ public class HomeViewModel : BaseViewModel
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
         var request = new GetShowsRequest
         {
-            UserId = App.UserId,
+            UserId = App.UserId
         };
         if (!string.IsNullOrWhiteSpace(ShowName))
             request.Name = ShowName;

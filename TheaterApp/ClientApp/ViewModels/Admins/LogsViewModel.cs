@@ -10,7 +10,7 @@ namespace ClientApp.ViewModels.Admins;
 
 public class LogsViewModel : BaseViewModel
 {
-    public ObservableCollection<Log> Logs { get; set; }
+    public ObservableCollection<Log> Logs { get; }
 
     public LogsViewModel()
     {

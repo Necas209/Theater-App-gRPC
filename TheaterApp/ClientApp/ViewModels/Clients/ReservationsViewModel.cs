@@ -17,7 +17,7 @@ public class ReservationsViewModel : BaseViewModel
         Reservations = new ObservableCollection<Reservation>();
     }
 
-    public ObservableCollection<Reservation> Reservations { get; set; }
+    public ObservableCollection<Reservation> Reservations { get; }
 
     public Reservation? Reservation { get; set; }
 

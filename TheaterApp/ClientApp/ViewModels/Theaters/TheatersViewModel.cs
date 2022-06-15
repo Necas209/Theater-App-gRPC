@@ -10,17 +10,19 @@ public class TheatersViewModel : BaseViewModel
 {
     public TheatersViewModel()
     {
+        Name = "";
+        Location = "";
         IsManager = App.UserType == User.UserType.Manager;
         Theaters = new ObservableCollection<Theater>();
     }
 
-    public ObservableCollection<Theater> Theaters { get; set; }
+    public ObservableCollection<Theater> Theaters { get; }
 
     public Theater? Theater { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
-    public string? Location { get; set; }
+    public string Location { get; set; }
 
     public bool IsManager { get; set; }
 

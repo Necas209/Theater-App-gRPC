@@ -18,9 +18,9 @@ public class AddSessionViewModel : BaseViewModel
         Theaters = new ObservableCollection<Theater>();
     }
 
-    public ObservableCollection<Show> Shows { get; set; }
+    public ObservableCollection<Show> Shows { get; }
 
-    public ObservableCollection<Theater> Theaters { get; set; }
+    public ObservableCollection<Theater> Theaters { get; }
 
     public Show? Show { get; set; }
 

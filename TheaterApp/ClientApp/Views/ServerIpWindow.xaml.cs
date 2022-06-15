@@ -30,17 +30,11 @@ public partial class ServerIpWindow
 
     private void BtConnect_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
-        {
-            var result = await _model.Connect();
-            if (result)
-            {
-                var window = new LoginWindow();
-                Hide();
-                window.ShowDialog();
-                Show();
-            }
-        });
+        if (!_model.Connect()) return;
+        var window = new LoginWindow();
+        Hide();
+        window.ShowDialog();
+        Show();
     }
 
     protected override void OnClosing(CancelEventArgs e)

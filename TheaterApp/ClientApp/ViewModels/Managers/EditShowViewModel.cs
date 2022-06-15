@@ -40,7 +40,7 @@ public class EditShowViewModel : BaseViewModel
 
     public TimeSpan Length { get; set; }
 
-    public ObservableCollection<Genre> Genres { get; set; }
+    public ObservableCollection<Genre> Genres { get; }
 
     public Genre? Genre { get; set; }
 

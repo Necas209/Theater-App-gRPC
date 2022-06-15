@@ -1,38 +1,38 @@
-﻿using Microsoft.EntityFrameworkCore;
-using GrpcLibrary.Models;
+﻿using GrpcLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Server.Data;
 
-public class TheaterDbContext: DbContext
+public class TheaterDbContext : DbContext
 {
     public TheaterDbContext(DbContextOptions<TheaterDbContext> options)
         : base(options)
     {
     }
-    
-    public DbSet<User> Users { get; set; } = null!;
 
-    public DbSet<Client> Clients { get; set; } = null!;
+    public DbSet<User> Users => Set<User>();
 
-    public DbSet<Manager> Managers { get; set; } = null!;
+    public DbSet<Client> Clients => Set<Client>();
 
-    public DbSet<Admin> Admins { get; set; } = null!;
+    public DbSet<Manager> Managers => Set<Manager>();
 
-    public DbSet<Theater> Theaters { get; set; } = null!;
+    public DbSet<Admin> Admins => Set<Admin>();
 
-    public DbSet<Show> Shows { get; set; } = null!;
+    public DbSet<Theater> Theaters => Set<Theater>();
 
-    public DbSet<Genre> Genres { get; set; } = null!;
+    public DbSet<Show> Shows => Set<Show>();
 
-    public DbSet<Session> Sessions { get; set; } = null!;
+    public DbSet<Genre> Genres => Set<Genre>();
 
-    public DbSet<Reservation> Reservations { get; set; } = null!;
+    public DbSet<Session> Sessions => Set<Session>();
 
-    public DbSet<Watched> Watched { get; set; } = null!;
+    public DbSet<Reservation> Reservations => Set<Reservation>();
 
-    public DbSet<Log> Logs { get; set; } = null!;
+    public DbSet<Watched> Watched => Set<Watched>();
 
-    public DbSet<Movement> Movements { get; set; } = null!;
+    public DbSet<Log> Logs => Set<Log>();
+
+    public DbSet<Movement> Movements => Set<Movement>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

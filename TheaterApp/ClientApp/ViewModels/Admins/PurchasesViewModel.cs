@@ -17,7 +17,7 @@ public class PurchasesViewModel : BaseViewModel
         Purchases = new ObservableCollection<Reservation>();
     }
 
-    public ObservableCollection<Reservation> Purchases { get; set; }
+    public ObservableCollection<Reservation> Purchases { get; }
 
     public DateTime StartDate { get; set; }
 

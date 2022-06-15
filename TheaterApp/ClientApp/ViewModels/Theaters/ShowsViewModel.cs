@@ -10,20 +10,21 @@ public class ShowsViewModel : BaseViewModel
 {
     public ShowsViewModel()
     {
+        Name = "";
         IsManager = App.UserType == User.UserType.Manager;
         Shows = new ObservableCollection<Show>();
         Genres = new ObservableCollection<Genre>();
     }
 
-    public ObservableCollection<Show> Shows { get; set; }
+    public ObservableCollection<Show> Shows { get; }
 
     public Show? Show { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
     public Genre? Genre { get; set; }
 
-    public ObservableCollection<Genre> Genres { get; set; }
+    public ObservableCollection<Genre> Genres { get; }
 
     public bool IsManager { get; set; }
 
@@ -52,7 +53,7 @@ public class ShowsViewModel : BaseViewModel
         var client = new TheaterManager.TheaterManagerClient(App.Channel);
         var request = new GetShowsRequest
         {
-            UserId = App.UserId,
+            UserId = App.UserId
         };
         if (!string.IsNullOrWhiteSpace(Name))
             request.Name = Name;

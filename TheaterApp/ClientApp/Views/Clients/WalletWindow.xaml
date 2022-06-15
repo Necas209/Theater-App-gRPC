@@ -14,13 +14,8 @@
         <Label Content="Saldo:" Margin="200 30 60 95" FontSize="10" HorizontalContentAlignment="Right" />
         <Label Margin="240 30 10 95" FontSize="10" Content="{Binding Client.Funds}" ContentStringFormat="C" />
         <Label Content="Método:" Margin="20 60 210 65" FontSize="10" HorizontalContentAlignment="Right" />
-        <ComboBox Text="--Selecione o método" Focusable="True" Margin="90 60 80 70"
-                  SelectedItem="{Binding PaymentMethod}">
-            <ComboBoxItem>Multibanco</ComboBoxItem>
-            <ComboBoxItem>Cartão de Crédito</ComboBoxItem>
-            <ComboBoxItem>Paypal</ComboBoxItem>
-            <ComboBoxItem>MB Way</ComboBoxItem>
-        </ComboBox>
+        <ComboBox Focusable="True" Margin="90 60 80 70" ItemsSource="{Binding PaymentMethods}"
+                  SelectedItem="{Binding PaymentMethod}" />
         <Label Content="Valor:" Margin="20 82 210 45" FontSize="10" HorizontalContentAlignment="Right" />
         <TextBox Margin="90 85 80 45" Text="{Binding AddedFunds}" />
         <Button Style="{DynamicResource RoundButton}" Content="Adicionar" Margin="220 120 10 10"
