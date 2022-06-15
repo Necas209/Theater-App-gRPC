@@ -19,10 +19,9 @@ public class TheaterService : TheaterManager.TheaterManagerBase
     public override async Task<GetSessionReply> GetSession(GetSessionRequest request, ServerCallContext context)
     {
         var session = await _context.Sessions
-            .Where(x => x.Id == request.Id)
             .Include(x => x.Show).ThenInclude(x => x!.Genre)
             .Include(x => x.Theater)
-            .FirstOrDefaultAsync();
+            .SingleOrDefaultAsync(x => x.Id == request.Id);
         if (session == null)
             return await Task.FromResult(new GetSessionReply
             {

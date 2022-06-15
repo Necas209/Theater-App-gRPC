@@ -13,14 +13,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="Icons\Profile.jpg" />
       <Resource Include="Icons\Profile.jpg" />
       <None Remove="Icons\Profile2.png" />
       <Resource Include="Icons\Profile2.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
     </ItemGroup>
 
 </Project>
