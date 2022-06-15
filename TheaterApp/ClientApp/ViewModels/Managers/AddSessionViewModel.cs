@@ -13,7 +13,7 @@ public class AddSessionViewModel : BaseViewModel
 {
     public AddSessionViewModel()
     {
-        Showtime = DateTime.Now;
+        Showtime = DateTime.Today;
         Shows = new ObservableCollection<Show>();
         Theaters = new ObservableCollection<Theater>();
     }
@@ -88,6 +88,7 @@ public class AddSessionViewModel : BaseViewModel
             var client = new TheaterManager.TheaterManagerClient(App.Channel);
             var reply = await client.GetShowsAsync(new GetShowsRequest
             {
+                UserId = App.UserId,
                 Name = textInput
             });
             var shows = JsonSerializer.Deserialize<List<Show>>(reply.Shows);
@@ -110,6 +111,7 @@ public class AddSessionViewModel : BaseViewModel
             var client = new TheaterManager.TheaterManagerClient(App.Channel);
             var reply = await client.GetTheatersAsync(new GetTheatersRequest
             {
+                UserId = App.UserId,
                 Name = textInput
             });
             var theaters = JsonSerializer.Deserialize<List<Theater>>(reply.Theaters);

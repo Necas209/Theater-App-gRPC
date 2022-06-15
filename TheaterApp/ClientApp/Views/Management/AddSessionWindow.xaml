@@ -20,7 +20,7 @@
                   DisplayMemberPath="Name" SelectedItem="{Binding Theater}" KeyDown="CbTheaters_OnKeyDown" />
         <Label Content="Data:" Margin="20 120 300 150" HorizontalAlignment="Right" />
         <xctk:DateTimePicker Margin="110 120 140 150" TextAlignment="Center" Format="Custom"
-                             FormatString="dd/mm/yyyy hh:mm" Value="{Binding Showtime}" />
+                             FormatString="dd/MM/yyyy HH:mm" Value="{Binding Showtime}" />
         <Label Content="Lugares:" Margin="20 160 300 110" HorizontalAlignment="Right" />
         <TextBox Margin="110 160 140 110" Text="{Binding TotalSeats}" />
         <Label Content="Preço:" Margin="20 200 300 70" HorizontalAlignment="Right" />

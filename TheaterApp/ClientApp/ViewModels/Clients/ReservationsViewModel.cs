@@ -46,7 +46,7 @@ public class ReservationsViewModel : BaseViewModel
                 {
                     UserId = App.UserId,
                     StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
-                    EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
+                    EndDate = Timestamp.FromDateTime(EndDate.AddDays(1).ToUniversalTime())
                 }
             );
             var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);

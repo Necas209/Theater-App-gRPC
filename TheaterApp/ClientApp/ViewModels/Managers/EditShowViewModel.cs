@@ -12,6 +12,7 @@ public class EditShowViewModel : BaseViewModel
 {
     private string? _name;
     private string? _synopsis;
+    private Genre? _genre;
 
     public EditShowViewModel()
     {
@@ -42,7 +43,14 @@ public class EditShowViewModel : BaseViewModel
 
     public ObservableCollection<Genre> Genres { get; }
 
-    public Genre? Genre { get; set; }
+    public Genre? Genre
+    {
+        get => _genre;
+        set
+        {
+            _genre = value;
+            OnPropertyChanged(nameof(Genre));
+        } }
 
     public event StringMethod? ShowError;
 

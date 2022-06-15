@@ -76,11 +76,14 @@ public class TheaterService : TheaterManager.TheaterManagerBase
                 .Join(_context.Sessions.Where(x => x.TheaterId == request.TheaterId), show => show.Id,
                     session => session.ShowId, (show, session) => new { show })
                 .Select(x => x.show)
+                .Include(x => x.Genre)
+                .Distinct()
                 .ToListAsync();
         else
             shows = await _context.Shows
                 .Where(x => (!request.HasName || x.Name.Contains(request.Name)) &&
                             (!request.HasGenreId || x.GenreId == request.GenreId))
+                .Include(x => x.Genre)
                 .ToListAsync();
         var json = JsonSerializer.Serialize(shows, new JsonSerializerOptions
         {
@@ -118,13 +121,19 @@ public class TheaterService : TheaterManager.TheaterManagerBase
     {
         var startDate = request.StartDate.ToDateTime();
         var endDate = request.EndDate.ToDateTime();
-        var sessions = await _context.Sessions
-            .Where(x => x.Showtime >= startDate && x.Showtime.Date <= endDate &&
-                        (!request.HasShowId || x.ShowId == request.ShowId) &&
-                        (!request.HasTheaterId || x.TheaterId == request.TheaterId))
-            .Include(x => x.Theater)
-            .Include(x => x.Show)
-            .ToListAsync();
+        List<Session> sessions;
+        if (request.HasShowId)
+            sessions = await _context.Sessions
+                .Where(x => x.ShowId == request.ShowId && x.TheaterId == request.TheaterId)
+                .Include(x => x.Theater)
+                .Include(x => x.Show)
+                .ToListAsync();
+        else
+            sessions = await _context.Sessions
+                .Where(x => x.Showtime >= startDate && x.Showtime.Date <= endDate)
+                .Include(x => x.Theater)
+                .Include(x => x.Show)
+                .ToListAsync();
         var json = JsonSerializer.Serialize(sessions, new JsonSerializerOptions
         {
             ReferenceHandler = ReferenceHandler.IgnoreCycles

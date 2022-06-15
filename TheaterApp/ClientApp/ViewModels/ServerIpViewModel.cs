@@ -32,7 +32,7 @@ public class ServerIpViewModel : BaseViewModel
             App.Channel = GrpcChannel.ForAddress(address.Equals(IPAddress.Loopback)
                 ? "https://localhost:7046"
                 : $"https://{address}:7046");
-            if (App.Channel.State == ConnectivityState.Ready)
+            if (App.Channel.State != ConnectivityState.TransientFailure)
             {
                 ShowMsg?.Invoke("Conexão ao servidor com sucesso");
                 return true;

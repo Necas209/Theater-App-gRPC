@@ -16,9 +16,10 @@ public partial class EditShowWindow
             _model.Name = show.Name;
             _model.Synopsis = show.Synopsis;
             _model.Length = show.Length;
-            _model.ShowError += ShowError;
-            _model.ShowMsg += ShowMsg;
+            _model.Genre = show.Genre;
         }
+        _model.ShowError += ShowError;
+        _model.ShowMsg += ShowMsg;
         Dispatcher.Invoke(async () => await _model.GetGenres());
     }
 

@@ -9,27 +9,29 @@
     <Window.DataContext>
         <theaters:SessionsViewModel />
     </Window.DataContext>
-    <Grid Height="340" Width="550">
+    <Grid Height="340" Width="750">
         <Label Content="Lista de Sessões" FontSize="17" Margin="130 5 130 300" HorizontalAlignment="Center" />
         <ListView Margin="30 50 130 50" ItemsSource="{Binding Sessions}"
                   SelectedItem="{Binding Session}">
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Espetáculo" Width="140" DisplayMemberBinding="{Binding Show.Name}" />
+                    <GridViewColumn Header="Teatro" Width="130" DisplayMemberBinding="{Binding Theater.Name}" />
                     <GridViewColumn Header="Data/Hora" Width="130" DisplayMemberBinding="{Binding  Showtime}" />
-                    <GridViewColumn Header="Preço" Width="130" DisplayMemberBinding="{Binding TicketPrice}" />
-                    <GridViewColumn Header="Lugares Vagos" Width="130" DisplayMemberBinding="{Binding AvailableSeats}" />
+                    <GridViewColumn Header="Preço" Width="80" DisplayMemberBinding="{Binding TicketPrice}" />
+                    <GridViewColumn Header="Lugares Vagos" Width="100" DisplayMemberBinding="{Binding AvailableSeats}" />
                 </GridView>
             </ListView.View>
         </ListView>
-        <DatePicker Margin="430 70 10 240" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+        <DatePicker Margin="630 70 10 240" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
                     SelectedDate="{Binding StartDate}" />
-        <DatePicker Margin="430 170 10 140" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
+        <DatePicker Margin="630 170 10 140" IsTodayHighlighted="True" FirstDayOfWeek="Monday"
                     SelectedDate="{Binding EndDate}" />
-        <Button Style="{DynamicResource RoundButton}" Margin="450 240 30 70" Content="Filtrar"
+        <Button Style="{DynamicResource RoundButton}" Margin="650 240 30 70" Content="Filtrar"
                 Click="BtFilter_OnClick" />
-        <Button Style="{DynamicResource RoundButton}" Content="Adicionar" Margin="120 305 350 10"
+        <Button Style="{DynamicResource RoundButton}" Content="Adicionar" Margin="320 305 310 10"
                 Click="BtAddSession_OnClick" Visibility="{Binding IsManager, Converter={StaticResource BoolToVis}}" />
-        <Button Style="{DynamicResource RoundButton}" Content="Eliminar" Margin="240 305 230 10"
+        <Button Style="{DynamicResource RoundButton}" Content="Eliminar" Margin="500 305 130 10"
                 Click="BtDelSession_OnClick" Visibility="{Binding IsManager, Converter={StaticResource BoolToVis}}" />
     </Grid>
 </Window>

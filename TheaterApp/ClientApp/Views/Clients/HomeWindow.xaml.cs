@@ -55,22 +55,24 @@ public partial class HomeWindow
 
     private void LvTheaters_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
-        {
-            await _model.GetShowsByTheater();
-            TabTheaters.IsSelected = false;
-            TabShows.IsSelected = true;
-        });
+        if (_model.Theater != null)
+            Dispatcher.Invoke(async () =>
+            {
+                await _model.GetShowsByTheater();
+                TabTheaters.IsSelected = false;
+                TabShows.IsSelected = true;
+            });
     }
 
     private void LvShows_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
-        {
-            await _model.GetSessions();
-            TabShows.IsSelected = false;
-            TabSessions.IsSelected = true;
-        });
+        if (_model.Show != null)
+            Dispatcher.Invoke(async () =>
+            {
+                await _model.GetSessions();
+                TabShows.IsSelected = false;
+                TabSessions.IsSelected = true;
+            });
     }
 
     private void BtBuyTickets_OnClick(object sender, RoutedEventArgs e)
@@ -83,6 +85,7 @@ public partial class HomeWindow
         {
             var window = new BuyTicketsWindow(_model.Session.Id);
             window.ShowDialog();
+            Dispatcher.Invoke(async () => await _model.GetClientInfo());
         }
     }
 

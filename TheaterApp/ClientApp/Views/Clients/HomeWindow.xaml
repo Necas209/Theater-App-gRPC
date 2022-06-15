@@ -38,7 +38,7 @@
                             Style="{DynamicResource RoundButton}" />
                 </Grid>
             </TabItem>
-            <TabItem Name="TabShows" Header="Espetáculos" Width="150" IsSelected="True">
+            <TabItem Name="TabShows" Header="Espetáculos" Width="150">
                 <Grid>
                     <ListView Margin="0 0 200 0" ItemsSource="{Binding Shows}"
                               SelectedItem="{Binding Show}" SelectionChanged="LvShows_OnSelectionChanged">

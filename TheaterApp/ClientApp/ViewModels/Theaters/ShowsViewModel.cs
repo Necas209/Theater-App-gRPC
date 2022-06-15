@@ -61,10 +61,11 @@ public class ShowsViewModel : BaseViewModel
             request.GenreId = Genre.Id;
         var reply = await client.GetShowsAsync(request);
         var shows = JsonSerializer.Deserialize<List<Show>>(reply.Shows);
-        if (shows?.Count != 0)
+        if (shows != null)
         {
+            Show = null;
             Shows.Clear();
-            shows?.ForEach(show => Shows.Add(show));
+            shows.ForEach(show => Shows.Add(show));
         }
     }
 
