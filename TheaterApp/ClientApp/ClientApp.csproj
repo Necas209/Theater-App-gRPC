@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <RootNamespace>ClientApp</RootNamespace>
+        <ApplicationIcon>Icons\icon.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,9 +15,11 @@
 
     <ItemGroup>
       <None Remove="Icons\Profile.jpg" />
-      <Resource Include="Icons\Profile.jpg" />
       <None Remove="Icons\Profile2.png" />
       <Resource Include="Icons\Profile2.png" />
+      <None Remove="Icons\icon.png" />
+      <None Remove="Icons\icon.ico" />
+      <Resource Include="Icons\icon.ico" />
     </ItemGroup>
 
     <ItemGroup>

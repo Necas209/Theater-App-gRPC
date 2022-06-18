@@ -5,12 +5,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
         xmlns:vm="clr-namespace:ClientApp.ViewModels.Clients"
-        Title="HomeWindow" SizeToContent="WidthAndHeight">
+        Title="Página Inicial" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <vm:HomeViewModel />
     </Window.DataContext>
     <Grid Height="450" Width="800">
-        <Label Margin="300 10 300 400" Content="HomePage" FontSize="20" HorizontalContentAlignment="Center" />
+        <Label Margin="300 10 300 400" Content="Página Inicial" FontSize="20" HorizontalContentAlignment="Center" />
         <Label Content="{Binding Client.Funds}" ContentStringFormat="C" Margin="700 8 45 416" />
         <Button Template="{StaticResource ProfileButton}" Margin="740 10 10 390" Click="BtProfile_OnClick" />
         <TabControl Margin="30 50 30 50">
@@ -70,7 +70,8 @@
                             <GridView>
                                 <GridViewColumn Header="Data/Hora" Width="130"
                                                 DisplayMemberBinding="{Binding  Showtime}" />
-                                <GridViewColumn Header="Preço" Width="130" DisplayMemberBinding="{Binding TicketPrice}" />
+                                <GridViewColumn Header="Preço" Width="130"
+                                                DisplayMemberBinding="{Binding TicketPrice, StringFormat='C'}" />
                                 <GridViewColumn Header="Lugares Vagos" Width="130"
                                                 DisplayMemberBinding="{Binding AvailableSeats}" />
                                 <GridViewColumn Header="Total Lugares" Width="130"

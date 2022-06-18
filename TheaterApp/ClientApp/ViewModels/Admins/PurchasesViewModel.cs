@@ -46,8 +46,11 @@ public class PurchasesViewModel : BaseViewModel
                 }
             );
             var purchases = JsonSerializer.Deserialize<List<Reservation>>(reply.Purchases);
-            Purchases.Clear();
-            purchases?.ForEach(purchase => purchases.Add(purchase));
+            if (purchases != null)
+            {
+                Purchases.Clear();
+                purchases.ForEach(purchase => Purchases.Add(purchase));
+            }
         }
     }
 }

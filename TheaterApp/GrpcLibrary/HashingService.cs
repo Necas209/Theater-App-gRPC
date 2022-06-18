@@ -21,8 +21,7 @@ public static class HashingService
         }
         finally
         {
-            for (var i = 0; i < bytes.Length; i++)
-                bytes[i] = 0;
+            for (var i = 0; i < bytes.Length; i++) bytes[i] = 0;
             bytesPin.Free();
         }
     }

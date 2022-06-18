@@ -74,4 +74,3 @@ message GetReservationsRequest {
 message GetReservationsReply {
   string reservations = 1;
 }
-

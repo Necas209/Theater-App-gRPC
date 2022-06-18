@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:managers="clr-namespace:ClientApp.ViewModels.Managers"
         mc:Ignorable="d"
-        Title="AddSessionWindow" SizeToContent="WidthAndHeight">
+        Title="Adicionar Sessão" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <managers:AddSessionViewModel />
     </Window.DataContext>

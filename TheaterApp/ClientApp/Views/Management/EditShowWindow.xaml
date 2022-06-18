@@ -6,7 +6,7 @@
         xmlns:managers="clr-namespace:ClientApp.ViewModels.Managers"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="EditShowWindow" SizeToContent="WidthAndHeight">
+        Title="Editar Espetáculo" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <managers:EditShowViewModel />
     </Window.DataContext>

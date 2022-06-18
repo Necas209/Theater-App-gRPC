@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
         xmlns:theaters="clr-namespace:ClientApp.ViewModels.Theaters"
-        Title="ShowsWindow" SizeToContent="WidthAndHeight">
+        Title="Espetáculos" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <theaters:ShowsViewModel />
     </Window.DataContext>

@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:clients="clr-namespace:ClientApp.ViewModels.Clients"
         mc:Ignorable="d"
-        Title="Shows" SizeToContent="WidthAndHeight">
+        Title="Reservas" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <clients:ReservationsViewModel />
     </Window.DataContext>

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GrpcLibrary.Models;
 
@@ -7,6 +6,7 @@ public class Log
 {
     public Log()
     {
+        Message = "";
         Stamp = DateTime.Now;
     }
 
@@ -16,9 +16,7 @@ public class Log
 
     public int UserId { get; set; }
 
-    public string Message { get; set; } = null!;
+    public string Message { get; set; }
 
-    [ForeignKey(nameof(UserId))]
-    [InverseProperty(nameof(Models.User.Logs))]
     public User? User { get; set; }
 }

@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:vm="clr-namespace:ClientApp.ViewModels.Admins"
         mc:Ignorable="d"
-        Title="LogsWindow" SizeToContent="WidthAndHeight">
+        Title="Logs" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <vm:LogsViewModel />
     </Window.DataContext>

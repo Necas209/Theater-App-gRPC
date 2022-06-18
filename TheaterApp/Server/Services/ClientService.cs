@@ -210,9 +210,7 @@ public class ClientService : ClientManager.ClientManagerBase
         var startDate = request.StartDate.ToDateTime();
         var endDate = request.EndDate.ToDateTime();
         var reservations = await _context.Reservations
-            .Where(x => x.ClientId == request.UserId
-                        && x.TimeOfPurchase <= endDate
-                        && x.TimeOfPurchase >= startDate)
+            .Where(x => x.ClientId == request.UserId && x.TimeOfPurchase <= endDate && x.TimeOfPurchase >= startDate)
             .Include(x => x.Session).ThenInclude(x => x!.Show)
             .Include(x => x.Session).ThenInclude(x => x!.Theater)
             .OrderByDescending(x => x.TimeOfPurchase)

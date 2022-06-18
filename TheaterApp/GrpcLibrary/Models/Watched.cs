@@ -1,18 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace GrpcLibrary.Models;
 
-namespace GrpcLibrary.Models;
+public sealed class Watched
+{
+    public int ClientId { get; init; }
 
-public class Watched
-{ 
-    public int ClientId { get; set; }
-    
-    public int ShowId { get; set; }
-    
-    [ForeignKey(nameof(ClientId))]
-    [InverseProperty(nameof(GrpcLibrary.Models.Client.ShowsWatched))]
-    public virtual Client? Client { get; set; }
+    public int ShowId { get; init; }
 
-    [ForeignKey(nameof(ShowId))]
-    [InverseProperty(nameof(GrpcLibrary.Models.Show.ClientsWatched))]
-    public virtual Show? Show { get; set; }
+    public Client? Client { get; set; }
+
+    public Show? Show { get; set; }
 }

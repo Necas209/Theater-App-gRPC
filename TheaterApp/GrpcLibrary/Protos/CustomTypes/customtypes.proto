@@ -1,5 +1,5 @@
 ﻿// Adapted from https://github.com/googleapis/googleapis/blob/master/google/type/money.proto
-    syntax = "proto3";
+syntax = "proto3";
 
 package customTypes;
 

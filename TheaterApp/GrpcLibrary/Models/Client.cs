@@ -12,22 +12,15 @@ public sealed class Client
         Movements = new List<Movement>();
     }
 
-    [Key]
-    public int Id { get; set; }
-    
-    [DataType(DataType.Currency)]
-    public decimal Funds { get; set; }
-    
-    [ForeignKey(nameof(Id))]
-    [InverseProperty(nameof(Models.User.Client))]
-    public User? User { get; set; }
+    [Key] public int Id { get; set; }
 
-    [InverseProperty(nameof(Reservation.Client))]
+    [DataType(DataType.Currency)] public decimal Funds { get; set; }
+
+    [ForeignKey(nameof(Id))] public User? User { get; set; }
+
     public ICollection<Reservation> Reservations { get; set; }
 
-    [InverseProperty(nameof(Watched.Client))]
     public ICollection<Watched> ShowsWatched { get; set; }
-    
-    [InverseProperty(nameof(Movement.Client))]
+
     public ICollection<Movement> Movements { get; set; }
 }

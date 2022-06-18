@@ -101,6 +101,7 @@ public class AdminService : AdminManager.AdminManagerBase
             .Where(x => x.Stamp >= startDate && x.Stamp <= endDate)
             .Include(x => x.User)
             .OrderByDescending(x => x.Stamp)
+            .Take(50)
             .ToListAsync();
         var json = JsonSerializer.Serialize(logs, new JsonSerializerOptions
         {

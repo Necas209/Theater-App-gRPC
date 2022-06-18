@@ -5,20 +5,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:clients="clr-namespace:ClientApp.ViewModels.Clients"
         mc:Ignorable="d"
-        Title="WalletWindow" SizeToContent="WidthAndHeight">
+        Title="Carteira" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <clients:WalletViewModel />
     </Window.DataContext>
-    <Grid Height="150" Width="300">
-        <Label Content="Adicionar Fundos" Margin="90 0 90 120" HorizontalAlignment="Center" />
-        <Label Content="Saldo:" Margin="200 30 60 95" FontSize="10" HorizontalContentAlignment="Right" />
-        <Label Margin="240 30 10 95" FontSize="10" Content="{Binding Client.Funds}" ContentStringFormat="C" />
-        <Label Content="Método:" Margin="20 60 210 65" FontSize="10" HorizontalContentAlignment="Right" />
-        <ComboBox Focusable="True" Margin="90 60 80 70" ItemsSource="{Binding PaymentMethods}"
+    <Grid Height="200" Width="400">
+        <Label Content="Adicionar Fundos" FontSize="16" Margin="90 10 90 160" HorizontalAlignment="Center" />
+        <Label Content="Saldo:" Margin="250 40 100 130" HorizontalContentAlignment="Right" />
+        <Label Margin="310 40 20 130" Content="{Binding Client.Funds}" ContentStringFormat="C" />
+        <Label Content="Método:" Margin="50 80 290 90" HorizontalContentAlignment="Right" />
+        <ComboBox Focusable="True" Margin="120 80 130 90" ItemsSource="{Binding PaymentMethods}"
                   SelectedItem="{Binding PaymentMethod}" />
-        <Label Content="Valor:" Margin="20 82 210 45" FontSize="10" HorizontalContentAlignment="Right" />
-        <TextBox Margin="90 85 80 45" Text="{Binding AddedFunds}" />
-        <Button Style="{DynamicResource RoundButton}" Content="Adicionar" Margin="220 120 10 10"
+        <Label Content="Valor:" Margin="50 120 290 50" HorizontalContentAlignment="Right" />
+        <TextBox Margin="120 120 130 50" Text="{Binding AddedFunds}" />
+        <Button Style="{DynamicResource RoundButton}" Content="Adicionar" Margin="310 150 20 20"
                 Click="BtAddFunds_OnClick" />
     </Grid>
 </Window>

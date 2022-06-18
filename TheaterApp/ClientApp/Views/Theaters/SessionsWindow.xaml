@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:theaters="clr-namespace:ClientApp.ViewModels.Theaters"
         mc:Ignorable="d"
-        Title="SessionsListManager" SizeToContent="WidthAndHeight">
+        Title="Sessões" SizeToContent="WidthAndHeight">
     <Window.DataContext>
         <theaters:SessionsViewModel />
     </Window.DataContext>
@@ -18,7 +18,8 @@
                     <GridViewColumn Header="Espetáculo" Width="140" DisplayMemberBinding="{Binding Show.Name}" />
                     <GridViewColumn Header="Teatro" Width="130" DisplayMemberBinding="{Binding Theater.Name}" />
                     <GridViewColumn Header="Data/Hora" Width="130" DisplayMemberBinding="{Binding  Showtime}" />
-                    <GridViewColumn Header="Preço" Width="80" DisplayMemberBinding="{Binding TicketPrice}" />
+                    <GridViewColumn Header="Preço" Width="80"
+                                    DisplayMemberBinding="{Binding TicketPrice, StringFormat='C'}" />
                     <GridViewColumn Header="Lugares Vagos" Width="100" DisplayMemberBinding="{Binding AvailableSeats}" />
                 </GridView>
             </ListView.View>

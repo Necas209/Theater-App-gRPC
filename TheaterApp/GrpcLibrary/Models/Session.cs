@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GrpcLibrary.Models;
 
@@ -24,14 +23,9 @@ public sealed class Session
 
     [DataType(DataType.Currency)] public decimal TicketPrice { get; set; }
 
-    [ForeignKey(nameof(ShowId))]
-    [InverseProperty(nameof(Models.Show.Sessions))]
     public Show? Show { get; set; }
 
-    [ForeignKey(nameof(TheaterId))]
-    [InverseProperty(nameof(Models.Theater.Sessions))]
     public Theater? Theater { get; set; }
 
-    [InverseProperty(nameof(Reservation.Session))]
     public ICollection<Reservation> Reservations { get; set; }
 }
