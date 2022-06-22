@@ -4,10 +4,14 @@ App developed for Distributed Systems class, for selling and buying theater tick
 
 Communication between client and server was achieved using the .NET implementation of the gRPC framework, an open-source RPC framework developed by Google.
 
+## Solution structure
+
 Solution is comprised of three projects:
 - __ClientApp__, client-side application developed in C#, using WPF and following the _MVVM_ architecture
 - __Server__, gRPC service, featuring all of the needed server-side logic for database interaction and client request processing
 - __GrpcLibrary__, a shared library containing the database-equivalent class models, shared services and protocolo buffer (_protobuf_) definitions
+
+## Users
 
 The app supports three types of users:
 - __Admin__, for user and log management
