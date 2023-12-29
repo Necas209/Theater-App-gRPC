@@ -26,13 +26,13 @@ public partial class ReservationsWindow
         MessageBox.Show( s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtFilter_OnClick(object sender, RoutedEventArgs e)
+    private async void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetReservations());
+        await _model.GetReservations();
     }
 
-    private void BtCancelReservation_OnClick(object sender, RoutedEventArgs e)
+    private async void BtCancelReservation_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.CancelReservation());
+        await _model.CancelReservation();
     }
 }

@@ -43,16 +43,15 @@ public partial class TheatersWindow
         if (_model.Theater == null)
         {
             ShowError("Selecione um teatro primeiro.");
+            return;
         }
-        else
-        {
-            var window = new EditTheaterWindow(_model.Theater);
-            window.ShowDialog();
-        }
+
+        var window = new EditTheaterWindow(_model.Theater);
+        window.ShowDialog();
     }
 
-    private void BtDelTheater_OnClick(object sender, RoutedEventArgs e)
+    private async void BtDelTheater_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.DelTheater());
+        await _model.DelTheater();
     }
 }

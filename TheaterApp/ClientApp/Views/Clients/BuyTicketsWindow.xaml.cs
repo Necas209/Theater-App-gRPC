@@ -30,8 +30,8 @@ public partial class BuyTicketsWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtBuyTickets_OnClick(object sender, RoutedEventArgs e)
+    private async void BtBuyTickets_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.ButTickets());
+        await _model.ButTickets();
     }
 }

@@ -35,10 +35,8 @@ public static class HashingService
 
     public static bool SecureStringEqual(SecureString secureString1, SecureString secureString2)
     {
-        if (secureString1 == null)
-            throw new ArgumentNullException(nameof(secureString1));
-        if (secureString2 == null)
-            throw new ArgumentNullException(nameof(secureString2));
+        ArgumentNullException.ThrowIfNull(secureString1);
+        ArgumentNullException.ThrowIfNull(secureString2);
         if (secureString1.Length != secureString2.Length)
             return false;
         var ssBStr1Ptr = IntPtr.Zero;

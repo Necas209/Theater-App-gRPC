@@ -27,9 +27,9 @@ public partial class SessionsWindow
         MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
-    private void BtFilter_OnClick(object sender, RoutedEventArgs e)
+    private async void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetSessions());
+        await _model.GetSessions();
     }
 
     private void BtAddSession_OnClick(object sender, RoutedEventArgs e)
@@ -38,8 +38,8 @@ public partial class SessionsWindow
         window.ShowDialog();
     }
 
-    private void BtDelSession_OnClick(object sender, RoutedEventArgs e)
+    private async void BtDelSession_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.DelSession());
+        await _model.DelSession();
     }
 }

@@ -6,12 +6,7 @@ namespace ClientApp.ViewModels;
 
 public class ServerIpViewModel : BaseViewModel
 {
-    public ServerIpViewModel()
-    {
-        IpAddress = "127.0.0.1";
-    }
-
-    public string IpAddress { get; set; }
+    public string IpAddress { get; set; } = "127.0.0.1";
 
     public event StringMethod? ShowError;
 
@@ -22,25 +17,25 @@ public class ServerIpViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(IpAddress))
         {
             ShowError?.Invoke("Endereço IP em falta.");
+            return false;
         }
-        else if (!IPAddress.TryParse(IpAddress, out var address))
+
+        if (!IPAddress.TryParse(IpAddress, out var address))
         {
             ShowError?.Invoke("Endereço IP não é válido.");
+            return false;
         }
-        else
+
+        App.Channel = GrpcChannel.ForAddress(address.Equals(IPAddress.Loopback)
+            ? "https://localhost:7046"
+            : $"https://{address}:7046");
+        if (App.Channel.State == ConnectivityState.TransientFailure)
         {
-            App.Channel = GrpcChannel.ForAddress(address.Equals(IPAddress.Loopback)
-                ? "https://localhost:7046"
-                : $"https://{address}:7046");
-            if (App.Channel.State != ConnectivityState.TransientFailure)
-            {
-                ShowMsg?.Invoke("Conexão ao servidor com sucesso");
-                return true;
-            }
-
             ShowError?.Invoke("O canal gRPC não existe.");
+            return false;
         }
 
-        return false;
+        ShowMsg?.Invoke("Conexão ao servidor com sucesso");
+        return true;
     }
 }

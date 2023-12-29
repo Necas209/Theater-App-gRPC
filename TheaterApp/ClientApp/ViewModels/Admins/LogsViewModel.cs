@@ -10,18 +10,11 @@ namespace ClientApp.ViewModels.Admins;
 
 public class LogsViewModel : BaseViewModel
 {
-    public ObservableCollection<Log> Logs { get; }
+    public ObservableCollection<Log> Logs { get; } = [];
 
-    public LogsViewModel()
-    {
-        StartDate = DateTime.Today.AddDays(-7);
-        EndDate = DateTime.Now;
-        Logs = new ObservableCollection<Log>();
-    }
+    public DateTime StartDate { get; set; } = DateTime.Today.AddDays(-7);
 
-    public DateTime StartDate { get; set; }
-
-    public DateTime EndDate { get; set; }
+    public DateTime EndDate { get; set; } = DateTime.Now;
 
     public event StringMethod? ShowError;
 
@@ -30,22 +23,21 @@ public class LogsViewModel : BaseViewModel
         if (EndDate < StartDate)
         {
             ShowError?.Invoke("Data de início tem de ser anterior a data de fim");
+            return;
         }
-        else
+
+        var client = new AdminManager.AdminManagerClient(App.Channel);
+        var reply = await client.GetLogsAsync(new GetLogsRequest
         {
-            var client = new AdminManager.AdminManagerClient(App.Channel);
-            var reply = await client.GetLogsAsync(new GetLogsRequest
-            {
-                UserId = App.UserId,
-                StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
-                EndDate = Timestamp.FromDateTime(EndDate.AddDays(1).ToUniversalTime())
-            });
-            var logs = JsonSerializer.Deserialize<List<Log>>(reply.Logs);
-            if (logs != null)
-            {
-                Logs.Clear();
-                logs.ForEach(log => Logs.Add(log));
-            }
+            UserId = App.UserId,
+            StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+            EndDate = Timestamp.FromDateTime(EndDate.AddDays(1).ToUniversalTime())
+        });
+        var logs = JsonSerializer.Deserialize<List<Log>>(reply.Logs);
+        if (logs != null)
+        {
+            Logs.Clear();
+            logs.ForEach(log => Logs.Add(log));
         }
     }
 }

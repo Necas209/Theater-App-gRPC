@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using ClientApp.ViewModels;
 
@@ -31,19 +32,16 @@ public partial class ServerIpWindow
     private void BtConnect_OnClick(object sender, RoutedEventArgs e)
     {
         if (!_model.Connect()) return;
+
         var window = new LoginWindow();
         Hide();
         window.ShowDialog();
         Show();
     }
 
-    protected override void OnClosing(CancelEventArgs e)
+    protected override async void OnClosing(CancelEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
-        {
-            if (_app.Channel != null)
-                await _app.Channel.ShutdownAsync();
-        });
+        await (_app.Channel?.ShutdownAsync() ?? Task.CompletedTask);
         base.OnClosing(e);
     }
 }

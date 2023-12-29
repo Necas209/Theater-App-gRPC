@@ -5,8 +5,7 @@ namespace GrpcLibrary.Models;
 
 public sealed class Admin
 {
-    [Key] public int Id { get; set; }
+    [Key] public int Id { get; init; }
 
-    // ReSharper disable once UnusedMember.Global
-    [ForeignKey(nameof(Id))] public User? User { get; set; }
+    [ForeignKey(nameof(Id))] public User? User { get; init; }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using Grpc.Core;
 using GrpcLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,18 +6,11 @@ using Server.Data;
 
 namespace Server.Services;
 
-public class AdminService : AdminManager.AdminManagerBase
+public class AdminService(TheaterDbContext dbContext) : AdminManager.AdminManagerBase
 {
-    private readonly TheaterDbContext _context;
-
-    public AdminService(TheaterDbContext context)
-    {
-        _context = context;
-    }
-
     public override async Task<AddUserReply> AddUser(AddUserRequest request, ServerCallContext context)
     {
-        if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
+        if (await dbContext.Users.AnyAsync(x => x.UserName == request.UserName))
             return await Task.FromResult(new AddUserReply
             {
                 Result = false,
@@ -53,13 +45,13 @@ public class AdminService : AdminManager.AdminManagerBase
                 });
         }
 
-        await _context.Users.AddAsync(user);
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Users.AddAsync(user);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(AddUser)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new AddUserReply
         {
             Result = true,
@@ -71,22 +63,19 @@ public class AdminService : AdminManager.AdminManagerBase
     {
         var startDate = request.StartDate.ToDateTime();
         var endDate = request.EndDate.ToDateTime();
-        var purchases = await _context.Reservations
+        var purchases = await dbContext.Reservations
             .Where(x => x.TimeOfPurchase >= startDate && x.TimeOfPurchase <= endDate)
             .Include(x => x.Session).ThenInclude(x => x!.Theater)
             .Include(x => x.Session).ThenInclude(x => x!.Show)
             .OrderByDescending(x => x.TimeOfPurchase)
             .ToListAsync();
-        var json = JsonSerializer.Serialize(purchases, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var json = JsonSerializer.Serialize(purchases);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetPurchases)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetPurchasesReply
         {
             Purchases = json
@@ -97,22 +86,19 @@ public class AdminService : AdminManager.AdminManagerBase
     {
         var startDate = request.StartDate.ToDateTime();
         var endDate = request.EndDate.ToDateTime();
-        var logs = await _context.Logs
+        var logs = await dbContext.Logs
             .Where(x => x.Stamp >= startDate && x.Stamp <= endDate)
             .Include(x => x.User)
             .OrderByDescending(x => x.Stamp)
             .Take(50)
             .ToListAsync();
-        var json = JsonSerializer.Serialize(logs, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var json = JsonSerializer.Serialize(logs);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetLogs)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetLogsReply
         {
             Logs = json

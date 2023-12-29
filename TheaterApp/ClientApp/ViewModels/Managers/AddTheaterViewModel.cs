@@ -5,26 +5,17 @@ using System.Threading.Tasks;
 
 namespace ClientApp.ViewModels.Managers;
 
-public class AddTheaterViewModel : BaseViewModel
+public partial class AddTheaterViewModel : BaseViewModel
 {
-    public AddTheaterViewModel()
-    {
-        Name = "";
-        Location = "";
-        Address = "";
-        Email = "";
-        PhoneNumber = "";
-    }
+    public string Name { get; set; } = string.Empty;
 
-    public string Name { get; set; }
+    public string Location { get; set; } = string.Empty;
 
-    public string Location { get; set; }
+    public string Address { get; set; } = string.Empty;
 
-    public string Address { get; set; }
+    [DataType(DataType.EmailAddress)] public string Email { get; set; } = string.Empty;
 
-    [DataType(DataType.EmailAddress)] public string Email { get; set; }
-
-    [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; set; }
+    [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; set; } = string.Empty;
 
     public event StringMethod? ShowError;
 
@@ -35,37 +26,47 @@ public class AddTheaterViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(Name))
         {
             ShowError?.Invoke("Nome em falta");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Location))
+
+        if (string.IsNullOrWhiteSpace(Location))
         {
             ShowError?.Invoke("Localização em falta");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Address))
+
+        if (string.IsNullOrWhiteSpace(Address))
         {
             ShowError?.Invoke("Endereço em falta");
+            return;
         }
-        else if (!Regex.IsMatch(PhoneNumber, "^(?:[92]\\d{2}(?:\\s?\\d{3}){2})$"))
+
+        if (!MyRegex().IsMatch(PhoneNumber))
         {
             ShowError?.Invoke("Telefone em falta ou inválido.");
+            return;
         }
-        else if (!MailAddress.TryCreate(Email, out _))
+
+        if (!MailAddress.TryCreate(Email, out _))
         {
             ShowError?.Invoke("Email em falta ou inválido.");
+            return;
         }
-        else
+
+        var client = new MgrManager.MgrManagerClient(app.Channel);
+        var reply = await client.AddTheaterAsync(new AddTheaterRequest
         {
-            var client = new MgrManager.MgrManagerClient(app.Channel);
-            var reply = await client.AddTheaterAsync(new AddTheaterRequest
-            {
-                UserId = app.UserId,
-                Name = Name,
-                Location = Location,
-                Address = Address,
-                Email = Email,
-                PhoneNumber = PhoneNumber
-            });
-            if (!reply.Result) ShowError?.Invoke(reply.Description);
-            else ShowMsg?.Invoke(reply.Description);
-        }
+            UserId = app.UserId,
+            Name = Name,
+            Location = Location,
+            Address = Address,
+            Email = Email,
+            PhoneNumber = PhoneNumber
+        });
+        var eventCalled = reply.Result ? ShowMsg : ShowError;
+        eventCalled?.Invoke(reply.Description);
     }
+
+    [GeneratedRegex(@"^(?:[92]\d{2}(?:\s?\d{3}){2})$")]
+    private static partial Regex MyRegex();
 }

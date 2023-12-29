@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
@@ -12,19 +13,16 @@ public class SessionsViewModel : BaseViewModel
 {
     public SessionsViewModel()
     {
-        StartDate = DateTime.Today;
-        EndDate = DateTime.Today.AddDays(7);
         IsManager = App.UserType == User.UserType.Manager;
-        Sessions = new ObservableCollection<Session>();
     }
 
-    public ObservableCollection<Session> Sessions { get; }
+    public ObservableCollection<Session> Sessions { get; } = [];
 
     public bool IsManager { get; set; }
 
-    public DateTime StartDate { get; set; }
+    public DateTime StartDate { get; set; } = DateTime.Today;
 
-    public DateTime EndDate { get; set; }
+    public DateTime EndDate { get; set; } = DateTime.Today.AddDays(7);
 
     public Session? Session { get; set; }
 
@@ -37,26 +35,24 @@ public class SessionsViewModel : BaseViewModel
         if (Session == null)
         {
             ShowError?.Invoke("Selecione uma sessão primeiro.");
+            return;
         }
-        else
+
+        var client = new MgrManager.MgrManagerClient(App.Channel);
+        var reply = await client.DelSessionAsync(new DelSessionRequest
         {
-            var client = new MgrManager.MgrManagerClient(App.Channel);
-            var reply = await client.DelSessionAsync(new DelSessionRequest
-            {
-                UserId = App.UserId,
-                Id = Session.Id
-            });
-            if (!reply.Result)
-            {
-                ShowError?.Invoke(reply.Description);
-            }
-            else
-            {
-                ShowMsg?.Invoke(reply.Description);
-                Sessions.Remove(Session);
-                Session = null;
-            }
+            UserId = App.UserId,
+            Id = Session.Id
+        });
+        if (!reply.Result)
+        {
+            ShowError?.Invoke(reply.Description);
+            return;
         }
+
+        ShowMsg?.Invoke(reply.Description);
+        Sessions.Remove(Session);
+        Session = null;
     }
 
     public async Task GetSessions()
@@ -64,19 +60,18 @@ public class SessionsViewModel : BaseViewModel
         if (EndDate < StartDate)
         {
             ShowError?.Invoke("Data de início tem de ser anterior a data de fim");
+            return;
         }
-        else
+
+        var client = new TheaterManager.TheaterManagerClient(App.Channel);
+        var reply = await client.GetSessionsAsync(new GetSessionsRequest
         {
-            var client = new TheaterManager.TheaterManagerClient(App.Channel);
-            var reply = await client.GetSessionsAsync(new GetSessionsRequest
-            {
-                UserId = App.UserId,
-                StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
-                EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
-            });
-            var sessions = JsonSerializer.Deserialize<List<Session>>(reply.Sessions);
-            Sessions.Clear();
-            sessions?.ForEach(session => Sessions.Add(session));
-        }
+            UserId = App.UserId,
+            StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+            EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
+        });
+        var sessions = JsonSerializer.Deserialize<List<Session>>(reply.Sessions);
+        Sessions.Clear();
+        foreach (var session in sessions ?? Enumerable.Empty<Session>()) Sessions.Add(session);
     }
 }

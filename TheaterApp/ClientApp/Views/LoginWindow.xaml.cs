@@ -6,9 +6,6 @@ using GrpcLibrary.Models;
 
 namespace ClientApp.Views;
 
-/// <summary>
-///     Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class LoginWindow
 {
     private readonly App _app;
@@ -27,29 +24,24 @@ public partial class LoginWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtLogin_OnClick(object sender, RoutedEventArgs e)
+    private async void BtLogin_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
+        var result = await _model.Login(PbPassword.SecurePassword);
+        if (!result) return;
+
+        Window window = _app.UserType switch
         {
-            var result = await _model.Login(PbPassword.SecurePassword);
-            if (result)
-            {
-                Window window = _app.UserType switch
-                {
-                    User.UserType.Client => new HomeWindow(),
-                    _ => new ProfileWindow()
-                };
-                Hide();
-                window.ShowDialog();
-                Show();
-            }
-        });
+            User.UserType.Client => new HomeWindow(),
+            _ => new ProfileWindow()
+        };
+        Hide();
+        window.ShowDialog();
+        Show();
     }
 
     private void PbPassword_OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Enter)
-            BtLogin_OnClick(sender, e);
+        if (e.Key == Key.Enter) BtLogin_OnClick(sender, e);
     }
 
     private void BtRegister_OnClick(object sender, RoutedEventArgs e)

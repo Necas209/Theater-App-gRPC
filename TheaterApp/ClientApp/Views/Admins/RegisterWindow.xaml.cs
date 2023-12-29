@@ -25,9 +25,8 @@ public partial class RegisterWindow
         MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
-    private void BtRegister_OnClick(object sender, RoutedEventArgs e)
+    private async void BtRegister_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
-            await _model.RegisterUser(PbPassword.SecurePassword, PbConfirmPassword.SecurePassword));
+        await _model.RegisterUser(PbPassword.SecurePassword, PbConfirmPassword.SecurePassword);
     }
 }

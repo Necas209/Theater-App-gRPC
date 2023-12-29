@@ -13,7 +13,7 @@ public partial class AddTheaterWindow
         InitializeComponent();
         _app = (App)Application.Current;
         _model = (AddTheaterViewModel)DataContext;
-        _model.ShowError += ShowError;        
+        _model.ShowError += ShowError;
         _model.ShowMsg += ShowMsg;
     }
 
@@ -27,8 +27,8 @@ public partial class AddTheaterWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtAddTheater_OnClick(object sender, RoutedEventArgs e)
+    private async void BtAddTheater_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.AddTheater(_app));
+        await _model.AddTheater(_app);
     }
 }

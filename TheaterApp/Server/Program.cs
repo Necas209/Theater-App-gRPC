@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.Services;
@@ -11,6 +12,12 @@ builder.Services.AddDbContext<TheaterDbContext>(options =>
         builder.Configuration.GetConnectionString("TheaterDbConnection")
     )
 );
+
+// Add default JSON serializer settings
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var app = builder.Build();
 

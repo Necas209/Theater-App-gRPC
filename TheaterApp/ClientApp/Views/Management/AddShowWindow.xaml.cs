@@ -28,8 +28,8 @@ public partial class AddShowWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtAddShow_OnClick(object sender, RoutedEventArgs e)
+    private async void BtAddShow_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.AddShow(_app));
+        await _model.AddShow(_app);
     }
 }

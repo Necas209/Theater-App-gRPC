@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
@@ -10,14 +11,9 @@ namespace ClientApp.ViewModels.Managers;
 
 public class EditShowViewModel : BaseViewModel
 {
+    private Genre? _genre;
     private string? _name;
     private string? _synopsis;
-    private Genre? _genre;
-
-    public EditShowViewModel()
-    {
-        Genres = new ObservableCollection<Genre>();
-    }
 
     public string? Name
     {
@@ -25,7 +21,7 @@ public class EditShowViewModel : BaseViewModel
         set
         {
             _name = value;
-            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged();
         }
     }
 
@@ -35,13 +31,13 @@ public class EditShowViewModel : BaseViewModel
         set
         {
             _synopsis = value;
-            OnPropertyChanged(nameof(Synopsis));
+            OnPropertyChanged();
         }
     }
 
     public TimeSpan Length { get; set; }
 
-    public ObservableCollection<Genre> Genres { get; }
+    public ObservableCollection<Genre> Genres { get; } = [];
 
     public Genre? Genre
     {
@@ -49,8 +45,9 @@ public class EditShowViewModel : BaseViewModel
         set
         {
             _genre = value;
-            OnPropertyChanged(nameof(Genre));
-        } }
+            OnPropertyChanged();
+        }
+    }
 
     public event StringMethod? ShowError;
 
@@ -64,7 +61,7 @@ public class EditShowViewModel : BaseViewModel
             UserId = App.UserId
         });
         var genres = JsonSerializer.Deserialize<List<Genre>>(reply.Genres);
-        genres?.ForEach(genre => Genres.Add(genre));
+        foreach (var genre in genres ?? Enumerable.Empty<Genre>()) Genres.Add(genre);
     }
 
     public async Task SaveShow()
@@ -72,32 +69,37 @@ public class EditShowViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(Name))
         {
             ShowError?.Invoke("Nome em falta.");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Synopsis))
+
+        if (string.IsNullOrWhiteSpace(Synopsis))
         {
             ShowError?.Invoke("Sinopse em falta.");
+            return;
         }
-        else if (Length <= TimeSpan.Zero)
+
+        if (Length <= TimeSpan.Zero)
         {
             ShowError?.Invoke($"Duração deverá ser superior a {TimeSpan.Zero}");
+            return;
         }
-        else if (Genre == null)
+
+        if (Genre == null)
         {
             ShowError?.Invoke("Deverá selecionar um género.");
+            return;
         }
-        else
+
+        var client = new MgrManager.MgrManagerClient(App.Channel);
+        var reply = await client.EditShowAsync(new EditShowRequest
         {
-            var client = new MgrManager.MgrManagerClient(App.Channel);
-            var reply = await client.EditShowAsync(new EditShowRequest
-            {
-                UserId = App.UserId,
-                Name = Name,
-                Synopsis = Synopsis,
-                Length = Duration.FromTimeSpan(Length),
-                GenreId = Genre.Id
-            });
-            if (!reply.Result) ShowError?.Invoke(reply.Description);
-            else ShowMsg?.Invoke(reply.Description);
-        }
+            UserId = App.UserId,
+            Name = Name,
+            Synopsis = Synopsis,
+            Length = Duration.FromTimeSpan(Length),
+            GenreId = Genre.Id
+        });
+        var eventHandler = reply.Result ? ShowMsg : ShowError;
+        eventHandler?.Invoke(reply.Description);
     }
 }

@@ -6,7 +6,7 @@ public sealed class Watched
 
     public int ShowId { get; init; }
 
-    public Client? Client { get; set; }
+    public Client? Client { get; init; }
 
-    public Show? Show { get; set; }
+    public Show? Show { get; init; }
 }

@@ -15,28 +15,23 @@ public class BuyTicketsViewModel : BaseViewModel
     private Session? _session;
     private decimal _total;
 
-    public BuyTicketsViewModel()
-    {
-        Tickets = Enumerable.Range(1, 6);
-    }
-
     public Client? Client
     {
         get => _client;
-        set
+        private set
         {
             _client = value;
-            OnPropertyChanged(nameof(Client));
+            OnPropertyChanged();
         }
     }
 
     public Session? Session
     {
         get => _session;
-        set
+        private set
         {
             _session = value;
-            OnPropertyChanged(nameof(Session));
+            OnPropertyChanged();
         }
     }
 
@@ -46,12 +41,12 @@ public class BuyTicketsViewModel : BaseViewModel
         set
         {
             _noTickets = value;
-            OnPropertyChanged(nameof(NoTickets));
+            OnPropertyChanged();
             OnPropertyChanged(nameof(Total));
         }
     }
 
-    public IEnumerable<int> Tickets { get; }
+    public IEnumerable<int> Tickets { get; } = Enumerable.Range(1, 6);
 
     public decimal Total
     {
@@ -63,7 +58,7 @@ public class BuyTicketsViewModel : BaseViewModel
         set
         {
             _total = value;
-            OnPropertyChanged(nameof(Total));
+            OnPropertyChanged();
         }
     }
 
@@ -90,9 +85,12 @@ public class BuyTicketsViewModel : BaseViewModel
             Id = sessionId
         });
         if (!reply.Result)
+        {
             ShowError?.Invoke(reply.Description);
-        else
-            Session = JsonSerializer.Deserialize<Session>(reply.Session);
+            return;
+        }
+
+        Session = JsonSerializer.Deserialize<Session>(reply.Session);
     }
 
     public async Task ButTickets()
@@ -100,25 +98,24 @@ public class BuyTicketsViewModel : BaseViewModel
         if (NoTickets > Session!.AvailableSeats)
         {
             ShowError?.Invoke($"Só há {Session!.AvailableSeats} lugares disponíveis.");
+            return;
         }
-        else if (Total > Client!.Funds)
+
+        if (Total > Client!.Funds)
         {
             ShowError?.Invoke("Não tem fundos suficientes.");
+            return;
         }
-        else
+
+        var client = new ClientManager.ClientManagerClient(App.Channel);
+        var reply = await client.BuyTicketsAsync(new BuyTicketsRequest
         {
-            var client = new ClientManager.ClientManagerClient(App.Channel);
-            var reply = await client.BuyTicketsAsync(new BuyTicketsRequest
-            {
-                ClientId = App.UserId,
-                NoTickets = NoTickets,
-                TimeOfPurchase = Timestamp.FromDateTime(DateTime.UtcNow),
-                SessionId = Session!.Id
-            });
-            if (!reply.Result)
-                ShowError?.Invoke(reply.Description);
-            else
-                ShowMsg?.Invoke(reply.Description);
-        }
+            ClientId = App.UserId,
+            NoTickets = NoTickets,
+            TimeOfPurchase = Timestamp.FromDateTime(DateTime.UtcNow),
+            SessionId = Session!.Id
+        });
+        var eventCalled = reply.Result ? ShowMsg : ShowError;
+        eventCalled?.Invoke(reply.Description);
     }
 }

@@ -4,19 +4,19 @@ namespace GrpcLibrary.Models;
 
 public sealed class Reservation
 {
-    [Key] public int Id { get; set; }
+    [Key] public int Id { get; init; }
 
-    public int ClientId { get; set; }
+    public int ClientId { get; init; }
 
     public int SessionId { get; init; }
 
-    public int NoTickets { get; set; }
+    public int NoTickets { get; init; }
 
-    public DateTime TimeOfPurchase { get; set; }
+    public DateTime TimeOfPurchase { get; init; }
 
-    [DataType(DataType.Currency)] public decimal Total { get; set; }
+    [DataType(DataType.Currency)] public decimal Total { get; init; }
 
-    public Client? Client { get; set; }
+    public Client? Client { get; init; }
 
-    public Session? Session { get; set; }
+    public Session? Session { get; init; }
 }

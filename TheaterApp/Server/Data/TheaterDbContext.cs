@@ -3,17 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Server.Data;
 
-public class TheaterDbContext : DbContext
+public class TheaterDbContext(DbContextOptions<TheaterDbContext> options) : DbContext(options)
 {
-    public TheaterDbContext(DbContextOptions<TheaterDbContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<User> Users => Set<User>();
 
     public DbSet<Client> Clients => Set<Client>();
 
+    // ReSharper disable once ReturnTypeCanBeEnumerable.Global
     public DbSet<Manager> Managers => Set<Manager>();
 
     public DbSet<Admin> Admins => Set<Admin>();

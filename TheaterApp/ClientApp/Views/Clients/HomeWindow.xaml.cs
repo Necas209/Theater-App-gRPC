@@ -38,59 +38,52 @@ public partial class HomeWindow
         window.ShowDialog();
     }
 
-    private void BtFilterTheaters_OnClick(object sender, RoutedEventArgs e)
+    private async void BtFilterTheaters_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetTheaters());
+        await _model.GetTheaters();
     }
 
-    private void BtFilterShows_OnClick(object sender, RoutedEventArgs e)
+    private async void BtFilterShows_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetShows());
+        await _model.GetShows();
     }
 
-    private void BtFilterSessions_OnClick(object sender, RoutedEventArgs e)
+    private async void BtFilterSessions_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetSessions());
+        await _model.GetSessions();
     }
 
-    private void LvTheaters_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void LvTheaters_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_model.Theater != null)
-            Dispatcher.Invoke(async () =>
-            {
-                await _model.GetShowsByTheater();
-                TabTheaters.IsSelected = false;
-                TabShows.IsSelected = true;
-            });
+        if (_model.Theater == null) return;
+        await _model.GetShowsByTheater();
+        TabTheaters.IsSelected = false;
+        TabShows.IsSelected = true;
     }
 
-    private void LvShows_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void LvShows_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_model.Show != null)
-            Dispatcher.Invoke(async () =>
-            {
-                await _model.GetSessions();
-                TabShows.IsSelected = false;
-                TabSessions.IsSelected = true;
-            });
+        if (_model.Show == null) return;
+        await _model.GetSessions();
+        TabShows.IsSelected = false;
+        TabSessions.IsSelected = true;
     }
 
-    private void BtBuyTickets_OnClick(object sender, RoutedEventArgs e)
+    private async void BtBuyTickets_OnClick(object sender, RoutedEventArgs e)
     {
         if (_model.Session == null)
         {
             ShowError("Selecione uma sessão primeiro");
+            return;
         }
-        else
-        {
-            var window = new BuyTicketsWindow(_model.Session.Id);
-            window.ShowDialog();
-            Dispatcher.Invoke(async () => await _model.GetClientInfo());
-        }
+
+        var window = new BuyTicketsWindow(_model.Session.Id);
+        window.ShowDialog();
+        await _model.GetClientInfo();
     }
 
-    private void BtWatched_OnClick(object sender, RoutedEventArgs e)
+    private async void BtWatched_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.MarkAsWatched());
+        await _model.MarkAsWatched();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using Grpc.Core;
 using GrpcLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,31 +6,21 @@ using Server.Data;
 
 namespace Server.Services;
 
-public class ClientService : ClientManager.ClientManagerBase
+public class ClientService(TheaterDbContext dbContext) : ClientManager.ClientManagerBase
 {
-    private readonly TheaterDbContext _context;
-
-    public ClientService(TheaterDbContext context)
-    {
-        _context = context;
-    }
-
     public override async Task<GetClientInfoReply> GetClientInfo(GetClientInfoRequest request,
         ServerCallContext context)
     {
-        var client = await _context.Clients
+        var client = await dbContext.Clients
             .Include(x => x.User)
             .SingleOrDefaultAsync(x => x.Id == request.UserId);
-        var clientInfo = JsonSerializer.Serialize(client, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var clientInfo = JsonSerializer.Serialize(client);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetClientInfo)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetClientInfoReply
         {
             ClientInfo = clientInfo
@@ -40,14 +29,14 @@ public class ClientService : ClientManager.ClientManagerBase
 
     public override async Task<BuyTicketsReply> BuyTickets(BuyTicketsRequest request, ServerCallContext context)
     {
-        var client = await _context.Clients.FindAsync(request.ClientId);
+        var client = await dbContext.Clients.FindAsync(request.ClientId);
         if (client == null)
             return await Task.FromResult(new BuyTicketsReply
             {
                 Result = false,
                 Description = "Client ID not found."
             });
-        var session = await _context.Sessions.FindAsync(request.SessionId);
+        var session = await dbContext.Sessions.FindAsync(request.SessionId);
         if (session == null)
             return await Task.FromResult(new BuyTicketsReply
             {
@@ -69,12 +58,12 @@ public class ClientService : ClientManager.ClientManagerBase
             });
         // Update available seats and funds
         session.AvailableSeats -= request.NoTickets;
-        _context.Sessions.Update(session);
+        dbContext.Sessions.Update(session);
         client.Funds -= purchaseTotal;
-        _context.Clients.Update(client);
-        await _context.SaveChangesAsync();
+        dbContext.Clients.Update(client);
+        await dbContext.SaveChangesAsync();
         // Add reservation, movement and log
-        await _context.Reservations.AddAsync(new Reservation
+        await dbContext.Reservations.AddAsync(new Reservation
         {
             ClientId = request.ClientId,
             SessionId = request.SessionId,
@@ -82,18 +71,18 @@ public class ClientService : ClientManager.ClientManagerBase
             TimeOfPurchase = request.TimeOfPurchase.ToDateTime(),
             Total = purchaseTotal
         });
-        await _context.Movements.AddAsync(new Movement
+        await dbContext.Movements.AddAsync(new Movement
         {
             ClientId = request.ClientId,
             Description = "Reservation",
             Value = -purchaseTotal
         });
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.ClientId,
             Message = nameof(BuyTickets)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new BuyTicketsReply
         {
             Result = true,
@@ -104,23 +93,23 @@ public class ClientService : ClientManager.ClientManagerBase
     public override async Task<MarkAsWatchedReply> MarkAsWatched(MarkAsWatchedRequest request,
         ServerCallContext context)
     {
-        if (await _context.Watched.FindAsync(request.UserId, request.ShowId) != null)
+        if (await dbContext.Watched.FindAsync(request.UserId, request.ShowId) != null)
             return await Task.FromResult(new MarkAsWatchedReply
             {
                 Result = false,
                 Description = "Show already marked as watched."
             });
-        await _context.Watched.AddAsync(new Watched
+        await dbContext.Watched.AddAsync(new Watched
         {
             ClientId = request.UserId,
             ShowId = request.ShowId
         });
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(MarkAsWatched)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new MarkAsWatchedReply
         {
             Result = true,
@@ -130,7 +119,7 @@ public class ClientService : ClientManager.ClientManagerBase
 
     public override async Task<AddFundsReply> AddFunds(AddFundsRequest request, ServerCallContext context)
     {
-        var client = await _context.Clients.FindAsync(request.UserId);
+        var client = await dbContext.Clients.FindAsync(request.UserId);
         if (client == null)
             return await Task.FromResult(new AddFundsReply
             {
@@ -138,19 +127,19 @@ public class ClientService : ClientManager.ClientManagerBase
                 Description = "Client ID not found."
             });
         client.Funds += request.Funds;
-        _context.Clients.Update(client);
-        await _context.Movements.AddAsync(new Movement
+        dbContext.Clients.Update(client);
+        await dbContext.Movements.AddAsync(new Movement
         {
             ClientId = client.Id,
             Description = $"Funds;{request.PaymentMethod}",
             Value = request.Funds
         });
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(AddFunds)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new AddFundsReply
         {
             Result = true,
@@ -161,7 +150,7 @@ public class ClientService : ClientManager.ClientManagerBase
 
     public override async Task<RefundReply> Refund(RefundRequest request, ServerCallContext context)
     {
-        var reservation = await _context.Reservations.FindAsync(request.ReservationId);
+        var reservation = await dbContext.Reservations.FindAsync(request.ReservationId);
         if (reservation == null)
             return await Task.FromResult(new RefundReply
             {
@@ -169,7 +158,7 @@ public class ClientService : ClientManager.ClientManagerBase
                 Description = "Reservation ID not found.",
                 Funds = -1
             });
-        var client = await _context.Clients.FindAsync(request.UserId);
+        var client = await dbContext.Clients.FindAsync(request.UserId);
         if (client == null)
             return await Task.FromResult(new RefundReply
             {
@@ -177,25 +166,25 @@ public class ClientService : ClientManager.ClientManagerBase
                 Description = "Client ID not found",
                 Funds = -1
             });
-        var session = await _context.Sessions.FindAsync(reservation.SessionId);
+        var session = await dbContext.Sessions.FindAsync(reservation.SessionId);
         session!.AvailableSeats += reservation.NoTickets;
-        _context.Sessions.Update(session);
+        dbContext.Sessions.Update(session);
         client.Funds += reservation.Total;
-        _context.Clients.Update(client);
-        await _context.SaveChangesAsync();
-        _context.Reservations.Remove(reservation);
-        await _context.Movements.AddAsync(new Movement
+        dbContext.Clients.Update(client);
+        await dbContext.SaveChangesAsync();
+        dbContext.Reservations.Remove(reservation);
+        await dbContext.Movements.AddAsync(new Movement
         {
             ClientId = request.UserId,
             Description = "Refund",
             Value = reservation.Total
         });
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(Refund)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new RefundReply
         {
             Result = true,
@@ -209,22 +198,19 @@ public class ClientService : ClientManager.ClientManagerBase
     {
         var startDate = request.StartDate.ToDateTime();
         var endDate = request.EndDate.ToDateTime();
-        var reservations = await _context.Reservations
+        var reservations = await dbContext.Reservations
             .Where(x => x.ClientId == request.UserId && x.TimeOfPurchase <= endDate && x.TimeOfPurchase >= startDate)
             .Include(x => x.Session).ThenInclude(x => x!.Show)
             .Include(x => x.Session).ThenInclude(x => x!.Theater)
             .OrderByDescending(x => x.TimeOfPurchase)
             .ToListAsync();
-        var json = JsonSerializer.Serialize(reservations, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var json = JsonSerializer.Serialize(reservations);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetReservations)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetReservationsReply
         {
             Reservations = json

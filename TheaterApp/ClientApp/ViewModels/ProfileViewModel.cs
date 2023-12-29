@@ -32,7 +32,7 @@ public class ProfileViewModel : BaseViewModel
         set
         {
             _name = value;
-            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged();
         }
     }
 
@@ -42,7 +42,7 @@ public class ProfileViewModel : BaseViewModel
         set
         {
             _userName = value;
-            OnPropertyChanged(nameof(UserName));
+            OnPropertyChanged();
         }
     }
 
@@ -53,7 +53,7 @@ public class ProfileViewModel : BaseViewModel
         set
         {
             _email = value;
-            OnPropertyChanged(nameof(Email));
+            OnPropertyChanged();
         }
     }
 
@@ -79,30 +79,31 @@ public class ProfileViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(Name))
         {
             ShowError?.Invoke("Nome em falta.");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Email))
+
+        if (string.IsNullOrWhiteSpace(Email))
         {
             ShowError?.Invoke("Email em falta.");
+            return;
         }
-        else if (HashingService.HashPassword(oldPassword) != _passwordHash)
+
+        if (HashingService.HashPassword(oldPassword) != _passwordHash)
         {
             ShowError?.Invoke("Password atual incorreta.");
+            return;
         }
-        else
+
+        var client = new AuthManager.AuthManagerClient(App.Channel);
+        var reply = await client.UpdUserInfoAsync(new UpdUserInfoRequest
         {
-            var client = new AuthManager.AuthManagerClient(App.Channel);
-            var reply = await client.UpdUserInfoAsync(new UpdUserInfoRequest
-            {
-                UserId = App.UserId,
-                Name = Name,
-                UserName = UserName,
-                Email = Email,
-                PasswordHash = HashingService.HashPassword(newPassword.Length > 0 ? newPassword : oldPassword)
-            });
-            if (!reply.Result)
-                ShowError?.Invoke(reply.Description);
-            else
-                ShowMsg?.Invoke(reply.Description);
-        }
+            UserId = App.UserId,
+            Name = Name,
+            UserName = UserName,
+            Email = Email,
+            PasswordHash = HashingService.HashPassword(newPassword.Length > 0 ? newPassword : oldPassword)
+        });
+        var eventHandler = reply.Result ? ShowMsg : ShowError;
+        eventHandler?.Invoke(reply.Description);
     }
 }

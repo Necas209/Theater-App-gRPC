@@ -4,27 +4,15 @@ namespace GrpcLibrary.Models;
 
 public sealed class Theater
 {
-    public Theater()
-    {
-        Name = "";
-        Location = "";
-        Address = "";
-        Email = "";
-        PhoneNumber = "";
-        Sessions = new HashSet<Session>();
-    }
-
     [Key] public int Id { get; init; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string Location { get; set; }
+    public string Location { get; init; } = string.Empty;
 
-    public string Address { get; set; }
+    public string Address { get; init; } = string.Empty;
 
-    [DataType(DataType.EmailAddress)] public string Email { get; set; }
+    [DataType(DataType.EmailAddress)] public string Email { get; init; } = string.Empty;
 
-    [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; set; }
-
-    public ICollection<Session> Sessions { get; set; }
+    [DataType(DataType.PhoneNumber)] public string PhoneNumber { get; init; } = string.Empty;
 }

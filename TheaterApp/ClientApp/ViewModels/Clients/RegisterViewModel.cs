@@ -8,18 +8,11 @@ namespace ClientApp.ViewModels.Clients;
 
 public class RegisterViewModel : BaseViewModel
 {
-    public RegisterViewModel()
-    {
-        UserName = "";
-        Name = "";
-        Email = "";
-    }
+    public string UserName { get; set; } = string.Empty;
 
-    public string UserName { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string Name { get; set; }
-
-    [DataType(DataType.EmailAddress)] public string Email { get; set; }
+    [DataType(DataType.EmailAddress)] public string Email { get; set; } = string.Empty;
 
     public event StringMethod? ShowError;
 
@@ -30,37 +23,42 @@ public class RegisterViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(UserName))
         {
             ShowError?.Invoke("UserName em falta.");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Name))
+
+        if (string.IsNullOrWhiteSpace(Name))
         {
             ShowError?.Invoke("Nome em falta.");
+            return;
         }
-        else if (!MailAddress.TryCreate(Email, out _))
+
+        if (!MailAddress.TryCreate(Email, out _))
         {
             ShowError?.Invoke("Email em falta ou inválido.");
+            return;
         }
-        else if (password.Length == 0 || confirmPassword.Length == 0)
+
+        if (password.Length == 0 || confirmPassword.Length == 0)
         {
             ShowError?.Invoke("Password em falta.");
+            return;
         }
-        else if (!HashingService.SecureStringEqual(password, confirmPassword))
+
+        if (!HashingService.SecureStringEqual(password, confirmPassword))
         {
             ShowError?.Invoke("Passwords não coincidem.");
+            return;
         }
-        else
+
+        var client = new AuthManager.AuthManagerClient(App.Channel);
+        var reply = await client.RegisterAsync(new RegisterRequest
         {
-            var client = new AuthManager.AuthManagerClient(App.Channel);
-            var reply = await client.RegisterAsync(new RegisterRequest
-            {
-                Name = Name,
-                Email = Email,
-                UserName = UserName,
-                PasswordHash = HashingService.HashPassword(password)
-            });
-            if (reply.Result)
-                ShowMsg?.Invoke(reply.Description);
-            else
-                ShowError?.Invoke(reply.Description);
-        }
+            Name = Name,
+            Email = Email,
+            UserName = UserName,
+            PasswordHash = HashingService.HashPassword(password)
+        });
+        var eventHandler = reply.Result ? ShowMsg : ShowError;
+        eventHandler?.Invoke(reply.Description);
     }
 }

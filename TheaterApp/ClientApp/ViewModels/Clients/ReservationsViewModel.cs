@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
@@ -10,20 +11,13 @@ namespace ClientApp.ViewModels.Clients;
 
 public class ReservationsViewModel : BaseViewModel
 {
-    public ReservationsViewModel()
-    {
-        StartDate = DateTime.Today.AddMonths(-3);
-        EndDate = DateTime.Now;
-        Reservations = new ObservableCollection<Reservation>();
-    }
-
-    public ObservableCollection<Reservation> Reservations { get; }
+    public ObservableCollection<Reservation> Reservations { get; } = [];
 
     public Reservation? Reservation { get; set; }
 
-    public DateTime StartDate { get; set; }
+    public DateTime StartDate { get; set; } = DateTime.Today.AddMonths(-3);
 
-    public DateTime EndDate { get; set; }
+    public DateTime EndDate { get; set; } = DateTime.Now;
 
     public event StringMethod? ShowError;
 
@@ -34,25 +28,26 @@ public class ReservationsViewModel : BaseViewModel
         if (EndDate > DateTime.Today)
         {
             ShowError?.Invoke("Data de fim deve ser atual!");
+            return;
         }
-        else if (EndDate < StartDate)
+
+        if (EndDate < StartDate)
         {
             ShowError?.Invoke("Data de início tem de ser anterior a data de fim");
+            return;
         }
-        else
-        {
-            var client = new ClientManager.ClientManagerClient(App.Channel);
-            var reply = await client.GetReservationsAsync(new GetReservationsRequest
-                {
-                    UserId = App.UserId,
-                    StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
-                    EndDate = Timestamp.FromDateTime(EndDate.AddDays(1).ToUniversalTime())
-                }
-            );
-            var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);
-            Reservations.Clear();
-            reservations?.ForEach(reservation => Reservations.Add(reservation));
-        }
+
+        var client = new ClientManager.ClientManagerClient(App.Channel);
+        var reply = await client.GetReservationsAsync(new GetReservationsRequest
+            {
+                UserId = App.UserId,
+                StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+                EndDate = Timestamp.FromDateTime(EndDate.AddDays(1).ToUniversalTime())
+            }
+        );
+        var reservations = JsonSerializer.Deserialize<List<Reservation>>(reply.Reservations);
+        Reservations.Clear();
+        foreach (var reservation in reservations ?? Enumerable.Empty<Reservation>()) Reservations.Add(reservation);
     }
 
     public async Task CancelReservation()
@@ -60,25 +55,23 @@ public class ReservationsViewModel : BaseViewModel
         if (Reservation == null)
         {
             ShowError?.Invoke("Selecione uma compra primeiro.");
+            return;
         }
-        else
+
+        var client = new ClientManager.ClientManagerClient(App.Channel);
+        var reply = await client.RefundAsync(new RefundRequest
         {
-            var client = new ClientManager.ClientManagerClient(App.Channel);
-            var reply = await client.RefundAsync(new RefundRequest
-            {
-                UserId = App.UserId,
-                ReservationId = Reservation.Id
-            });
-            if (!reply.Result)
-            {
-                ShowError?.Invoke(reply.Description);
-            }
-            else
-            {
-                ShowMsg?.Invoke(reply.Description);
-                Reservations.Remove(Reservation);
-                Reservation = null;
-            }
+            UserId = App.UserId,
+            ReservationId = Reservation.Id
+        });
+        if (!reply.Result)
+        {
+            ShowError?.Invoke(reply.Description);
+            return;
         }
+
+        ShowMsg?.Invoke(reply.Description);
+        Reservations.Remove(Reservation);
+        Reservation = null;
     }
 }

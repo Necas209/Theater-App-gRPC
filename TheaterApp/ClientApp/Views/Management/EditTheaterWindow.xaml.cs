@@ -12,13 +12,11 @@ public partial class EditTheaterWindow
     {
         InitializeComponent();
         _model = (EditTheaterViewModel)DataContext;
-        {
-            _model.Name = theater.Name;
-            _model.Location = theater.Location;
-            _model.Address = theater.Address;
-            _model.Email = theater.Email;
-            _model.PhoneNumber = theater.PhoneNumber;
-        }
+        _model.Name = theater.Name;
+        _model.Location = theater.Location;
+        _model.Address = theater.Address;
+        _model.Email = theater.Email;
+        _model.PhoneNumber = theater.PhoneNumber;
         _model.ShowError += ShowError;
         _model.ShowMsg += ShowMsg;
     }
@@ -33,8 +31,8 @@ public partial class EditTheaterWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtSaveTheater_OnClick(object sender, RoutedEventArgs e)
+    private async void BtSaveTheater_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.SaveTheater());
+        await _model.SaveTheater();
     }
 }

@@ -5,7 +5,7 @@ namespace GrpcLibrary.Models;
 
 public sealed class Manager
 {
-    [Key] public int Id { get; set; }
+    [Key] public int Id { get; init; }
 
-    [ForeignKey(nameof(Id))] public User? User { get; set; }
+    [ForeignKey(nameof(Id))] public User? User { get; init; }
 }

@@ -10,28 +10,19 @@ namespace ClientApp.ViewModels.Admins;
 
 public class RegisterViewModel : BaseViewModel
 {
-    public RegisterViewModel()
+    public string UserName { get; set; } = string.Empty;
+
+    public string Name { get; set; } = string.Empty;
+
+    [DataType(DataType.EmailAddress)] public string Email { get; set; } = string.Empty;
+
+    public Dictionary<User.UserType, string> UserTypes { get; } = new()
     {
-        Name = "";
-        UserName = "";
-        Email = "";
-        UserType = User.UserType.Admin;
-        UserTypes = new Dictionary<User.UserType, string>
-        {
-            { User.UserType.Admin, "Administrador" },
-            { User.UserType.Manager, "Gestor" }
-        };
-    }
+        { User.UserType.Admin, "Administrador" },
+        { User.UserType.Manager, "Gestor" }
+    };
 
-    public string UserName { get; set; }
-
-    public string Name { get; set; }
-
-    [DataType(DataType.EmailAddress)] public string Email { get; set; }
-
-    public Dictionary<User.UserType, string> UserTypes { get; }
-
-    public User.UserType UserType { get; set; }
+    public User.UserType UserType { get; set; } = User.UserType.Admin;
 
     public event StringMethod? ShowError;
 
@@ -42,39 +33,44 @@ public class RegisterViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(UserName))
         {
             ShowError?.Invoke("UserName em falta.");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Name))
+
+        if (string.IsNullOrWhiteSpace(Name))
         {
             ShowError?.Invoke("Nome em falta.");
+            return;
         }
-        else if (!MailAddress.TryCreate(Email, out _))
+
+        if (!MailAddress.TryCreate(Email, out _))
         {
             ShowError?.Invoke("Email em falta ou inválido.");
+            return;
         }
-        else if (password.Length == 0 || confirmPassword.Length == 0)
+
+        if (password.Length == 0 || confirmPassword.Length == 0)
         {
             ShowError?.Invoke("Password em falta.");
+            return;
         }
-        else if (!HashingService.SecureStringEqual(password, confirmPassword))
+
+        if (!HashingService.SecureStringEqual(password, confirmPassword))
         {
             ShowError?.Invoke("Passwords não coincidem.");
+            return;
         }
-        else
+
+        var client = new AdminManager.AdminManagerClient(App.Channel);
+        var reply = await client.AddUserAsync(new AddUserRequest
         {
-            var client = new AdminManager.AdminManagerClient(App.Channel);
-            var reply = await client.AddUserAsync(new AddUserRequest
-            {
-                UserId = App.UserId,
-                Name = Name,
-                Email = Email,
-                UserName = UserName,
-                PasswordHash = HashingService.HashPassword(password),
-                UserType = (int)UserType
-            });
-            if (reply.Result)
-                ShowMsg?.Invoke(reply.Description);
-            else
-                ShowError?.Invoke(reply.Description);
-        }
+            UserId = App.UserId,
+            Name = Name,
+            Email = Email,
+            UserName = UserName,
+            PasswordHash = HashingService.HashPassword(password),
+            UserType = (int)UserType
+        });
+        var eventCalled = reply.Result ? ShowMsg : ShowError;
+        eventCalled?.Invoke(reply.Description);
     }
 }

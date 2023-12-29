@@ -10,18 +10,11 @@ namespace ClientApp.ViewModels.Admins;
 
 public class PurchasesViewModel : BaseViewModel
 {
-    public PurchasesViewModel()
-    {
-        StartDate = DateTime.Today.AddMonths(-3);
-        EndDate = DateTime.Now;
-        Purchases = new ObservableCollection<Reservation>();
-    }
+    public ObservableCollection<Reservation> Purchases { get; } = [];
 
-    public ObservableCollection<Reservation> Purchases { get; }
+    public DateTime StartDate { get; set; } = DateTime.Today.AddMonths(-3);
 
-    public DateTime StartDate { get; set; }
-
-    public DateTime EndDate { get; set; }
+    public DateTime EndDate { get; set; } = DateTime.Now;
 
     public event StringMethod? ShowError;
 
@@ -30,27 +23,28 @@ public class PurchasesViewModel : BaseViewModel
         if (EndDate > DateTime.Today)
         {
             ShowError?.Invoke("Data de fim deve ser atual!");
+            return;
         }
-        else if (EndDate < StartDate)
+
+        if (EndDate < StartDate)
         {
             ShowError?.Invoke("Data de início tem de ser anterior a data de fim");
+            return;
         }
-        else
-        {
-            var client = new AdminManager.AdminManagerClient(App.Channel);
-            var reply = await client.GetPurchasesAsync(new GetPurchasesRequest
-                {
-                    UserId = App.UserId,
-                    StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
-                    EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
-                }
-            );
-            var purchases = JsonSerializer.Deserialize<List<Reservation>>(reply.Purchases);
-            if (purchases != null)
+
+        var client = new AdminManager.AdminManagerClient(App.Channel);
+        var reply = await client.GetPurchasesAsync(new GetPurchasesRequest
             {
-                Purchases.Clear();
-                purchases.ForEach(purchase => Purchases.Add(purchase));
+                UserId = App.UserId,
+                StartDate = Timestamp.FromDateTime(StartDate.ToUniversalTime()),
+                EndDate = Timestamp.FromDateTime(EndDate.ToUniversalTime())
             }
+        );
+        var purchases = JsonSerializer.Deserialize<List<Reservation>>(reply.Purchases);
+        if (purchases != null)
+        {
+            Purchases.Clear();
+            purchases.ForEach(purchase => Purchases.Add(purchase));
         }
     }
 }

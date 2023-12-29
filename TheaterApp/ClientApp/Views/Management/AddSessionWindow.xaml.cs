@@ -21,30 +21,32 @@ public partial class AddSessionWindow
     {
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
+
     private static void ShowMsg(string s)
     {
         MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
-    private void CbShows_OnKeyDown(object sender, KeyEventArgs e)
+    private async void CbShows_OnKeyDown(object sender, KeyEventArgs e)
     {
-        var text = ((ComboBox)sender).Text;
+        if (sender is not ComboBox { Text: { Length: > 0 } text })
+            return;
+
         if (e.Key == Key.Enter)
-            Dispatcher.Invoke(async () => await _model.GetShows(text));
+            await _model.GetShows(text);
     }
 
-    private void CbTheaters_OnKeyDown(object sender, KeyEventArgs e)
+    private async void CbTheaters_OnKeyDown(object sender, KeyEventArgs e)
     {
-        var text = ((ComboBox)sender).Text;
+        if (sender is not ComboBox { Text: { Length: > 0 } text })
+            return;
+
         if (e.Key == Key.Enter)
-            Dispatcher.Invoke(async () => await _model.GetTheaters(text));
+            await _model.GetTheaters(text);
     }
 
-    private void BtAddSession_OnClick(object sender, RoutedEventArgs e)
+    private async void BtAddSession_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
-        {
-            await _model.AddSession();
-        });
+        await _model.AddSession();
     }
 }

@@ -11,22 +11,15 @@ namespace ClientApp.ViewModels.Managers;
 
 public class AddSessionViewModel : BaseViewModel
 {
-    public AddSessionViewModel()
-    {
-        Showtime = DateTime.Today;
-        Shows = new ObservableCollection<Show>();
-        Theaters = new ObservableCollection<Theater>();
-    }
+    public ObservableCollection<Show> Shows { get; } = [];
 
-    public ObservableCollection<Show> Shows { get; }
-
-    public ObservableCollection<Theater> Theaters { get; }
+    public ObservableCollection<Theater> Theaters { get; } = [];
 
     public Show? Show { get; set; }
 
     public Theater? Theater { get; set; }
 
-    public DateTime Showtime { get; set; }
+    public DateTime Showtime { get; set; } = DateTime.Today;
 
     [DataType(DataType.Currency)] public decimal TicketPrice { get; set; }
 
@@ -41,40 +34,45 @@ public class AddSessionViewModel : BaseViewModel
         if (Show == null)
         {
             ShowError?.Invoke("Selecione um espetáculo");
+            return;
         }
-        else if (Theater == null)
+
+        if (Theater == null)
         {
             ShowError?.Invoke("Selecione um teatro.");
+            return;
         }
-        else if (Showtime <= DateTime.Now)
+
+        if (Showtime <= DateTime.Now)
         {
             ShowError?.Invoke("Data deverá ser futura.");
+            return;
         }
-        else if (TicketPrice <= 0)
+
+        if (TicketPrice <= 0)
         {
-            ShowError?.Invoke($"Preço do bilhete deverá ser superior a {0:C}");
+            ShowError?.Invoke("Preço do bilhete deverá ser superior a {0:C}");
+            return;
         }
-        else if (TotalSeats <= 0)
+
+        if (TotalSeats <= 0)
         {
             ShowError?.Invoke("Número de lugares deverá ser superior a 0.");
+            return;
         }
-        else
+
+        var client = new MgrManager.MgrManagerClient(App.Channel);
+        var reply = await client.AddSessionAsync(new AddSessionRequest
         {
-            var client = new MgrManager.MgrManagerClient(App.Channel);
-            var reply = await client.AddSessionAsync(new AddSessionRequest
-            {
-                UserId = App.UserId,
-                ShowId = Show.Id,
-                TheaterId = Theater.Id,
-                Showtime = Timestamp.FromDateTime(Showtime.ToUniversalTime()),
-                TotalSeats = TotalSeats,
-                TicketPrice = TicketPrice
-            });
-            if (!reply.Result)
-                ShowError?.Invoke(reply.Description);
-            else
-                ShowMsg?.Invoke(reply.Description);
-        }
+            UserId = App.UserId,
+            ShowId = Show.Id,
+            TheaterId = Theater.Id,
+            Showtime = Timestamp.FromDateTime(Showtime.ToUniversalTime()),
+            TotalSeats = TotalSeats,
+            TicketPrice = TicketPrice
+        });
+        var eventHandler = reply.Result ? ShowMsg : ShowError;
+        eventHandler?.Invoke(reply.Description);
     }
 
     public async Task GetShows(string textInput)
@@ -82,21 +80,20 @@ public class AddSessionViewModel : BaseViewModel
         if (textInput.Length == 0)
         {
             ShowError?.Invoke("Espetáculo em falta.");
+            return;
         }
-        else
+
+        var client = new TheaterManager.TheaterManagerClient(App.Channel);
+        var reply = await client.GetShowsAsync(new GetShowsRequest
         {
-            var client = new TheaterManager.TheaterManagerClient(App.Channel);
-            var reply = await client.GetShowsAsync(new GetShowsRequest
-            {
-                UserId = App.UserId,
-                Name = textInput
-            });
-            var shows = JsonSerializer.Deserialize<List<Show>>(reply.Shows);
-            if (shows != null)
-            {
-                Shows.Clear();
-                shows.ForEach(show => Shows.Add(show));
-            }
+            UserId = App.UserId,
+            Name = textInput
+        });
+        var shows = JsonSerializer.Deserialize<List<Show>>(reply.Shows);
+        if (shows != null)
+        {
+            Shows.Clear();
+            shows.ForEach(show => Shows.Add(show));
         }
     }
 
@@ -105,21 +102,20 @@ public class AddSessionViewModel : BaseViewModel
         if (textInput.Length == 0)
         {
             ShowError?.Invoke("Teatro em falta.");
+            return;
         }
-        else
+
+        var client = new TheaterManager.TheaterManagerClient(App.Channel);
+        var reply = await client.GetTheatersAsync(new GetTheatersRequest
         {
-            var client = new TheaterManager.TheaterManagerClient(App.Channel);
-            var reply = await client.GetTheatersAsync(new GetTheatersRequest
-            {
-                UserId = App.UserId,
-                Name = textInput
-            });
-            var theaters = JsonSerializer.Deserialize<List<Theater>>(reply.Theaters);
-            if (theaters != null)
-            {
-                Theaters.Clear();
-                theaters.ForEach(theater => Theaters.Add(theater));
-            }
+            UserId = App.UserId,
+            Name = textInput
+        });
+        var theaters = JsonSerializer.Deserialize<List<Theater>>(reply.Theaters);
+        if (theaters != null)
+        {
+            Theaters.Clear();
+            theaters.ForEach(theater => Theaters.Add(theater));
         }
     }
 }

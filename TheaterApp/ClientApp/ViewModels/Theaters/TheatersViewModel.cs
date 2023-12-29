@@ -10,19 +10,16 @@ public class TheatersViewModel : BaseViewModel
 {
     public TheatersViewModel()
     {
-        Name = "";
-        Location = "";
         IsManager = App.UserType == User.UserType.Manager;
-        Theaters = new ObservableCollection<Theater>();
     }
 
-    public ObservableCollection<Theater> Theaters { get; }
+    public ObservableCollection<Theater> Theaters { get; } = [];
 
     public Theater? Theater { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string Location { get; set; }
+    public string Location { get; set; } = string.Empty;
 
     public bool IsManager { get; set; }
 
@@ -43,12 +40,10 @@ public class TheatersViewModel : BaseViewModel
             request.Location = Location;
         var reply = await client.GetTheatersAsync(request);
         var theaters = JsonSerializer.Deserialize<List<Theater>>(reply.Theaters);
-        if (theaters != null)
-        {
-            Theaters.Clear();
-            Theater = null;
-            theaters.ForEach(show => Theaters.Add(show));
-        }
+        if (theaters == null) return;
+        Theaters.Clear();
+        Theater = null;
+        foreach (var show in theaters) Theaters.Add(show);
     }
 
     public async Task DelTheater()
@@ -56,25 +51,23 @@ public class TheatersViewModel : BaseViewModel
         if (Theater == null)
         {
             ShowError?.Invoke("Escolha um teatro primeiro.");
+            return;
         }
-        else
+
+        var client = new MgrManager.MgrManagerClient(App.Channel);
+        var reply = await client.DelTheaterAsync(new DelTheaterRequest
         {
-            var client = new MgrManager.MgrManagerClient(App.Channel);
-            var reply = await client.DelTheaterAsync(new DelTheaterRequest
-            {
-                UserId = App.UserId,
-                Id = Theater.Id
-            });
-            if (!reply.Result)
-            {
-                ShowError?.Invoke(reply.Description);
-            }
-            else
-            {
-                ShowMsg?.Invoke(reply.Description);
-                Theaters.Remove(Theater);
-                Theater = null;
-            }
+            UserId = App.UserId,
+            Id = Theater.Id
+        });
+        if (!reply.Result)
+        {
+            ShowError?.Invoke(reply.Description);
+            return;
         }
+
+        ShowMsg?.Invoke(reply.Description);
+        Theaters.Remove(Theater);
+        Theater = null;
     }
 }

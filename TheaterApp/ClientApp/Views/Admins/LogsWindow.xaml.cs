@@ -20,8 +20,8 @@ public partial class LogsWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtFilter_OnClick(object sender, RoutedEventArgs e)
+    private async void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetLogs());
+        await _model.GetLogs();
     }
 }

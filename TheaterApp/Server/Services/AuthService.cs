@@ -5,18 +5,11 @@ using Server.Data;
 
 namespace Server.Services;
 
-public class AuthService : AuthManager.AuthManagerBase
+public class AuthService(TheaterDbContext dbContext) : AuthManager.AuthManagerBase
 {
-    private readonly TheaterDbContext _context;
-
-    public AuthService(TheaterDbContext context)
-    {
-        _context = context;
-    }
-
     public override async Task<LoginReply> Login(LoginRequest request, ServerCallContext context)
     {
-        var user = await _context.Users.SingleOrDefaultAsync(u =>
+        var user = await dbContext.Users.SingleOrDefaultAsync(u =>
             u.UserName == request.UserName && u.PasswordHash == request.PasswordHash);
         if (user == null)
             return await Task.FromResult(new LoginReply
@@ -24,12 +17,12 @@ public class AuthService : AuthManager.AuthManagerBase
                 LoginStatus = false
             });
         var userType = await FindUserTypeAsync(user.Id);
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = user.Id,
             Message = nameof(Login)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new LoginReply
         {
             LoginStatus = true,
@@ -40,18 +33,18 @@ public class AuthService : AuthManager.AuthManagerBase
 
     public override async Task<GetUserInfoReply> GetUserInfo(GetUserInfoRequest request, ServerCallContext context)
     {
-        var user = await _context.Users.FindAsync(request.UserId);
+        var user = await dbContext.Users.FindAsync(request.UserId);
         if (user == null)
             return await Task.FromResult(new GetUserInfoReply
             {
                 UserExists = false
             });
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetUserInfo)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetUserInfoReply
         {
             UserName = user.UserName,
@@ -64,7 +57,7 @@ public class AuthService : AuthManager.AuthManagerBase
 
     public override async Task<UpdUserInfoReply> UpdUserInfo(UpdUserInfoRequest request, ServerCallContext context)
     {
-        var user = await _context.Users.FindAsync(request.UserId);
+        var user = await dbContext.Users.FindAsync(request.UserId);
         if (user == null)
             return await Task.FromResult(new UpdUserInfoReply
             {
@@ -78,13 +71,13 @@ public class AuthService : AuthManager.AuthManagerBase
             user.UserName = request.UserName;
             user.PasswordHash = request.PasswordHash;
         }
-        _context.Users.Update(user);
-        await _context.Logs.AddAsync(new Log
+        dbContext.Users.Update(user);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(UpdUserInfo)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new UpdUserInfoReply
         {
             Result = true,
@@ -94,7 +87,7 @@ public class AuthService : AuthManager.AuthManagerBase
 
     public override async Task<RegisterReply> Register(RegisterRequest request, ServerCallContext context)
     {
-        if (await _context.Users.AnyAsync(x => x.UserName == request.UserName))
+        if (await dbContext.Users.AnyAsync(x => x.UserName == request.UserName))
             return await Task.FromResult(new RegisterReply
             {
                 Result = false,
@@ -112,8 +105,8 @@ public class AuthService : AuthManager.AuthManagerBase
         {
             Message = nameof(Register)
         });
-        await _context.Users.AddAsync(user);
-        await _context.SaveChangesAsync();
+        await dbContext.Users.AddAsync(user);
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new RegisterReply
         {
             Result = true,
@@ -123,8 +116,10 @@ public class AuthService : AuthManager.AuthManagerBase
 
     private async Task<User.UserType> FindUserTypeAsync(int userId)
     {
-        if (await _context.Clients.FindAsync(userId) != null)
+        if (await dbContext.Clients.FindAsync(userId) != null)
             return User.UserType.Client;
-        return await _context.Admins.FindAsync(userId) != null ? User.UserType.Admin : User.UserType.Manager;
+        return await dbContext.Admins.FindAsync(userId) != null
+            ? User.UserType.Admin
+            : User.UserType.Manager;
     }
 }

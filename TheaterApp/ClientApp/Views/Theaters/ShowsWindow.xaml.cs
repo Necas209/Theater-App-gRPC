@@ -31,9 +31,9 @@ public partial class ShowsWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtFilter_OnClick(object sender, RoutedEventArgs e)
+    private async void BtFilter_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.GetShows());
+        await _model.GetShows();
     }
 
     private void BtAddShow_OnClick(object sender, RoutedEventArgs e)
@@ -47,16 +47,15 @@ public partial class ShowsWindow
         if (_model.Show == null)
         {
             ShowError("Escolha um espetáculo primeiro");
+            return;
         }
-        else
-        {
-            var window = new EditShowWindow(_model.Show);
-            window.ShowDialog();
-        }
+
+        var window = new EditShowWindow(_model.Show);
+        window.ShowDialog();
     }
 
-    private void BtDelShow_OnClick(object sender, RoutedEventArgs e)
+    private async void BtDelShow_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.DelShow());
+        await _model.DelShow();
     }
 }

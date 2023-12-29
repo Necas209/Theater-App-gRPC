@@ -3,6 +3,7 @@ using ClientApp.ViewModels;
 using ClientApp.Views.Admins;
 using ClientApp.Views.Clients;
 using ClientApp.Views.Theaters;
+using RegisterWindow = ClientApp.Views.Admins.RegisterWindow;
 
 namespace ClientApp.Views;
 
@@ -29,11 +30,11 @@ public partial class ProfileWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtSaveInfo_OnClick(object sender, RoutedEventArgs e)
+    private async void BtSaveInfo_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () =>
-            await _model.UpdateInfo(PbOldPassword.SecurePassword, PbNewPassword.SecurePassword));
+        await _model.UpdateInfo(PbOldPassword.SecurePassword, PbNewPassword.SecurePassword);
     }
+
 
     private void BtReservations_OnClick(object sender, RoutedEventArgs e)
     {
@@ -79,7 +80,7 @@ public partial class ProfileWindow
 
     private void BtRegister_OnClick(object sender, RoutedEventArgs e)
     {
-        var window = new Admins.RegisterWindow();
+        var window = new RegisterWindow();
         window.ShowDialog();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using Grpc.Core;
 using GrpcLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,18 +6,11 @@ using Server.Data;
 
 namespace Server.Services;
 
-public class TheaterService : TheaterManager.TheaterManagerBase
+public class TheaterService(TheaterDbContext dbContext) : TheaterManager.TheaterManagerBase
 {
-    private readonly TheaterDbContext _context;
-
-    public TheaterService(TheaterDbContext context)
-    {
-        _context = context;
-    }
-
     public override async Task<GetSessionReply> GetSession(GetSessionRequest request, ServerCallContext context)
     {
-        var session = await _context.Sessions
+        var session = await dbContext.Sessions
             .Include(x => x.Show).ThenInclude(x => x!.Genre)
             .Include(x => x.Theater)
             .SingleOrDefaultAsync(x => x.Id == request.Id);
@@ -28,16 +20,13 @@ public class TheaterService : TheaterManager.TheaterManagerBase
                 Result = false,
                 Description = "Session ID not found."
             });
-        var json = JsonSerializer.Serialize(session, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var json = JsonSerializer.Serialize(session);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetSession)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetSessionReply
         {
             Result = true,
@@ -48,20 +37,17 @@ public class TheaterService : TheaterManager.TheaterManagerBase
 
     public override async Task<GetTheatersReply> GetTheaters(GetTheatersRequest request, ServerCallContext context)
     {
-        var theaters = await _context.Theaters
+        var theaters = await dbContext.Theaters
             .Where(x => (!request.HasName || x.Name.Contains(request.Name)) &&
                         (!request.HasLocation || x.Location.Contains(request.Location)))
             .ToListAsync();
-        var json = JsonSerializer.Serialize(theaters, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var json = JsonSerializer.Serialize(theaters);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetTheaters)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetTheatersReply
         {
             Theaters = json
@@ -72,29 +58,26 @@ public class TheaterService : TheaterManager.TheaterManagerBase
     {
         List<Show> shows;
         if (request.HasTheaterId)
-            shows = await _context.Shows
-                .Join(_context.Sessions.Where(x => x.TheaterId == request.TheaterId), show => show.Id,
+            shows = await dbContext.Shows
+                .Join(dbContext.Sessions.Where(x => x.TheaterId == request.TheaterId), show => show.Id,
                     session => session.ShowId, (show, session) => new { show })
                 .Select(x => x.show)
                 .Include(x => x.Genre)
                 .Distinct()
                 .ToListAsync();
         else
-            shows = await _context.Shows
+            shows = await dbContext.Shows
                 .Where(x => (!request.HasName || x.Name.Contains(request.Name)) &&
                             (!request.HasGenreId || x.GenreId == request.GenreId))
                 .Include(x => x.Genre)
                 .ToListAsync();
-        var json = JsonSerializer.Serialize(shows, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var json = JsonSerializer.Serialize(shows);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetShows)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetShowsReply
         {
             Shows = json
@@ -103,14 +86,14 @@ public class TheaterService : TheaterManager.TheaterManagerBase
 
     public override async Task<GetGenresReply> GetGenres(GetGenresRequest request, ServerCallContext context)
     {
-        var genres = await _context.Genres.ToListAsync();
+        var genres = await dbContext.Genres.ToListAsync();
         var json = JsonSerializer.Serialize(genres);
-        await _context.Logs.AddAsync(new Log
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetGenres)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetGenresReply
         {
             Genres = json
@@ -123,27 +106,24 @@ public class TheaterService : TheaterManager.TheaterManagerBase
         var endDate = request.EndDate.ToDateTime();
         List<Session> sessions;
         if (request.HasShowId)
-            sessions = await _context.Sessions
+            sessions = await dbContext.Sessions
                 .Where(x => x.ShowId == request.ShowId && x.TheaterId == request.TheaterId)
                 .Include(x => x.Theater)
                 .Include(x => x.Show)
                 .ToListAsync();
         else
-            sessions = await _context.Sessions
+            sessions = await dbContext.Sessions
                 .Where(x => x.Showtime >= startDate && x.Showtime.Date <= endDate)
                 .Include(x => x.Theater)
                 .Include(x => x.Show)
                 .ToListAsync();
-        var json = JsonSerializer.Serialize(sessions, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-        await _context.Logs.AddAsync(new Log
+        var json = JsonSerializer.Serialize(sessions);
+        await dbContext.Logs.AddAsync(new Log
         {
             UserId = request.UserId,
             Message = nameof(GetSessions)
         });
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return await Task.FromResult(new GetSessionsReply
         {
             Sessions = json

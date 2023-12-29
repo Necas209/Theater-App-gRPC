@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using GrpcLibrary.Models;
@@ -10,21 +11,18 @@ public class ShowsViewModel : BaseViewModel
 {
     public ShowsViewModel()
     {
-        Name = "";
         IsManager = App.UserType == User.UserType.Manager;
-        Shows = new ObservableCollection<Show>();
-        Genres = new ObservableCollection<Genre>();
     }
 
-    public ObservableCollection<Show> Shows { get; }
+    public ObservableCollection<Show> Shows { get; } = [];
 
     public Show? Show { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public Genre? Genre { get; set; }
 
-    public ObservableCollection<Genre> Genres { get; }
+    public ObservableCollection<Genre> Genres { get; } = [];
 
     public bool IsManager { get; set; }
 
@@ -40,7 +38,7 @@ public class ShowsViewModel : BaseViewModel
             UserId = App.UserId
         });
         var genres = JsonSerializer.Deserialize<List<Genre>>(reply.Genres);
-        genres?.ForEach(genre => Genres.Add(genre));
+        foreach (var genre in genres ?? Enumerable.Empty<Genre>()) Genres.Add(genre);
         Genres.Add(new Genre
         {
             Id = 0,
@@ -57,16 +55,15 @@ public class ShowsViewModel : BaseViewModel
         };
         if (!string.IsNullOrWhiteSpace(Name))
             request.Name = Name;
-        if (Genre != null && Genre.Id != 0)
+        if (Genre is { Id: not 0 })
             request.GenreId = Genre.Id;
         var reply = await client.GetShowsAsync(request);
         var shows = JsonSerializer.Deserialize<List<Show>>(reply.Shows);
-        if (shows != null)
-        {
-            Show = null;
-            Shows.Clear();
-            shows.ForEach(show => Shows.Add(show));
-        }
+        if (shows == null) return;
+
+        Show = null;
+        Shows.Clear();
+        shows.ForEach(show => Shows.Add(show));
     }
 
     public async Task DelShow()
@@ -74,25 +71,23 @@ public class ShowsViewModel : BaseViewModel
         if (Show == null)
         {
             ShowError?.Invoke("Escolha um espetáculo primeiro.");
+            return;
         }
-        else
+
+        var client = new MgrManager.MgrManagerClient(App.Channel);
+        var reply = await client.DelShowAsync(new DelShowRequest
         {
-            var client = new MgrManager.MgrManagerClient(App.Channel);
-            var reply = await client.DelShowAsync(new DelShowRequest
-            {
-                UserId = App.UserId,
-                Id = Show.Id
-            });
-            if (!reply.Result)
-            {
-                ShowError?.Invoke(reply.Description);
-            }
-            else
-            {
-                ShowMsg?.Invoke(reply.Description);
-                Shows.Remove(Show);
-                Show = null;
-            }
+            UserId = App.UserId,
+            Id = Show.Id
+        });
+        if (!reply.Result)
+        {
+            ShowError?.Invoke(reply.Description);
+            return;
         }
+
+        ShowMsg?.Invoke(reply.Description);
+        Shows.Remove(Show);
+        Show = null;
     }
 }

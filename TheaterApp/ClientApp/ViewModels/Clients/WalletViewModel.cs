@@ -9,30 +9,26 @@ namespace ClientApp.ViewModels.Clients;
 
 public class WalletViewModel : BaseViewModel
 {
-    private Client? _client;
+    private Client _client = null!;
 
     public WalletViewModel()
     {
-        PaymentMethods = new List<string>
-        {
-            "Multibanco", "Cartão de Crédito", "Paypal", "MB Way"
-        };
         PaymentMethod = PaymentMethods.First();
     }
 
-    public Client? Client
+    public Client Client
     {
         get => _client;
         set
         {
             _client = value;
-            OnPropertyChanged(nameof(Client));
+            OnPropertyChanged();
         }
     }
 
     [DataType(DataType.Currency)] public decimal AddedFunds { get; set; }
 
-    public List<string> PaymentMethods { get; }
+    public List<string> PaymentMethods { get; } = ["Multibanco", "Cartão de Crédito", "Paypal", "MB Way"];
 
     public string PaymentMethod { get; set; }
 
@@ -47,34 +43,39 @@ public class WalletViewModel : BaseViewModel
         {
             UserId = App.UserId
         });
-        Client = JsonSerializer.Deserialize<Client>(reply.ClientInfo);
+        var client = JsonSerializer.Deserialize<Client>(reply.ClientInfo);
+        if (client == null)
+        {
+            ShowError?.Invoke("Erro ao obter informação do cliente!");
+            return;
+        }
+
+        Client = client;
     }
 
     public async Task AddFunds()
     {
         if (AddedFunds <= 0)
         {
-            ShowError?.Invoke($"Fundos adicionados deverão ser superiores a {0:C}!");
+            ShowError?.Invoke("Fundos adicionados deverão ser superiores a {0:C}!");
+            return;
         }
-        else
+
+        var client = new ClientManager.ClientManagerClient(App.Channel);
+        var reply = await client.AddFundsAsync(new AddFundsRequest
         {
-            var client = new ClientManager.ClientManagerClient(App.Channel);
-            var reply = await client.AddFundsAsync(new AddFundsRequest
-            {
-                UserId = App.UserId,
-                Funds = AddedFunds,
-                PaymentMethod = PaymentMethod
-            });
-            if (!reply.Result)
-            {
-                ShowError?.Invoke(reply.Description);
-            }
-            else
-            {
-                Client!.Funds = reply.TotalFunds;
-                OnPropertyChanged(nameof(Client));
-                ShowMsg?.Invoke(reply.Description);
-            }
+            UserId = App.UserId,
+            Funds = AddedFunds,
+            PaymentMethod = PaymentMethod
+        });
+        if (!reply.Result)
+        {
+            ShowError?.Invoke(reply.Description);
+            return;
         }
+
+        Client.Funds = reply.TotalFunds;
+        OnPropertyChanged(nameof(Client));
+        ShowMsg?.Invoke(reply.Description);
     }
 }

@@ -1,9 +1,5 @@
-﻿using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
-using ClientApp.ViewModels;
+﻿using System.Windows;
 using ClientApp.ViewModels.Clients;
-using GrpcLibrary.Models;
 
 namespace ClientApp.Views.Clients;
 
@@ -19,7 +15,7 @@ public partial class WalletWindow
         _model.ShowMsg += ShowMsg;
         Dispatcher.Invoke(async () => await _model.GetClientInfo());
     }
-    
+
     private static void ShowMsg(string s)
     {
         MessageBox.Show(s, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -30,8 +26,8 @@ public partial class WalletWindow
         MessageBox.Show(s, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
-    private void BtAddFunds_OnClick(object sender, RoutedEventArgs e)
+    private async void BtAddFunds_OnClick(object sender, RoutedEventArgs e)
     {
-        Dispatcher.Invoke(async () => await _model.AddFunds());
+        await _model.AddFunds();
     }
 }

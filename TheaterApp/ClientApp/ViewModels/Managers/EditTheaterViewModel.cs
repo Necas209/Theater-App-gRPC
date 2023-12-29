@@ -17,7 +17,7 @@ public class EditTheaterViewModel : BaseViewModel
         set
         {
             _name = value;
-            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged();
         }
     }
 
@@ -27,7 +27,7 @@ public class EditTheaterViewModel : BaseViewModel
         set
         {
             _location = value;
-            OnPropertyChanged(nameof(Location));
+            OnPropertyChanged();
         }
     }
 
@@ -37,7 +37,7 @@ public class EditTheaterViewModel : BaseViewModel
         set
         {
             _address = value;
-            OnPropertyChanged(nameof(Address));
+            OnPropertyChanged();
         }
     }
 
@@ -48,7 +48,7 @@ public class EditTheaterViewModel : BaseViewModel
         set
         {
             _email = value;
-            OnPropertyChanged(nameof(Email));
+            OnPropertyChanged();
         }
     }
 
@@ -59,7 +59,7 @@ public class EditTheaterViewModel : BaseViewModel
         set
         {
             _phoneNumber = value;
-            OnPropertyChanged(nameof(PhoneNumber));
+            OnPropertyChanged();
         }
     }
 
@@ -72,37 +72,44 @@ public class EditTheaterViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(Name))
         {
             ShowError?.Invoke("Nome em falta");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Location))
+
+        if (string.IsNullOrWhiteSpace(Location))
         {
             ShowError?.Invoke("Localização em falta");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Address))
+
+        if (string.IsNullOrWhiteSpace(Address))
         {
             ShowError?.Invoke("Endereço em falta");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(Email))
+
+        if (string.IsNullOrWhiteSpace(Email))
         {
             ShowError?.Invoke("Email em falta");
+            return;
         }
-        else if (string.IsNullOrWhiteSpace(PhoneNumber))
+
+        if (string.IsNullOrWhiteSpace(PhoneNumber))
         {
             ShowError?.Invoke("Telefone em falta");
+            return;
         }
-        else
+
+        var client = new MgrManager.MgrManagerClient(App.Channel);
+        var reply = await client.EditTheaterAsync(new EditTheaterRequest
         {
-            var client = new MgrManager.MgrManagerClient(App.Channel);
-            var reply = await client.EditTheaterAsync(new EditTheaterRequest
-            {
-                UserId = App.UserId,
-                Name = Name,
-                Location = Location,
-                Address = Address,
-                Email = Email,
-                PhoneNumber = PhoneNumber
-            });
-            if (!reply.Result) ShowError?.Invoke(reply.Description);
-            else ShowMsg?.Invoke(reply.Description);
-        }
+            UserId = App.UserId,
+            Name = Name,
+            Location = Location,
+            Address = Address,
+            Email = Email,
+            PhoneNumber = PhoneNumber
+        });
+        var eventHandler = reply.Result ? ShowMsg : ShowError;
+        eventHandler?.Invoke(reply.Description);
     }
 }
